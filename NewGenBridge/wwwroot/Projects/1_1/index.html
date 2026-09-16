@@ -1,0 +1,254 @@
+
+<!-- saved from url=(0054)https://pokolenie.kg/projects/HTML_CSS_id82/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style data-merge-styles="true"></style>
+		<style data-merge-styles="true"></style><link rel="stylesheet" href="./index_files/style.css">
+	</head>
+<body>
+<!--<img src="../projects/images/html_2_1" alt="">-->
+<section class="project-container">
+	<div class="project-container__logo">
+		<img src="./index_files/CSS-Logo.png" alt="Logo" srcset="" style="max-width: 200px">
+	</div>
+	
+	<p class="project-name">
+		�&nbsp;абота с ссылками и задним фоном
+	</p>
+	<div class="description-block">
+		<article class="description-block__text">
+			<div class="logos">
+				<!-- <img class="app" src="../projects/images/AppInventor-Logo.png" alt=""> -->
+			</div>
+			
+
+
+			<p>Состояние ссылок </p>
+
+			<p>Текст после двоеточия(:) у селектора называется псевдоклассом, например <span class="code_line"><span class="selector">:hover</span></span></p>
+			<p>Псевдоклассы позволяют отлавливать разные состояния элементов.</p>
+
+			<div class="code_container">
+				<ol class="list_nontype plain">
+					<li><span class="tag">a</span><span class="selector">:link</span><span class="comment"> //состояние ссылки до того как
+							ее посетили</span></li>
+					<li><span class="tag">a</span><span class="selector">:hover</span><span class="comment"> //состояние ссылки когда на нее
+							навели курсором</span></li>
+					<li><span class="tag">a</span><span class="selector">:active</span><span class="comment"> //состояние ссылки когда на
+							нее нажали мышкой, но еще не отпустили</span></li>
+					<li><span class="tag">a</span>	<span class="selector">:visited</span><span class="comment"> //состояние ссылки когда по
+							ней уже перешли</span></li>
+				</ol>
+			</div>
+
+			<p>Пример:</p>
+
+			<div class="code_container">
+				<ol class="code_list">
+					<li></li>
+				</ol>
+				<ol class="list_nontype">
+					<li>&lt;<span class="tag">a</span> <span class="attr">href</span>="<span class="value">#</span>"&gt;Ссылка&lt;<span class="tag"></span>/<span class="tag">a</span>&gt;</li>
+				</ol>
+			</div>
+
+			<div class="code_container">
+				<ol class="code_list">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ol>
+
+				<div>
+					<ol class="list_nontype">
+						<li><span class="tag">a</span><span class="selector">:link</span> {</li>
+						<li><span class="styles italic">color</span>: <span class="styles">red</span>; <span class="comment"> //в обычном состоянии ссылка будет красной</span> </li>
+						<li>}</li>
+					</ol>
+					<ol class="list_nontype">
+						<li><span class="tag">a</span><span class="selector">:visited</span> {</li>
+						<li><span class="styles italic">color</span>: <span class="styles">green</span><span class="comment"> //после перехода по ссылке она станет зеленой</span>; </li>
+						<li>} </li>
+					</ol>
+					<ol class="list_nontype">
+						<li><span class="tag">a</span><span class="selector">:hover</span> { </li>
+						<li><span class="styles italic">text-decoration</span>: <span class="styles">none</span>;<span class="comment"> //при наведении у ссылки будет
+								исчезать подчеркивание</span></li>
+						<li>}</li>
+					</ol>
+					<ol class="list_nontype">
+						<li><span class="tag">a</span><span class="selector">:active</span> {</li>
+						<li><span class="styles italic">color</span>: <span class="styles">blue</span>; <span class="comment">//при нажатии на ссылку она станет синей</span></li>
+						<li>}</li>
+					</ol>
+				</div>
+			</div>
+
+			<p>
+				Псевдоклассы наследуют состояния друг друга. Например: Если убрать подчеркивание для состояния <span class="code_line"><span class="selector">:link</span></span>, то
+				подчеркивание уберется для всех состояний.
+			</p>
+
+			<p>
+				Из-за наследования следует размещать псевдоклассы в документе css в таком порядке: <span class="code_line"><span class="selector">:link</span></span>, <span class="code_line"><span class="selector">:visited</span></span>, <span class="code_line"><span class="selector">:hover</span></span>,
+				<span class="code_line"><span class="selector">:active</span></span>. Если какой-то псевдокласс не нужен его можно не писать.
+			</p>
+
+			<p>Часто состояния <span class="code_line"><span class="selector">:link</span></span> и <span class="code_line"><span class="selector">:visited</span></span> объединяют через запятую:</p>
+
+			<div class="code_container">
+				<div>
+					<ol class="list_nontype">
+						<li>
+							<span class="tag">a</span><span class="selector">:link</span>, <span class="tag">a</span><span class="selector">:visited</span>{
+						</li>
+						<li><span class="styles italic">color</span>: <span class="styles">red</span>;</li>
+						<li>}</li>
+					</ol>
+					<ol class="list_nontype">
+						<li>
+							<span class="tag">a</span><span class="selector">:hover</span>{
+						</li>
+						<li><span class="styles italic">text-decoration</span>: <span class="styles">none</span>;</li>
+						<li>}</li>
+					</ol>
+					<ol class="list_nontype">
+						<li>
+							<span class="tag">a</span><span class="selector">:active</span>{
+						</li>
+						<li><span class="styles italic">color</span>: <span class="styles">blue</span>;</li>
+						<li>}</li>
+					</ol>
+				</div>
+			</div>
+
+			<p class="accent">�&nbsp;абота с фоном</p>
+
+			<div class="code_container">
+				<div>
+					<ol class="list_nontype">
+						<li><span class="styles italic">background-color</span>: <span class="styles"> цвет</span>;<span class="comment"> //выбирается любым из трех способов</span></li>
+					</ol>
+					<ol class="list_nontype">
+						<li><span class="styles italic">background-image</span>: <span class="styles">url(<span class="value">"путь к картинке"</span>)</span>; <span class="comment"> //задает фоновую картинку</span></li>
+					</ol>
+				</div>
+			</div>
+
+			<p>Фоновая картинка заполняет собой весь блок, это можно исправить следующим свойством:</p>
+
+			<div class="code_container">
+				<ol class="list_nontype plain">
+					<li><span class="styles italic">background-repeat</span>: <span class="styles">no-repeat</span> <span class="comment">//картинка не будет повторятся и займет левый верхний угол</span></li>
+					<li><span class="styles italic">background-repeat</span>: <span class="styles">repeat-x</span> <span class="comment">//картинка будет повторяться по координате x (по горизонтали)</span></li>
+					<li><span class="styles italic">background-repeat</span>: <span class="styles">repeat-y</span> <span class="comment">//картинка будет повторяться по координате y (по вертикали)</span></li>
+				</ol>
+			</div>
+
+
+			<p>Для того чтобы менять положение нашей фоновой картинке на экране или в блоке используется свойство :</p>
+
+			<div class="code_container">
+				<ol class="list_nontype plain">
+					<li><span class="styles italic">background-position</span>: <span class="styles">позиция x позиция y</span></li>
+					<li><span class="comment">позиция x : left, right, center, %, px</span></li>
+					<li><span class="comment">позиция y: top, center, bottom, %, px</span></li>
+					<li><span class="comment">background-size: %, px;</span></li>
+				</ol>
+			</div>
+
+			<p>К примеру свойство: <span class="code_line"><span class="styles italic">background-position</span>: <span class="styles">right bottom</span></span> поставит фоновую картинку в правый нижний угол</p>
+
+			<p>Вместо ключевых слов мы может также использовать px и %</p>
+
+			<p>Например: <span class="code_line"><span class="styles italic">background-position</span>: <span class="styles">90% 30px</span>;</span> наш фон на 90% от ширины блока сдвинутся вправо и на 30px вниз.</p>
+			<p>Можно также объединять значения в пикселях и ключевые слова: <span class="code_line"><span class="styles italic">background-position</span>: <span class="styles">90% center</span>;</span></p></article>
+			<p>Для того чтобы разрешить или запретить прокручивать фон в месте с текстом на странице существует свойство <span class="code_line"><span class="styles italic">background-attachment</span></span></p>
+			<div class="code_container">
+				<ol class="list_nontype plain">
+					<li><span class="styles italic">background-attachment</span>: <span class="styles">scroll</span>; <span class="comment"> //позволяет прокручивать фон вместе с текстом</span></li>
+					<li><span class="styles italic">background-attachment</span>: <span class="styles">fixed</span>; <span class="comment"> //делает фон фиксированным (запрещает прокручивать фон вместе с текстом)</span></li>
+				</ol>
+			</div>
+
+			<p class="accent">Практика</p>
+			<p class="accent">Задание 1</p>
+			<p>Создать ссылку которая при состоянии <span class="code_line"><span class="selector">:link</span></span> и <span class="code_line"><span class="selector">:visited</span></span> будет синяя, а при состоянии <span class="code_line"><span class="selector">:hover</span></span>(наведении) должна	будет стать зеленой</p>
+			<p class="accent">Задание 2</p>
+			<p>Создать ссылку которая при состоянии <span class="code_line"><span class="selector">:link</span></span> и <span class="code_line"><span class="selector">:visited</span></span> будет красная и подчеркнутая сверху, при состоянии <span class="code_line"><span class="selector">:hover</span></span> перечеркнутая фиолетовая</p>
+			<p class="accent">Задание 3</p>
+			<p>Создать ссылку которая при состоянии <span class="code_line"><span class="selector">:link</span></span> и <span class="code_line"><span class="selector">:visited</span></span> будет черная и не подчеркнутая, при состоянии <span class="code_line"><span class="selector">:hover</span></span> подчеркнутая снизу, оранжевая</p>
+			<p class="accent">Задание 4</p>
+			<p>Создать ссылку которая при состоянии <span class="code_line"><span class="selector">:link</span></span> и <span class="code_line"><span class="selector">:visited</span></span> голубая перечеркнутая, при состоянии <span class="code_line"><span class="selector">:hover</span></span> желтая без подчеркиваний, при состоянии <span class="code_line"><span class="selector">:active</span></span> размер текста становится 20px</p>
+			<p class="accent">Задание 5</p>
+			<p>По центру расположить блок с шириной 500px и высотой 300px, фон блока должен быть закрашен красным цветом.</p>
+			<p class="accent">Задание 6</p>
+			<p>По центру расположить блок с шириной 500px и высотой 300px, фон блока должен быть картинкой которая повторяется по всему экрану.</p>
+			<p class="accent">Задание 7</p>
+			<p>По центру расположить блок с шириной 500px и высотой 300px, фон блока должен быть картинкой которая повторяется по координате x.</p>
+			<p class="accent">Задание 8</p>
+			<p>По центру расположить блок с шириной 500px и высотой 300px, фон блока должен быть картинкой которая повторяется по координате Y.</p>
+			<p class="accent">Задание 9</p>
+			<p>По центру расположить блок с шириной 500px и высотой 300px, фон блока должен быть картинкой которая не повторяется и находится в правом нижнем углу.</p>
+			<p class="accent">Задание 10</p>
+			<p>По центру расположить блок с шириной 500px и высотой 300px, фон блока должен быть картинкой которая не повторяется по всему экрану и находится в центре.</p>
+			<p class="accent">Задание 11</p>
+			<p>По центру расположить блок с шириной 500px и высотой 300px, фон блока должен быть картинкой которая не повторяется по всему экрану и занимает 100% размера блока.</p>
+
+
+
+
+
+
+			<p class="accent">Используйте данный текст для того чтобы выполнить задания ниже, каждое следующие задание выполнять в отдельном html файле</p>
+			<p>
+				Integer odio risus, imperdiet vitae orci non, pulvinar suscipit dui. Proin condimentum luctus nulla, ut
+				bibendum mi convallis nec. Vestibulum at venenatis nulla. Vivamus ligula justo, commodo eget quam a, aliquam
+				semper dolor. Donec dapibus nunc hendrerit turpis porta auctor. Maecenas in hendrerit felis. Quisque id
+				ligula a dui rhoncus sodales ac eu nulla. Vestibulum ac dignissim nulla. Fusce sollicitudin nisl massa, quis
+				viverra metus condimentum non. Fusce quis viverra enim, id viverra libero. In accumsan justo enim, fringilla
+				egestas ipsum suscipit at. Etiam sed quam mi. Vestibulum ultricies nisi luctus convallis malesuada. Nulla
+				eleifend blandit lacus, sed volutpat erat cursus nec. Praesent volutpat sagittis ligula, ac sollicitudin
+				felis commodo non. Mauris vel nunc vel metus congue tristique at ut augue. Quisque id orci sed lacus mattis
+				rhoncus. Pellentesque mattis pharetra molestie. Nunc non cursus nisl. Ut sed rhoncus enim, non placerat
+				ipsum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam nisi sapien, pellentesque in dui
+				sit amet, rhoncus vestibulum sem. Maecenas est justo, ullamcorper at pretium at, pharetra sit amet leo.
+				Vivamus sem sem, iaculis non massa rhoncus, commodo placerat eros. Quisque egestas tellus at enim luctus
+				elementum. Nam id libero felis. Etiam eu nisi nulla. Donec egestas aliquam tortor, sed tincidunt enim
+				viverra ut. Donec accumsan ac erat quis egestas. Etiam mauris massa, ultricies suscipit augue sit amet,
+				tempor bibendum eros. Vivamus aliquet nibh at varius rhoncus. Duis risus sapien, semper ut arcu sit amet,
+				adipiscing dictum lorem. Curabitur sit amet nisi cursus, mattis lectus sed, consequat turpis. Praesent a
+				tincidunt nisi. Vestibulum dolor libero, pharetra vel mi eget, tincidunt rutrum nibh. Quisque sagittis
+				facilisis eros non aliquet. Integer diam lorem, tincidunt vitae bibendum id, pulvinar non nibh. Proin varius
+				dolor sed felis lobortis molestie. Vestibulum varius neque vel sem volutpat consectetur. Quisque elit
+				turpis, molestie at massa quis, scelerisque tincidunt purus. Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Nulla pharetra risus erat, eu imperdiet felis suscipit at. Vivamus rhoncus vel neque non
+				eleifend. Donec adipiscing eros quis molestie sodales. Proin vitae nulla ut sem lobortis scelerisque.
+				Aliquam ultricies porta sem quis fringilla. Quisque pretium enim ut elit fringilla, in adipiscing ligula
+				placerat. Integer id tortor tristique, facilisis lorem sit amet, porta ante. Nulla eget diam in erat
+				hendrerit gravida. Cras ut nunc metus. Nullam id faucibus ante. Proin tristique lorem tristique dolor
+				porttitor, eget adipiscing leo gravida. Proin erat erat, laoreet sit amet tincidunt ac, iaculis nec libero.
+				In placerat odio ac dapibus faucibus. Praesent ut est in ligula facilisis congue eget ac ante. Phasellus at
+				felis vitae est molestie ultricies.
+			</p>
+
+			<p class="accent">Задание 12</p>
+			<p>Поставить длинный текст, картинку поставить на задний фон, сделать так чтобы она повторялась по всему экрану и двигалась вверх вниз вместе с текстом.</p>
+			<p class="accent">Задание 13</p>
+			<p>Поставить длинный текст по центру, картинку поставить на задний фон, сделать так чтобы она повторялась по всему экрану и не двигалась вверх вниз вместе с текстом.</p>
+			<p class="accent">Задание 14</p>
+			<p>Поставить длинный текст по левому краю, картинку поставить на задний фон, сделать так чтобы она располагалась возле правой стенки сайта, и повторялась только по Y, картинка должна двигаться вверх и вниз вместе с текстом.</p>
+			<p class="accent">Задание 15</p>
+			<p>Поставить длинный текст по левому краю, картинка на заднем фоне должна быть размером 35% от общего экрана, весь экран должен иметь цвет фона черный.</p>
+
+		
+	</div>
+</section>
+</body><editor-card style="position:absolute;top:0px;left:0px;z-index:auto;display: block !important"><div dir="ltr" style="all: initial;"><div style="color-scheme: initial; forced-color-adjust: initial; mask: initial; math-depth: initial; position: absolute; position-anchor: initial; text-size-adjust: initial; appearance: initial; color: initial; font: initial; font-palette: initial; font-synthesis: initial; inset-area: initial; text-orientation: initial; text-rendering: initial; text-spacing-trim: initial; -webkit-font-smoothing: initial; -webkit-locale: initial; -webkit-text-orientation: initial; -webkit-writing-mode: initial; writing-mode: initial; zoom: initial; accent-color: initial; place-content: initial; place-items: initial; place-self: initial; alignment-baseline: initial; anchor-name: initial; animation-composition: initial; animation: initial; app-region: initial; aspect-ratio: initial; backdrop-filter: initial; backface-visibility: initial; background: initial; background-blend-mode: initial; baseline-shift: initial; baseline-source: initial; block-size: initial; border-block: initial; border: initial; border-radius: initial; border-collapse: initial; border-end-end-radius: initial; border-end-start-radius: initial; border-inline: initial; border-start-end-radius: initial; border-start-start-radius: initial; inset: initial; box-shadow: initial; box-sizing: initial; break-after: initial; break-before: initial; break-inside: initial; buffered-rendering: initial; caption-side: initial; caret-color: initial; clear: initial; clip: initial; clip-path: initial; clip-rule: initial; color-interpolation: initial; color-interpolation-filters: initial; color-rendering: initial; columns: initial; column-fill: initial; gap: initial; column-rule: initial; column-span: initial; contain: initial; contain-intrinsic-block-size: initial; contain-intrinsic-size: initial; contain-intrinsic-inline-size: initial; container: initial; content: initial; content-visibility: initial; counter-increment: initial; counter-reset: initial; counter-set: initial; cursor: initial; cx: initial; cy: initial; d: initial; display: initial; dominant-baseline: initial; empty-cells: initial; field-sizing: initial; fill: initial; fill-opacity: initial; fill-rule: initial; filter: initial; flex: initial; flex-flow: initial; float: initial; flood-color: initial; flood-opacity: initial; grid: initial; grid-area: initial; height: initial; hyphenate-character: initial; hyphenate-limit-chars: initial; hyphens: initial; image-orientation: initial; image-rendering: initial; initial-letter: initial; inline-size: initial; inset-block: initial; inset-inline: initial; isolation: initial; letter-spacing: initial; lighting-color: initial; line-break: initial; list-style: initial; margin-block: initial; margin: initial; margin-inline: initial; marker: initial; mask-type: initial; math-shift: initial; math-style: initial; max-block-size: initial; max-height: initial; max-inline-size: initial; max-width: initial; min-block-size: initial; min-height: initial; min-inline-size: initial; min-width: initial; mix-blend-mode: initial; object-fit: initial; object-position: initial; object-view-box: initial; offset: initial; opacity: initial; order: initial; orphans: initial; outline: initial; outline-offset: initial; overflow-anchor: initial; overflow-clip-margin: initial; overflow-wrap: initial; overflow: initial; overlay: initial; overscroll-behavior-block: initial; overscroll-behavior-inline: initial; overscroll-behavior: initial; padding-block: initial; padding: initial; padding-inline: initial; page: initial; page-orientation: initial; paint-order: initial; perspective: initial; perspective-origin: initial; pointer-events: initial; position-try: initial; position-visibility: initial; quotes: initial; r: initial; resize: initial; rotate: initial; ruby-position: initial; rx: initial; ry: initial; scale: initial; scroll-behavior: initial; scroll-margin-block: initial; scroll-margin: initial; scroll-margin-inline: initial; scroll-padding-block: initial; scroll-padding: initial; scroll-padding-inline: initial; scroll-snap-align: initial; scroll-snap-stop: initial; scroll-snap-type: initial; scroll-timeline: initial; scrollbar-color: initial; scrollbar-gutter: initial; scrollbar-width: initial; shape-image-threshold: initial; shape-margin: initial; shape-outside: initial; shape-rendering: initial; size: initial; speak: initial; stop-color: initial; stop-opacity: initial; stroke: initial; stroke-dasharray: initial; stroke-dashoffset: initial; stroke-linecap: initial; stroke-linejoin: initial; stroke-miterlimit: initial; stroke-opacity: initial; stroke-width: initial; tab-size: initial; table-layout: initial; text-align: initial; text-align-last: initial; text-anchor: initial; text-combine-upright: initial; text-decoration: initial; text-decoration-skip-ink: initial; text-emphasis: initial; text-emphasis-position: initial; text-indent: initial; text-overflow: initial; text-shadow: initial; text-transform: initial; text-underline-offset: initial; text-underline-position: initial; white-space: initial; timeline-scope: initial; touch-action: initial; transform: initial; transform-box: initial; transform-origin: initial; transform-style: initial; transition: initial; translate: initial; user-select: initial; vector-effect: initial; vertical-align: initial; view-timeline: initial; view-transition-class: initial; view-transition-name: initial; visibility: initial; border-spacing: initial; -webkit-box-align: initial; -webkit-box-decoration-break: initial; -webkit-box-direction: initial; -webkit-box-flex: initial; -webkit-box-ordinal-group: initial; -webkit-box-orient: initial; -webkit-box-pack: initial; -webkit-box-reflect: initial; -webkit-line-break: initial; -webkit-line-clamp: initial; -webkit-mask-box-image: initial; -webkit-print-color-adjust: initial; -webkit-rtl-ordering: initial; -webkit-ruby-position: initial; -webkit-tap-highlight-color: initial; -webkit-text-combine: initial; -webkit-text-decorations-in-effect: initial; -webkit-text-fill-color: initial; -webkit-text-security: initial; -webkit-text-stroke: initial; -webkit-user-drag: initial; widows: initial; width: initial; will-change: initial; word-break: initial; word-spacing: initial; x: initial; y: initial; z-index: 2147483647;"><link rel="stylesheet" href="chrome-extension://hokifickgkhplphjiodbggjmoafhignh/fonts/fabric-icons.css"><div style="all: initial;"><template shadowrootmode="open"></template></div></div><div style="color-scheme: initial; forced-color-adjust: initial; mask: initial; math-depth: initial; position: absolute; position-anchor: initial; text-size-adjust: initial; appearance: initial; color: initial; font: initial; font-palette: initial; font-synthesis: initial; inset-area: initial; text-orientation: initial; text-rendering: initial; text-spacing-trim: initial; -webkit-font-smoothing: initial; -webkit-locale: initial; -webkit-text-orientation: initial; -webkit-writing-mode: initial; writing-mode: initial; zoom: initial; accent-color: initial; place-content: initial; place-items: initial; place-self: initial; alignment-baseline: initial; anchor-name: initial; animation-composition: initial; animation: initial; app-region: initial; aspect-ratio: initial; backdrop-filter: initial; backface-visibility: initial; background: initial; background-blend-mode: initial; baseline-shift: initial; baseline-source: initial; block-size: initial; border-block: initial; border: initial; border-radius: initial; border-collapse: initial; border-end-end-radius: initial; border-end-start-radius: initial; border-inline: initial; border-start-end-radius: initial; border-start-start-radius: initial; inset: initial; box-shadow: initial; box-sizing: initial; break-after: initial; break-before: initial; break-inside: initial; buffered-rendering: initial; caption-side: initial; caret-color: initial; clear: initial; clip: initial; clip-path: initial; clip-rule: initial; color-interpolation: initial; color-interpolation-filters: initial; color-rendering: initial; columns: initial; column-fill: initial; gap: initial; column-rule: initial; column-span: initial; contain: initial; contain-intrinsic-block-size: initial; contain-intrinsic-size: initial; contain-intrinsic-inline-size: initial; container: initial; content: initial; content-visibility: initial; counter-increment: initial; counter-reset: initial; counter-set: initial; cursor: initial; cx: initial; cy: initial; d: initial; display: initial; dominant-baseline: initial; empty-cells: initial; field-sizing: initial; fill: initial; fill-opacity: initial; fill-rule: initial; filter: initial; flex: initial; flex-flow: initial; float: initial; flood-color: initial; flood-opacity: initial; grid: initial; grid-area: initial; height: initial; hyphenate-character: initial; hyphenate-limit-chars: initial; hyphens: initial; image-orientation: initial; image-rendering: initial; initial-letter: initial; inline-size: initial; inset-block: initial; inset-inline: initial; isolation: initial; letter-spacing: initial; lighting-color: initial; line-break: initial; list-style: initial; margin-block: initial; margin: initial; margin-inline: initial; marker: initial; mask-type: initial; math-shift: initial; math-style: initial; max-block-size: initial; max-height: initial; max-inline-size: initial; max-width: initial; min-block-size: initial; min-height: initial; min-inline-size: initial; min-width: initial; mix-blend-mode: initial; object-fit: initial; object-position: initial; object-view-box: initial; offset: initial; opacity: initial; order: initial; orphans: initial; outline: initial; outline-offset: initial; overflow-anchor: initial; overflow-clip-margin: initial; overflow-wrap: initial; overflow: initial; overlay: initial; overscroll-behavior-block: initial; overscroll-behavior-inline: initial; overscroll-behavior: initial; padding-block: initial; padding: initial; padding-inline: initial; page: initial; page-orientation: initial; paint-order: initial; perspective: initial; perspective-origin: initial; pointer-events: initial; position-try: initial; position-visibility: initial; quotes: initial; r: initial; resize: initial; rotate: initial; ruby-position: initial; rx: initial; ry: initial; scale: initial; scroll-behavior: initial; scroll-margin-block: initial; scroll-margin: initial; scroll-margin-inline: initial; scroll-padding-block: initial; scroll-padding: initial; scroll-padding-inline: initial; scroll-snap-align: initial; scroll-snap-stop: initial; scroll-snap-type: initial; scroll-timeline: initial; scrollbar-color: initial; scrollbar-gutter: initial; scrollbar-width: initial; shape-image-threshold: initial; shape-margin: initial; shape-outside: initial; shape-rendering: initial; size: initial; speak: initial; stop-color: initial; stop-opacity: initial; stroke: initial; stroke-dasharray: initial; stroke-dashoffset: initial; stroke-linecap: initial; stroke-linejoin: initial; stroke-miterlimit: initial; stroke-opacity: initial; stroke-width: initial; tab-size: initial; table-layout: initial; text-align: initial; text-align-last: initial; text-anchor: initial; text-combine-upright: initial; text-decoration: initial; text-decoration-skip-ink: initial; text-emphasis: initial; text-emphasis-position: initial; text-indent: initial; text-overflow: initial; text-shadow: initial; text-transform: initial; text-underline-offset: initial; text-underline-position: initial; white-space: initial; timeline-scope: initial; touch-action: initial; transform: initial; transform-box: initial; transform-origin: initial; transform-style: initial; transition: initial; translate: initial; user-select: initial; vector-effect: initial; vertical-align: initial; view-timeline: initial; view-transition-class: initial; view-transition-name: initial; visibility: initial; border-spacing: initial; -webkit-box-align: initial; -webkit-box-decoration-break: initial; -webkit-box-direction: initial; -webkit-box-flex: initial; -webkit-box-ordinal-group: initial; -webkit-box-orient: initial; -webkit-box-pack: initial; -webkit-box-reflect: initial; -webkit-line-break: initial; -webkit-line-clamp: initial; -webkit-mask-box-image: initial; -webkit-print-color-adjust: initial; -webkit-rtl-ordering: initial; -webkit-ruby-position: initial; -webkit-tap-highlight-color: initial; -webkit-text-combine: initial; -webkit-text-decorations-in-effect: initial; -webkit-text-fill-color: initial; -webkit-text-security: initial; -webkit-text-stroke: initial; -webkit-user-drag: initial; widows: initial; width: initial; will-change: initial; word-break: initial; word-spacing: initial; x: initial; y: initial; z-index: 2147483647;"><link rel="stylesheet" href="chrome-extension://hokifickgkhplphjiodbggjmoafhignh/fonts/fabric-icons.css"></div><div id="editorNotificationContainer" style="color-scheme: initial; forced-color-adjust: initial; mask: initial; math-depth: initial; position: fixed; position-anchor: initial; text-size-adjust: initial; appearance: initial; color: initial; font: initial; font-palette: initial; font-synthesis: initial; inset-area: initial; text-orientation: initial; text-rendering: initial; text-spacing-trim: initial; -webkit-font-smoothing: initial; -webkit-locale: initial; -webkit-text-orientation: initial; -webkit-writing-mode: initial; writing-mode: initial; zoom: initial; accent-color: initial; place-content: initial; place-items: initial; place-self: initial; alignment-baseline: initial; anchor-name: initial; animation-composition: initial; animation: initial; app-region: initial; aspect-ratio: initial; backdrop-filter: initial; backface-visibility: initial; background: initial; background-blend-mode: initial; baseline-shift: initial; baseline-source: initial; block-size: initial; border-block: initial; border: initial; border-radius: initial; border-collapse: initial; border-end-end-radius: initial; border-end-start-radius: initial; border-inline: initial; border-start-end-radius: initial; border-start-start-radius: initial; bottom: 0px; box-shadow: initial; box-sizing: initial; break-after: initial; break-before: initial; break-inside: initial; buffered-rendering: initial; caption-side: initial; caret-color: initial; clear: initial; clip: initial; clip-path: initial; clip-rule: initial; color-interpolation: initial; color-interpolation-filters: initial; color-rendering: initial; columns: initial; column-fill: initial; gap: initial; column-rule: initial; column-span: initial; contain: initial; contain-intrinsic-block-size: initial; contain-intrinsic-size: initial; contain-intrinsic-inline-size: initial; container: initial; content: initial; content-visibility: initial; counter-increment: initial; counter-reset: initial; counter-set: initial; cursor: initial; cx: initial; cy: initial; d: initial; display: flex; dominant-baseline: initial; empty-cells: initial; field-sizing: initial; fill: initial; fill-opacity: initial; fill-rule: initial; filter: initial; flex: initial; flex-direction: column-reverse; flex-wrap: initial; float: initial; flood-color: initial; flood-opacity: initial; grid: initial; grid-area: initial; height: initial; hyphenate-character: initial; hyphenate-limit-chars: initial; hyphens: initial; image-orientation: initial; image-rendering: initial; initial-letter: initial; inline-size: initial; inset-block: initial; inset-inline: initial; isolation: initial; left: initial; letter-spacing: initial; lighting-color: initial; line-break: initial; list-style: initial; margin-block: initial; margin: 1em; margin-inline: initial; marker: initial; mask-type: initial; math-shift: initial; math-style: initial; max-block-size: initial; max-height: initial; max-inline-size: initial; max-width: initial; min-block-size: initial; min-height: initial; min-inline-size: initial; min-width: initial; mix-blend-mode: initial; object-fit: initial; object-position: initial; object-view-box: initial; offset: initial; opacity: initial; order: initial; orphans: initial; outline: initial; outline-offset: initial; overflow-anchor: initial; overflow-clip-margin: initial; overflow-wrap: initial; overflow: initial; overlay: initial; overscroll-behavior-block: initial; overscroll-behavior-inline: initial; overscroll-behavior: initial; padding-block: initial; padding: initial; padding-inline: initial; page: initial; page-orientation: initial; paint-order: initial; perspective: initial; perspective-origin: initial; pointer-events: initial; position-try: initial; position-visibility: initial; quotes: initial; r: initial; resize: initial; right: 0px; rotate: initial; ruby-position: initial; rx: initial; ry: initial; scale: initial; scroll-behavior: initial; scroll-margin-block: initial; scroll-margin: initial; scroll-margin-inline: initial; scroll-padding-block: initial; scroll-padding: initial; scroll-padding-inline: initial; scroll-snap-align: initial; scroll-snap-stop: initial; scroll-snap-type: initial; scroll-timeline: initial; scrollbar-color: initial; scrollbar-gutter: initial; scrollbar-width: initial; shape-image-threshold: initial; shape-margin: initial; shape-outside: initial; shape-rendering: initial; size: initial; speak: initial; stop-color: initial; stop-opacity: initial; stroke: initial; stroke-dasharray: initial; stroke-dashoffset: initial; stroke-linecap: initial; stroke-linejoin: initial; stroke-miterlimit: initial; stroke-opacity: initial; stroke-width: initial; tab-size: initial; table-layout: initial; text-align: initial; text-align-last: initial; text-anchor: initial; text-combine-upright: initial; text-decoration: initial; text-decoration-skip-ink: initial; text-emphasis: initial; text-emphasis-position: initial; text-indent: initial; text-overflow: initial; text-shadow: initial; text-transform: initial; text-underline-offset: initial; text-underline-position: initial; white-space: initial; timeline-scope: initial; top: initial; touch-action: initial; transform: initial; transform-box: initial; transform-origin: initial; transform-style: initial; transition: initial; translate: initial; user-select: initial; vector-effect: initial; vertical-align: initial; view-timeline: initial; view-transition-class: initial; view-transition-name: initial; visibility: initial; border-spacing: initial; -webkit-box-align: initial; -webkit-box-decoration-break: initial; -webkit-box-direction: initial; -webkit-box-flex: initial; -webkit-box-ordinal-group: initial; -webkit-box-orient: initial; -webkit-box-pack: initial; -webkit-box-reflect: initial; -webkit-line-break: initial; -webkit-line-clamp: initial; -webkit-mask-box-image: initial; -webkit-print-color-adjust: initial; -webkit-rtl-ordering: initial; -webkit-ruby-position: initial; -webkit-tap-highlight-color: initial; -webkit-text-combine: initial; -webkit-text-decorations-in-effect: initial; -webkit-text-fill-color: initial; -webkit-text-security: initial; -webkit-text-stroke: initial; -webkit-user-drag: initial; widows: initial; width: initial; will-change: initial; word-break: initial; word-spacing: initial; x: initial; y: initial; z-index: 2147483647;"></div></div></editor-card></html>

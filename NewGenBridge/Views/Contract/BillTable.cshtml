@@ -1,0 +1,232 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model List<BillViewModel>
+
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var contractInfoList = ViewBag.NamesList;
+}
+
+<style>
+    .link-true{
+        text-decoration: underline !important;
+        text-decoration-color: var(--main-color);
+    }
+
+    .abs-container {
+        position: relative;
+    }
+
+    #searchBar {
+        width: 50%;
+        position: relative;
+        z-index: 1;
+    }
+
+    .drop-down-ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        position: absolute;
+        width: 50%;
+        margin-top: -.5rem;
+        padding-top: .5rem;
+        border: 1px solid var(--main-color);
+        border-top: 0;
+        box-sizing: border-box;
+        z-index: 0;
+        max-height: 30vh;
+        overflow-y: scroll;
+    }
+
+        .drop-down-ul > li {
+            background: var(--light-color);
+            cursor: pointer;
+
+            span {
+                display: block;
+                padding: .5rem;
+            }
+        }
+
+    #li-not-found {
+        padding: .5rem;
+    }
+
+    .drop-down-ul > li:hover {
+        background: var(--main-color);
+    }
+
+    .pages-container {
+        display: flex;
+        margin: 1rem 0;
+        padding: 0;
+        list-style: none;
+        justify-content: center;
+        gap: 1rem;
+    }
+</style>
+<h2>@Html.T("bills")</h2>
+<div class="abs-container" tabindex="0" style="outline:none; margin-bottom: 1rem;">
+    <input type="search" id="searchBar" autocomplete="off" placeholder="@Html.T("enter_student_name")" value="@(ViewBag.Name ?? "")" />
+    <ul class="drop-down-ul d-none" id="searchList">
+        <li id="li-not-found" class="d-none">@Html.T("nothing_found")</li>
+        @foreach (var student in contractInfoList)
+        {
+            <li data-student="@student.StudentName">
+                <span>
+                    @student.StudentName
+                </span>
+            </li>
+        }
+    </ul>
+</div>
+
+<!--
+FIX INSERT
+-->
+
+<div id="contract-list-container">
+    @await Html.PartialAsync("_BillTablePartial", Model)
+</div>
+
+<!--
+FIX END
+-->
+
+<script>
+    (function () {
+           const baseUrl = "@Url.Action("BillTable", "Contract")";
+
+           function loadBills(url) {
+               const fetchUrl = url || baseUrl;
+               fetch(fetchUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                   .then(r => {
+                       if (!r.ok) throw new Error('Network error');
+                       return r.text();
+                   })
+                   .then(html => {
+                       document.getElementById('contract-list-container').innerHTML = html;
+                       attachBillEventHandlers();
+                   })
+                   .catch(err => {
+                       console.error(err);
+                   });
+           }
+
+           function attachBillEventHandlers() {
+               // Payment status toggle
+               $('.payment-trigger').off('change').on('change', function(){
+                   var billId = $(this).attr('id');
+                   var status = $(this).is(':checked');
+                   $.ajax({
+                       url: '/Contract/UpdateBillStatus',
+                       type: 'POST',
+                       data: { billId: billId, status: status },
+                       success: function(response) {
+                           var span = $('#' + billId).next('span');
+                           if(status){
+                               span.text('Paid');
+                           } else {
+                               span.text('');
+                           }
+                           console.log('Bill status updated successfully.');
+                       },
+                       error: function(xhr, status, error) {
+                           console.error('Error updating bill status:', error);
+                       }
+                   });
+               });
+
+               // File upload trigger
+               $('[data-trigger="billUpload"]').off('click').on('click', function(e){
+                   e.preventDefault();
+                   $(this).next('form').find('input[type="file"]').click();
+               });
+           }
+
+           // File upload handler (global scope for inline onchange)
+           window.askIfSure = function(inputElement){
+               var form = $(inputElement).closest('form')[0];
+               var formData = new FormData(form);
+
+               $.ajax({
+                   url: form.action,
+                   type: form.method,
+                   data: formData,
+                   contentType: false,
+                   processData: false,
+                   success: function() {
+                       var cAlert = new AlertBox('File uploaded successfully.', false, false);
+                       cAlert.show();
+                       // Reload to show updated file status
+                       loadBills(window.location.pathname + window.location.search);
+                   },
+                   error: function() {
+                       var cAlert = new AlertBox('Error uploading file.', true, false);
+                       cAlert.show();
+                   }
+               });
+           };
+
+           // Search functionality
+           let searchBar = document.querySelector("#searchBar");
+           let searchDrop = document.querySelector("#searchList");
+           let items = () => document.querySelectorAll('#searchList>li');
+           let notFound = () => document.querySelector('#li-not-found');
+
+           searchBar.addEventListener('focus', () => {
+               searchDrop.classList.remove('d-none');
+           });
+
+           window.addEventListener('click', (e) => {
+               if (e.target != searchBar)
+                   searchDrop.classList.add('d-none');
+           });
+
+           searchBar.addEventListener('input', (e) => {
+               let searchValue = searchBar.value.toUpperCase();
+               let found = 0;
+               for (const opt of items()) {
+                   const toShow = opt.innerText.toUpperCase().includes(searchValue);
+                   found += toShow;
+                   opt.classList.toggle('d-none', !toShow);
+               }
+               notFound().classList.toggle('d-none', found);
+           });
+
+           searchBar.addEventListener('keydown', (e) => {
+               if (e.key === 'Enter') {
+                   e.preventDefault();
+                   const value = searchBar.value.trim();
+                   if (!value) {
+                       loadBills(baseUrl);
+                   } else {
+                       loadBills(baseUrl + '?name=' + encodeURIComponent(value));
+                   }
+                   searchDrop.classList.add('d-none');
+               }
+           });
+
+           // Click on search item
+           function attachSearchItemHandlers() {
+               for (const item of items()) {
+                   if (item === notFound()) continue;
+                   item.removeEventListener('click', item._copHandler);
+                   item._copHandler = function () {
+                       const student = item.getAttribute('data-student') || item.innerText.trim();
+                       searchBar.value = item.innerText;
+                       searchDrop.classList.add('d-none');
+                       loadBills(baseUrl + '?name=' + encodeURIComponent(student));
+                   };
+                   item.addEventListener('click', item._copHandler);
+               }
+           }
+
+           // Initial setup
+           attachBillEventHandlers();
+           attachSearchItemHandlers();
+       })();
+</script>

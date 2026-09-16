@@ -1,0 +1,23 @@
+﻿@using NewGenBridge.Models
+@model List<Branch>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Html.T("welcome")!</h2>
+<div class="timetable-container">
+    @foreach (Branch branch in Model)
+    {
+        <div class="timetable-card">
+            <p class="branch-name">@branch.Name</p>
+            @foreach (Group group in branch.Groups)
+            {
+                <p class="group-name">
+                    <a href="@Url.Action("GroupAttendance", "Attendance", new{groupId = group.Id, date = DateTime.Now})" data-ajax="true" data-ajax-update="#attendance-pop-up">
+                        @group.Name @Html.T(group.Day.ToString().ToLower()) @group.Time.ToString("hh\\:mm")
+                    </a>
+                </p>
+            }
+        </div>
+    }
+</div>
+<div class="pop-up" id="attendance-pop-up"></div>

@@ -1,0 +1,84 @@
+﻿@using System.Globalization
+@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model List<Royalty>
+@{
+    List<Branch> branches = ViewBag.Branches;
+    CultureInfo info = new CultureInfo("en-US");
+}
+<style>
+    li.active a {
+        padding: 0 3px;
+        border-bottom: 1px solid;
+    }
+</style>
+<table class="table access-table" style="width: 100%;" id="contract-table">
+    <tr>
+        <th>@Html.T("date")</th>
+        <th>@Html.T("amount_bills")</th>
+        <th>@Html.T("royalty") %</th>
+        <th>@Html.T("amount_royalty")</th>
+        <th>@Html.T("branch")</th>
+    </tr>
+    @foreach (var royalty in Model.OrderByDescending(r => r.Period))
+    {
+        <tr>
+            <td>
+                @{
+                    string month = royalty.Period.ToString("MMMM", info);
+                }
+                @Html.T(month.ToLower()) @royalty.Period.Year
+            </td>
+            <td>@((royalty.Total * 20).ToString("N2", info))</td>
+            <td>5%</td>
+            <td>@royalty.Total.ToString("N2")</td>
+            <td>@branches.FirstOrDefault(b => b.Id == royalty.BranchId)?.Name</td>
+        </tr>
+    }
+</table>
+<ul class="pages-container">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <li>
+            <a href="@Url.Action("RoyaltyTable", "Contract", new { page = ViewBag.CurrentPage - 1 })" class="page-number">@Html.T("previous")</a>
+        </li>
+    }
+    @{
+        int totalPages = ViewBag.TotalPages;
+        int currentPage = ViewBag.CurrentPage;
+        <li class="@(currentPage == 1 ? "active" : "")">
+            <a href="@Url.Action("RoyaltyTable", "Contract", new { page = 1 })" class="page-number">1</a>
+        </li>
+        if (currentPage > 3)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        for (int i = Math.Max(2, currentPage - 1); i <= Math.Min(totalPages - 1, currentPage + 1); i++)
+        {
+            <li class="@(currentPage == i ? "active" : "")">
+                <a href="@Url.Action("RoyaltyTable", "Contract", new { page = i })">@i</a>
+            </li>
+        }
+        if (currentPage < totalPages - 2)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        if (totalPages > 1)
+        {
+            <li class="@(currentPage == totalPages ? "active" : "")">
+                <a href="@Url.Action("RoyaltyTable", "Contract", new { page = totalPages })">@totalPages</a>
+            </li>
+        }
+    }
+
+    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+    {
+        <li>
+            <a href="@Url.Action("RoyaltyTable", "Contract", new { page = ViewBag.CurrentPage + 1})" class="page-number">@Html.T("next")</a>
+        </li>
+    }
+</ul>

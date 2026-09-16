@@ -1,0 +1,69 @@
+﻿@using NewGenBridge.ViewModels
+@model StudentLessonViewModel
+@{
+    int a = 0;
+}
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUp('lesson-select-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <form asp-action="UpdateStudentLesson" asp-controller="Account" class="v-form"
+            data-ajax="true"
+            data-ajax-begin="submitFormSpin(this)"
+            data-ajax-complete="endFormSpin(this)"
+            data-ajax-failure="updateOnError()"
+            >
+            <input asp-for="StudentId" type="hidden" value="@Model.StudentId" />
+            <div class="v-form-block">
+                <label for="">@Html.T("name")</label>
+                <p class="false-input">@Model.StudentNameInfo</p>
+            </div>
+            <div class="v-form-block">
+                <label for="">@Html.T("level")</label>
+                <div class="select-wrapper">
+                    <select asp-items="@ViewBag.Levels" id="levelId">
+                    </select>
+                </div>
+            </div>
+            <div class="v-form-block">
+                <label for="">@Html.T("lesson")</label>
+                <div class="select-wrapper">
+                    <select asp-items="@ViewBag.Lessons" id="lessonId" asp-for="LessonId">
+                    </select>
+                </div>
+            </div>
+            <button class="action-button centered-button spinner-button">@Html.T("save")<span class="spinner"></span></button>
+        </form>
+    </div>
+</div>
+
+<script>
+    var currentLesson = '@Model.LessonId'
+    function PopulateLessons(){
+        var levelId = $('#levelId').val();
+        var url = '@Url.Action("GetLessonSelectList", "Level")';
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: { levelId: levelId, studentId: '@Model.StudentId' },
+            success: function (data) {
+                $('#lessonId').empty();
+                $.each(data, function (i, item) {
+                    let option = $('<option>').text(item.text).attr('value', item.value);
+                    if(currentLesson != "" && currentLesson == item.value){
+                        option.attr('selected', 'selected');
+                        currentLesson == "";
+                    }
+                    $('#lessonId').append(option);
+                });
+            },
+            error: function () {
+            }
+        });
+    }
+    PopulateLessons();
+    $('#levelId').on('change', PopulateLessons);
+</script>

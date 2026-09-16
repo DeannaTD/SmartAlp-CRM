@@ -1,0 +1,161 @@
+﻿@using NewGenBridge.ViewModels
+@model MentorLessonAccessViewModel
+
+@{
+    ViewData["Title"] = Html.T("lesson_access");
+    List<Level> availableLevels = Model.LevelsWithLessons.Where(record => 
+        Model.LevelsLessons.Any(levelLessons => levelLessons.LevelId == record.Id)
+    ).ToList();
+}
+
+<style>
+    .archive-table-link,
+    .block-table-link{
+        cursor: pointer;
+    }
+
+    .modal-list{
+        background: var(--light-color);
+        border-color: var(--accent-color);
+        border-width: 2px;
+        border-radius: 5px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .modal-box{
+        position: absolute;
+        min-width: 150px;
+    }
+
+    .modal-link{
+        padding: 1rem;
+    }
+
+    .modal-link:hover{
+        background: var(--accent-color);
+    }
+</style>
+<h2>@Html.T("lesson_access") - @Model.MentorName</h2>
+
+<table class="access-table">
+    @foreach (var level in availableLevels)
+    {
+        <tr>
+            <th colspan="4">@level.Name</th>
+        </tr>
+        <tr>
+            <td style="width: 2rem;" class="text-center">№</td>
+            <td>@Html.T("lessons")</td>
+            <td class="text-center">@Html.T("close_date")</td>
+            <td class="text-center">@Html.T("action")</td>
+        </tr>
+        var levelLessons = Model.LevelsLessons.Find(record => record.LevelId == level.Id);
+        short i = 1;
+        foreach(var lesson in level.Lessons)
+        {
+            UserLesson? userLesson = levelLessons.Lessons.Find(record => record.LessonId == lesson.Id);
+            if(userLesson == null)
+            {
+                <tr>
+                    <td>@(i++)</td>
+                    <td>@lesson.Name</td>
+                    <td></td>
+                    <td class="block-table-link open-trigger" data-lid="@lesson.Id">
+                        <span>@Html.T("open")</span>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                string time = userLesson.CloseAt?.ToString("dd/MM/yyyy") ?? "NO INFO";
+                if(userLesson.CloseAt is not null)
+                {
+                    if(userLesson.CloseAt.Value.Year > 2100)
+                    {
+                        time = "∞";
+                    }
+                }
+                <tr>
+                    <td>@(i++)</td>
+                    <td>@lesson.Name</td>
+                    <td>@time</td>
+                    @if(@userLesson.IsOpened)
+                    {
+                        <td class="archive-table-link">
+                            <a class="d-block" data-ajax="true" data-ajax-success="location.reload()"
+                                href="@Url.Action("SwitchLessonToMentor", "Account", new{userId = Model.MentorId, lessonId=lesson.Id, oType = 0})">@Html.T("close")</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="block-table-link open-trigger" data-lid="@lesson.Id">
+                            <span>@Html.T("open")</span>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    }
+</table>
+<template id="modal-template">
+    <ul class="modal-list">
+        <li class="modal-link">
+            <a href="#" data-otype="1">@Html.T("midnight")</a>
+        </li>
+        <li class="modal-link">
+            <a href="#" data-otype="2">@Html.T("month")</a>
+        </li>
+        <li class="modal-link">
+            <a href="#" data-otype="3">@Html.T("forever")</a>
+        </li>
+    </ul>
+</template>
+<script>
+
+    window.addEventListener("load", ()=>{
+        let modalOptions = document.getElementById("modal-template");
+        let modalWindow = null;
+        let triggers = document.querySelectorAll(".open-trigger");
+        triggers.forEach(trigger => trigger.addEventListener("click", (event)=>{
+            event.stopPropagation();
+
+            if(modalWindow) modalWindow.close();
+
+            let rect = event.target.getBoundingClientRect();
+            let offsetX = rect.left + window.scrollX;
+            let offsetY = rect.bottom + window.scrollY;
+            let lid = trigger.getAttribute("data-lid");
+            modalWindow = new ModalBox(modalOptions, offsetX, offsetY);
+            let links = modalWindow.box.querySelectorAll(".modal-link a");
+            console.log(links);
+            console.log(modalWindow);
+            links.forEach(link => {
+                let oType = link.getAttribute("data-otype");
+                link.href = "@Url.Action("SwitchLessonToMentor", "Account")?userId=@Model.MentorId&lessonId=" + lid + "&oType=" + oType;
+                link.addEventListener("click", (e)=>{
+                    e.stopPropagation();
+                    $.ajax({
+                        url: link.href,
+                        type: 'GET',
+                        success: function(response){
+                            location.reload();
+                        },
+                        error: function(xhr){
+                            alert("Error occured: ", xhr.error);
+                        }
+                    });
+                })
+            });
+            modalWindow.show();
+        }));
+        
+        document.addEventListener("click", (event=>{
+            if(modalWindow && !event.target.closest('.modal-box')){
+                modalWindow.close();
+                modalWindow = null;
+            }
+        }));
+    });
+</script>

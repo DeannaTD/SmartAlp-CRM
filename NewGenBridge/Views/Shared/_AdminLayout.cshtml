@@ -1,0 +1,170 @@
+﻿@using NewGenBridge.Helpers
+@{
+    string profileImage = "../Profile/" + User.Identity.Name + ".png";
+    var currentLanguage = Context.Request.Cookies["lang"] ?? "en";
+}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/main.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @if(ViewData["Title"] != null)
+    {
+        <title>@ViewData["Title"] - SmartAlp Academy</title>
+    }
+    else
+    {
+        <title>SmartAlp Academy</title>
+    }
+    <style>
+        .no-form {
+            select {
+                padding: 0;
+                border: none;
+                outline: none;
+            }
+
+            option {
+                cursor: pointer;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="primary-nav">
+        <nav class="primary-nav" aria-label="primary navigation">
+            <ul class="menu-list">
+                <li class="menu-item has-dropdown">
+                    <a href="#" class="dropdown-toggle" title="@Html.T("structure")">
+                        <img src="~/img/home.svg" alt="Home"><span>@Html.T("structure")</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li class="sub-menu-item">
+                            <a href="@Url.Action("StructureControl", "Branch")" title="@Html.T("structure")">
+                                <span>@Html.T("structure")</span>
+                            </a>
+                        </li>
+                        @if (User.IsInRole(NPUR.Supervisor) || User.IsInRole(NPUR.Admin))
+                        {
+                            <li class="sub-menu-item">
+                                <a href="@Url.Action("Company", "Branch")" title="@Html.T("company_data")">
+                                    <span>@Html.T("company_data")</span>
+                                </a>
+                            </li>
+                        }
+                        <li class="sub-menu-item">
+                            <a href="@Url.Action("BranchControlPanel", "Branch")" title="@Html.T("branch")">
+                                <span>@Html.T("branch")</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @if (User.IsInRole(NPUR.Supervisor) || User.IsInRole(NPUR.Admin))
+                {
+                    @* <li class="menu-item">
+                        <img src="~/img/building.svg" alt="Branches">
+                        <a href="@Url.Action("Company", "Branch")" title="@Html.T("company_data")">
+                            <img src="~/img/home.svg" alt="Home"><span>@Html.T("company_data")</span>
+                        </a>
+                    </li> *@
+                    <li class="menu-item"><a href="@Url.Action("KitRequests", "Branch")" title="@Html.T("kit_requests")"><img src="~/img/building.svg" alt="Kit Requests"><span>@Html.T("kit_requests")</span></a></li>
+                }
+                
+                <li class="menu-item has-dropdown">
+                    <a href="#" class="dropdown-toggle" title="@Html.T("finances")">
+                        <img src="~/img/bill.svg" alt="@Html.T("finances")"><span>@Html.T("finances")</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li class="sub-menu-item">
+                            <a href="@Url.Action("PriceTable", "Contract")" title="@Html.T("prices")">
+                                <span>@Html.T("prices")</span>
+                            </a>
+                        </li>
+                        <li class="sub-menu-item">
+                            <a href="@Url.Action("ContractTable", "Contract")" title="@Html.T("contracts")">
+                                <span>@Html.T("contracts")</span>
+                            </a>
+                        </li>
+                        <li class="sub-menu-item">
+                            <a href="@Url.Action("BillTable", "Contract")" title="@Html.T("bills")">
+                                <span>@Html.T("bills")</span>
+                            </a>
+                        </li>
+                        <li class="sub-menu-item">
+                            <a href="@Url.Action("RoyaltyTable", "Contract")" title="@Html.T("royalty")">
+                                <span>@Html.T("royalty")</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @if(!User.IsInRole(NPUR.Supervisor))
+                {
+                <li class="menu-item">
+                    <a href="@Url.Action("LevelControlMenu", "Level")" title="@Html.T("levels")">
+                        <img src="~/img/lessons.svg" alt="Branches"><span>@Html.T("levels")</span>
+                    </a>
+                </li>
+                }
+                
+                <li class="menu-item">
+                    <a href="@Url.Action("ManageAccess", "Branch")" title="@Html.T("access")">
+                        <img src="~/img/staff.svg" alt="Home"><span>@Html.T("access")</span>
+                    </a>
+                </li>
+                @if(!User.IsInRole(NPUR.Supervisor))
+                {
+                <li class="menu-item">
+                    <a href="@Url.Action("Index", "Hub")" title="@Html.T("hub")">
+                        <img src="~/img/staff.svg" alt="Home"><span>@Html.T("hub")</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                        <a href="@Url.Action("KnowledgeBaseIndex", "Hub")" title="@Html.T("knowledge_base")">
+                        <img src="~/img/staff.svg" alt="Home"><span>@Html.T("knowledge_base")</span>
+                    </a>
+                </li>
+                }
+                <li class="menu-item">
+                    <a href="@Url.Action("Register", "Account")" title="@Html.T("add_user")">
+                        <img src="~/img/add-square.svg" alt="Home"><span>@Html.T("add_user")</span>
+                    </a>
+                </li>
+                <li class="menu-item"><a href="@Url.Action("Settings", "Account")" title="@Html.T("settings")"><img src="~/img/settings.svg" alt="Settings"><span>@Html.T("settings")</span></a></li>
+                <li class="menu-item"><a href="@Url.Action("Logout", "Account")" title="@Html.T("logout")"><img src="~/img/logout.svg" alt="Logout"><span>@Html.T("logout")</span></a></li>
+            </ul>
+        </nav>
+        <div class="nav-toggler">
+            <img src="~/img/toggle-arrow.svg" alt="">
+        </div>
+    </aside>
+    <main>
+        <nav class="secondary-nav" aria-label="secondary navigation">
+            <form asp-controller="Master" asp-action="SetLanguage" method="get" class="no-form">
+                <select name="lang" onchange="this.form.submit()">
+                    <option value="en" selected="@(currentLanguage == "en")">EN</option>
+                    <option value="fr" selected="@(currentLanguage == "fr")">FR</option>
+                    <option value="it" selected="@(currentLanguage == "it")">IT</option>
+                    <option value="tr" selected="@(currentLanguage == "tr")">TR</option>
+                    <option value="de" selected="@(currentLanguage == "de")">DE</option>
+                    <option value="ru" selected="@(currentLanguage == "ru")">RU</option>
+                </select>
+            </form>
+            <a href="@Url.Action("Logout", "Account")" class="header-logout">
+                <img src="~/img/logout.svg" alt="Logout">
+            </a>
+            <a href="" class="header-profile">
+                <img src="@profileImage" alt="User profile" onerror="this.src='../Profile/default.png'">
+            </a>
+        </nav>
+        <section class="content" id="content">
+            @RenderBody()
+        </section>
+    </main>
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

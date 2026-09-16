@@ -1,0 +1,62 @@
+﻿@using NewGenBridge.ViewModels
+@model GroupEditionViewModel
+
+@{
+    Layout = null;
+    List<SelectListItem> daysOfWeek = [];
+    foreach (var day in Enum.GetValues<DayOfWeek>())
+    {
+        SelectListItem item = new SelectListItem(Html.T(day.ToString().ToLower()), ((int)day).ToString());
+        if (day == Model.Day)
+            item.Selected = true;
+        daysOfWeek.Add(item);
+    }
+}
+
+<form class="h-form" style="flex-wrap: wrap;" id="group-edit-form" asp-action="UpdateGroup" asp-controller="Branch" data-ajax="true" data-ajax-failure="groupFailed()"
+      data-ajax-success="groupSuccess('Group updated successfully!')">
+    <input type="hidden" asp-for="GroupId" value="@Model.GroupId" />
+    <div class="h-form-block">
+        <label>@Html.T("day")</label>
+        <div class="select-wrapper">
+            <select asp-for="Day" asp-items="@daysOfWeek"></select>
+        </div>
+    </div>
+    <div class="h-form-block">
+        <label>@Html.T("time")</label>
+        <input type="time" asp-for="Time" />
+    </div>
+    <div class="h-form-block">
+        <label>@Html.T("mentor")</label>
+        <div class="select-wrapper">
+            <select asp-for="MentorId" asp-items="@Model.Mentors"></select>
+        </div>
+    </div>
+    <div class="h-form-block" style="width: 100%;">
+        <label>@Html.T("comment")</label>
+        <input type="text" asp-for="Name" />
+    </div>
+    <div class="h-form-block" style="width: 100%;">
+        <button class="action-button" style="">@Html.T("save_changes")</button>
+    </div>
+</form>
+<script>
+    // $('#group-edit-form select').on('change', () => {
+    //     $('#group-edit-form').submit();
+    // })
+
+    // $('#group-edit-form input').on('change', () => {
+    //     $('#group-edit-form').submit();
+    // })
+
+    function groupFailed() {
+        let message = 'Something went wrong, page will be reloaded. Error code: #SUEGV52'
+        let calert = new AlertBox(xhr, true);
+        calert.show();
+    }
+
+    function groupSuccess(message) {
+        let calert = new AlertBox(message, false, false);
+        calert.show();
+    }
+</script>

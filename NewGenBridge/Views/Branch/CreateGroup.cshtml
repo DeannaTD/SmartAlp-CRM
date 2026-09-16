@@ -1,0 +1,61 @@
+﻿@using NewGenBridge.ViewModels
+@model GroupCreationViewModel
+@{
+    Layout = null;
+    List<SelectListItem> daysOfWeek = [];
+    foreach (var day in Enum.GetValues<DayOfWeek>())
+    {
+        daysOfWeek.Add(new SelectListItem(Html.T(day.ToString().ToLower()), ((int)day).ToString()));
+    }
+}
+
+
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUp('group-create-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <form asp-action="CreateGroup" asp-controller="Branch"
+        data-ajax="true"
+        data-ajax-begin="submitFormSpin(this)"
+        data-ajax-complete="ajaxCompleted" class="v-form">
+            <input type="hidden" asp-for="BranchId" value="@Model.BranchId" />
+            <div class="v-form-block">
+                <label>@Html.T("day")<span class="asterisk">*</span></label>
+                <div class="select-wrapper">
+                    <select asp-for="Day" asp-items="@daysOfWeek"></select>
+                </div>
+            </div>
+            <div class="v-form-block">
+                <label>@Html.T("time")<span class="asterisk">*</span></label>
+                <input type="time" asp-for="Time" />
+            </div>
+            <div class="v-form-block">
+                <label>@Html.T("mentor")<span class="asterisk">*</span></label>
+                <div class="select-wrapper">
+                    <select asp-for="MentorId" asp-items="@Model.Mentors"></select>
+                </div>
+            </div>
+            <div class="v-form-block">
+                <label>@Html.T("comment")</label>
+                <input type="text" asp-for="Name"/>
+            </div>
+            <button class="action-button centered-button spinner-button">@Html.T("create")<span class="spinner"></span></button>
+        </form>
+    </div>
+</div>
+<script>
+    ajaxCompleted = function (xhr) {
+        if (xhr.responseText.includes('#')) {
+            let calert = new AlertBox(xhr.responseText, false);
+            calert.show();
+            endFormSpin(document.getElementsByTagName('form')[0]);
+        }
+        else {
+            let calert = new AlertBox(xhr.responseText, true);
+            calert.show();
+        }
+    }
+</script>

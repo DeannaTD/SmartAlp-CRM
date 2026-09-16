@@ -1,0 +1,52 @@
+﻿@model Level
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .level-input {
+        display: block;
+        margin: .5rem 0;
+        min-width: 25vw;
+    }
+</style>
+<section class="setting-section">
+    <h2>@Html.T("edit"): @Model.Name</h2>
+    @* <div class="profile-image-form"> *@
+    <form asp-action="EditLevel" asp-controller="Level"
+          class="settings-grid" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <div class="profile-image-form ">
+            <label>@Html.T("level_picture")</label>
+            <div class="profile-image-input">
+                <img src="~/img/upload.svg" alt="Load profile picture">
+                <p class="profile-image-name">@Html.T("s_upload_title")</p>
+                <p class="profile-image-warning">@Html.T("s_upload_subtitle"): 250Mb</p>
+            </div>
+            <input name="picture" class="d-none" type="file" accept=".png,.jpg,.jpeg">
+        </div>
+        <div>
+            <span class="label settings-label">@Html.T("name")</span>
+            <input asp-for="Name" type="text" class="level-input" />
+        </div>
+        <div>
+            <span class="label settings-label">@Html.T("description")</span>
+            <input asp-for="Description" type="text" class="level-input" />
+        </div>
+        <button class="centered-button action-button profile-form-button">@Html.T("save")</button>
+    </form>
+    @* </div> *@
+</section>
+<script>
+    let pictureInputButton = document.querySelector(".profile-image-input");
+    let pictureInput = document.querySelector("[name='picture']");
+    pictureInputButton.addEventListener('click', () => {
+        $(pictureInput).trigger('click');
+    });
+
+    pictureInput.addEventListener('change', () => {
+        let value = pictureInput.value;
+        document.querySelector('.profile-image-name').innerText = value.split('\\').pop();
+        document.querySelector('.profile-image-warning').style.display = 'none';
+    });
+</script>

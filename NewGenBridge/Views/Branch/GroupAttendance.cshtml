@@ -1,0 +1,113 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model List<AttendanceViewModel>
+@{
+    DateTime[] dates = new DateTime[7];
+    for (int i = 0; i < 7; i++)
+    {
+        dates[i] = ViewBag.StartDate.AddDays(i);
+    }
+    DateTime previousDate = ViewBag.StartDate.AddDays(-7);
+    DateTime nextDate = ViewBag.StartDate.AddDays(7);
+}
+
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        @if (User.IsInRole(NPUR.Mentor))
+        {
+        <div class="pop-up-header-pre">
+            <div id="lesson-all-edit" style="width: 100%">
+                @* <script>
+                    $("#lesson-all-edit").load("@Url.Action("SwitchLessonToAll", "Level", new { groupId = ViewBag.GroupId })")
+                </script> *@
+            </div>
+            <button class="close-icon" onclick="closePopUpUpdate('attendance-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-header">
+            <div class="attendance-date">
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = previousDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-left.svg" alt=""></a>
+                <span class="accent-text">@dates[0].ToString("dd/MM/yyyy") - @dates[6].ToString("dd/MM/yyyy")</span>
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = nextDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-right.svg" alt=""></a>
+            </div>
+        </div>
+        }
+        else if(User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Manager) || User.IsInRole(NPUR.Supervisor))
+        {
+        <div class="pop-up-header-pre" style="position: relative; display: block;">
+            <div id="group-edit">
+                <script>
+                    $("#group-edit").load("@Url.Action("EditGroup", "Branch", new { groupId = ViewBag.GroupId })")
+                </script>
+            </div>
+                <div id="lesson-all-edit" style="width: 100%">
+                    <script>
+                        $("#lesson-all-edit").load("@Url.Action("SwitchLessonToAll", "Level", new { groupId = ViewBag.GroupId })")
+                    </script>
+                </div>
+            <button class="close-icon" onclick="closePopUpUpdate('attendance-pop-up')" style="position: absolute; top: 0; right: 0;">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-header">
+            <div class="attendance-date">
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = previousDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-left.svg" alt=""></a>
+                <span class="accent-text">@dates[0].ToString("dd/MM/yyyy") - @dates[6].ToString("dd/MM/yyyy")</span>
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = nextDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-right.svg" alt=""></a>
+            </div>
+            <a href="@Url.Action("RegisterStudent", "Account", new{groupId = ViewBag.GroupId})" class="action-link"
+                   data-ajax="true" data-ajax-update="#student-create-pop-up">@Html.T("add_new_student")</a>
+        </div>
+        }
+        <div class="pop-up-content">
+            <table class="attendance-table" style="width: 100%;">
+                <tr>
+                    <th colspan="2">@Html.T("name")</th>
+                    <th>@Html.T("mon")<br />@dates[0].ToString(@"dd/MM")</th>
+                    <th>@Html.T("tue")<br />@dates[1].ToString(@"dd/MM")</th>
+                    <th>@Html.T("wed")<br />@dates[2].ToString(@"dd/MM")</th>
+                    <th>@Html.T("thu")<br />@dates[3].ToString(@"dd/MM")</th>
+                    <th>@Html.T("fri")<br />@dates[4].ToString(@"dd/MM")</th>
+                    <th>@Html.T("sat")<br />@dates[5].ToString(@"dd/MM")</th>
+                    <th>@Html.T("sun")<br />@dates[6].ToString(@"dd/MM")</th>
+                </tr>
+                @foreach(AttendanceViewModel atModel in Model)
+                {
+                    int i = 0;
+                    string nameInfo = atModel.StudentName + " (" + atModel.StudentUserName + ")";
+                    <tr data-id="@atModel.StudentId">
+                        <td class="collapsed-cell">
+                            <p class="flex-text">
+                                @if(atModel.IsBlocked){ <img src="~/img/red-block.svg"/> }
+                                @nameInfo
+                            </p>
+                        </td>
+                        <td class="collapsed-cell">
+                            @if (User.IsInRole(NPUR.Mentor))
+                            {
+                                <a href="@Url.Action("StudentLessonHandle", "Level", new {studentId = atModel.StudentId, info = nameInfo })" data-ajax="true" data-ajax-update="#lesson-select-pop-up">
+                                    <img src="~/img/edit.svg" alt="">
+                                </a>
+                            }
+                            else if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Manager))
+                            {
+                                <a href="@Url.Action("StudentInfoHandle", "Account", new {studentId = atModel.StudentId})" data-ajax="true" data-ajax-update="#lesson-select-pop-up">
+                                    <img src="~/img/info-card.svg" alt="">
+                                </a>
+                            }
+                        </td>
+                        @foreach(Attendance attendance in atModel.Attendances)
+                        {
+                            <td class="presence-check" data-state="@attendance.AttendanceStatus" data-id="@attendance.Id" data-stamp="@dates[i++].ToString("dd/MM/yyyy")"><span class="presence-check"></span></td>
+                        }
+                    </tr>
+                }
+            </table>
+            <button class="action-button centered-button spinner-button" id="attendance-save" data-action="@Url.Action("UpdateAttendance", "Attendance")">@Html.T("save")<span class="spinner"></span></button>
+        </div>
+    </div>
+</div>
+<div class="pop-up" id="lesson-select-pop-up"></div>
+<div class="pop-up" id="student-create-pop-up"></div>
+<script src="~/js/atmenu.js"></script>

@@ -1,0 +1,120 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.Services
+@inject ContractService _contractService
+
+@model List<Contract>
+@{
+    bool addAction = User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor);
+    // int totalPages = ViewBag.TotalPages ?? 1;
+    // int currentPage = ViewBag.CurrentPage ?? 1;
+}
+
+<style>
+    li.active a{
+        padding: 0 3px;
+        border-bottom: 1px solid;
+    }
+</style>
+
+<table class="table access-table" style="width: 100%;" id="contract-table">
+    <tr>
+        <th>№</th>
+        <th>@Html.T("date_signed")</th>
+        <th>@Html.T("student_name")</th>
+        <th>@Html.T("parent_name")</th>
+        <th>@Html.T("monthly_payment")</th>
+        <th>@Html.T("valid_to")</th>
+        @if (addAction)
+        {
+            <th colspan="2">@Html.T("action")</th>
+        }
+        else
+        {
+            <th>@Html.T("action")</th>
+        }
+    </tr>
+    @foreach (var contract in Model.OrderByDescending(c => c.SignDate))
+    {
+        decimal price = 0;
+        if(contract.PriceAmount != null)
+        {
+            price = contract.PriceAmount ?? 0;
+        }
+        else
+        {
+            price = await _contractService.GetPriceSum(contract.PriceId);
+        }
+        <tr data-student="@contract.StudentName">
+            <td>@contract.Number</td>
+            <td>@contract.SignDate.ToString("dd.MM.yyyy")</td>
+            <td>@contract.StudentName</td>
+            <td>@contract.ParentName</td>
+            <td>@price</td>
+            <td>@contract.ExpirationDate.ToString("dd.MM.yyyy")</td>
+            <td>
+
+                <a href="@(Url.Content($"~/Contracts/contract_{contract.Id}.pdf"))" style="display: flex; align-items: center; gap: .5rem;">
+                    <img src="~/img/pdf.png" style="height: 2rem;" />
+                    @Html.T("view")
+                </a>
+            </td>
+            @if (addAction)
+            {
+                <td>
+                    <form class="m-none" asp-action="Delete" asp-asp-controller="Contract" method="post"
+                          onsubmit="return confirm('@Html.T("are_you_sure")')">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@contract.Id" />
+                        <input type="submit" value="@Html.T("delete")" class="input-text">
+                    </form>
+                </td>
+            }
+        </tr>
+    }
+</table>
+<ul class="pages-container">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <li>
+            <a href="@Url.Action("ContractTable", "Contract", new { page = ViewBag.CurrentPage - 1, name=ViewBag.Name })" class="page-number">@Html.T("previous")</a>
+        </li>
+    }
+    @{
+        int totalPages = ViewBag.TotalPages;
+        int currentPage = ViewBag.CurrentPage;
+        <li class="@(currentPage == 1 ? "active" : "")">
+            <a href="@Url.Action("ContractTable", "Contract", new { page = 1, name = ViewBag.Name })" class="page-number">1</a>
+        </li>
+        if (currentPage > 3)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        for (int i = Math.Max(2, currentPage - 1); i <= Math.Min(totalPages - 1, currentPage + 1); i++)
+        {
+            <li class="@(currentPage == i ? "active" : "")">
+                <a href="@Url.Action("ContractTable", "Contract", new { page = i, name = ViewBag.Name })">@i</a>
+            </li>
+        }
+        if (currentPage < totalPages - 2)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        if (totalPages > 1)
+        {
+            <li class="@(currentPage == totalPages ? "active" : "")">
+                <a href="@Url.Action("ContractTable", "Contract", new { page = totalPages, name = ViewBag.Name })">@totalPages</a>
+            </li>
+        }
+    }
+
+    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+    {
+        <li>
+            <a href="@Url.Action("ContractTable", "Contract", new { page = ViewBag.CurrentPage + 1, name = ViewBag.Name })" class="page-number">@Html.T("next")</a>
+        </li>
+    }
+</ul>

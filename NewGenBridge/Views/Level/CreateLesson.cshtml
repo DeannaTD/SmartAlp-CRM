@@ -1,0 +1,23 @@
+﻿@using NewGenBridge.ViewModels
+@inject NewGenBridge.Services.LevelService _levelService
+@model LessonCreationViewModel
+
+@{
+    var levels = _levelService.GetLevelsOnly();
+    List<SelectListItem> levelList = new List<SelectListItem>();
+    foreach(Level level in levels)
+    {
+        levelList.Add(new SelectListItem{
+            Text = level.Name,
+            Value = level.Id.ToString(),
+            Selected = level.Id == ViewBag.LevelId
+        });
+    }
+}
+<form asp-action="CreateLesson" asp-controller="Level" enctype="multipart/form-data">
+    <input type="text" asp-for="Name" />
+    <select asp-for="LevelId" asp-items="@levelList"></select>
+    <input type="file" asp-for="File" />
+    <input type="submit" value="Создать" />
+</form>
+

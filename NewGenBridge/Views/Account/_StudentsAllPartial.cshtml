@@ -1,0 +1,107 @@
+﻿@using NewGenBridge.Helpers
+@{
+    List<SelectListItem> groupList = ViewBag.GroupList;
+    int statusId = Convert.ToInt32(ViewBag.StatusId);
+}
+<table class="access-table" style="width: 100%">
+    <tr>
+        <th>@Html.T("name")</th>
+        <th>@Html.T("status")</th>
+        <th>@Html.T("start")</th>
+        <th>@Html.T("group")</th>
+        <th colspan="3">@Html.T("action")</th>
+    </tr>
+    @foreach (var student in Model)
+    {
+        <tr>
+            <td>
+                @student.FullName
+                <a href="@Url.Action("StudentInfoHandle", "Account", new { studentId = student.Id })" data-ajax="true" data-ajax-update="#lesson-select-pop-up">
+                    <img src="~/img/info-card.svg" alt="">
+                </a>
+            </td>
+            <td>
+                <p class="flex-text">
+                    @switch(student.StatusId)
+                    {
+                        case UserStatus.Active:
+                            <img src="~/img/green-checkmark.svg" alt="Active" title="Active" class="max-icon" />
+                            break;
+                        case UserStatus.Blocked:
+                            <img src="~/img/block.svg" alt="Blocked" title="Blocked" class="max-icon" />
+                            break;
+                        case UserStatus.Archived:
+                            <img src="~/img/archive.svg" alt="Archived" title="Archived" class="max-icon"/>
+                            break;
+                    }
+                    @{
+                        string tmp = UserStatus.GetName(student.StatusId).ToLower();
+                    }
+                    @Html.T(tmp)
+                </p>
+            </td>
+            <td>
+                @student.StartedOn.ToString("dd/MM/yyyy")
+            </td>
+            <td class="td-select-wrapper">
+                <form asp-action="SwitchUserStatus" asp-controller="Account" data-ajax="true">
+                    <input type="hidden" name="userId" value="@student.Id" />
+                    <input type="hidden" name="statusId" value="@UserStatus.Active" />
+                    <div class="select-wrapper">
+                        <select name="groupId" asp-items="@groupList" data-init="@student.GroupId"></select>
+                    </div>
+                </form>
+            </td>
+            <td class="form-trigger block-table-link">@Html.T("move")</td>
+            <td class="archive-table-link"><a href="@Url.Action("SwitchUserStatus", "Account", new { userId = student.Id, statusId = UserStatus.Blocked })" data-ajax="true" data-ajax-success="ajaxCompleted" data-ajax-failure="ajaxFailure">@Html.T("block")</a></td>
+            <td class="archive-table-link"><a href="@Url.Action("SwitchUserStatus", "Account", new { userId = student.Id, statusId = UserStatus.Archived })" data-ajax="true" data-ajax-success="ajaxCompleted" data-ajax-failure="ajaxFailure">@Html.T("archive")</a></td>
+        </tr>
+    }
+</table>
+
+<ul class="pages-container">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <li>
+            <a href="@Url.Action("Students", "Account", new { statusId = statusId, page = ViewBag.CurrentPage - 1, name = ViewBag.Name })" class="page-number">@Html.T("previous")</a>
+        </li>
+    }
+    @{
+        int totalPages = ViewBag.TotalPages;
+        int currentPage = ViewBag.CurrentPage;
+        <li class="@(currentPage == 1 ? "active" : "")">
+            <a href="@Url.Action("Students", "Account", new { statusId = statusId, page = 1, name = ViewBag.Name })" class="page-number">1</a>
+        </li>
+        if (currentPage > 3)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        for (int i = Math.Max(2, currentPage - 1); i <= Math.Min(totalPages - 1, currentPage + 1); i++)
+        {
+            <li class="@(currentPage == i ? "active" : "")">
+                <a href="@Url.Action("Students", "Account", new { statusId = statusId, page = i, name = ViewBag.Name })">@i</a>
+            </li>
+        }
+        if (currentPage < totalPages - 2)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        if (totalPages > 1)
+        {
+            <li class="@(currentPage == totalPages ? "active" : "")">
+                <a href="@Url.Action("Students", "Account", new { statusId = statusId, page = totalPages, name = ViewBag.Name })">@totalPages</a>
+            </li>
+        }
+    }
+
+    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+    {
+        <li>
+            <a href="@Url.Action("Students", "Account", new { statusId = statusId, page = ViewBag.CurrentPage + 1, name = ViewBag.Name })" class="page-number">@Html.T("next")</a>
+        </li>
+    }
+</ul>

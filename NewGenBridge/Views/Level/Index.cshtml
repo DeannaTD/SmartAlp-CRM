@@ -1,0 +1,16 @@
+﻿@using NewGenBridge.Helpers
+@model List<Level>
+
+@foreach(Level level in Model)
+{
+    <h2>@level.Name</h2>
+    <ol class="lesson-list">
+    @foreach(Lesson lesson in level.Lessons)
+    {
+        <li class="lesson-item">
+                <a href="@Url.Content("~/" + lesson.FileLink + "/lesson.pdf")" target="_blank">
+                @lesson.Name</a>
+        </li>
+    }
+    </ol>
+}

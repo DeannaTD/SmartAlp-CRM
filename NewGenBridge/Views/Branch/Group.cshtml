@@ -1,0 +1,11 @@
+﻿@model IEnumerable<NPUser>
+
+@foreach(var student in Model)
+{
+    <a href="@Url.Action("StudentLessonHandle", "Level", new { studentId = student.Id, lessonId = student.CurrentLessonId })"
+        data-ajax="true"
+        data-ajax-update="#div">
+        @student.FirstName @student.LastName (@student.UserName)
+    </a>
+}
+<div id="div"></div>

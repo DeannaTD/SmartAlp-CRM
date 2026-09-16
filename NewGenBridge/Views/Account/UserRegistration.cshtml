@@ -1,0 +1,85 @@
+﻿@using NewGenBridge.Services
+@using NewGenBridge.ViewModels
+@inject BranchService _branchService
+@model StaffRegistrationViewModel
+@using NewGenBridge.Helpers
+@{
+    List<SelectListItem> divSelect = [];
+    List<Division> divisions = [];
+    divisions = await _branchService.GetDivisionsOnlyAsync();
+    foreach (int? id in ViewBag.DivisionIds)
+    {
+        if (id is not null)
+        {
+            Division division = divisions.Find(x => x.Id == id);
+            divSelect.Add(new SelectListItem { Value = division.Id.ToString(), Text = division.Name });
+        }
+    }
+    List<SelectListItem> rolesList = [];
+    foreach (SelectListItem item in ViewBag.RoleList)
+    {
+        rolesList.Add(new SelectListItem()
+        {
+            Text = Html.T(item.Text.ToLower()),
+            Value = item.Value
+        });
+    }
+
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor))
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else 
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Html.T("new_user_registration");
+}
+<div class="form-only-block">
+    <h2>@Html.T("new_user_registration")</h2>
+    <form asp-action="Register" asp-controller="Account" class="v-form"
+          data-ajax="true"
+          data-ajax-begin="submitFormSpin(this)"
+          data-ajax-success="ajaxCompleted">
+        <div class="v-form-block">
+            <label>@Html.T("first_name"):<span class="asterisk">*</span></label>
+            <input asp-for="FirstName" autocomplete="off" required/>
+        </div>
+        <div class="v-form-block">
+            <label>@Html.T("last_name"):<span class="asterisk">*</span></label>
+            <input asp-for="LastName" autocomplete="off" required />
+        </div>
+        <div class="v-form-block">
+            <label>Email:</label>
+            <input asp-for="Email" autocomplete="off" />
+        </div>
+        <div class="v-form-block">
+            <label>@Html.T("date_of_birth"):<span class="asterisk">*</span></label>
+            <input asp-for="DateOfBirth" type="date" placeholder="@Html.T("date_of_birth")" required />
+        </div>
+        <div class="v-form-block">
+            <label>@Html.T("role"):<span class="asterisk">*</span></label>
+            <div class="select-wrapper">
+                <select asp-for="Role" asp-items="@rolesList" id="roleSelect"></select>
+            </div>
+        </div>
+        <div class="v-form-block" id="divisionBlock">
+            <label>@Html.T("division"):<span class="asterisk">*</span></label>
+            <div class="select-wrapper">
+                <select asp-for="DivisionId" asp-items="@divSelect"></select>
+            </div>
+        </div>
+        <button class="action-button spinner-button">@Html.T("register")<span class="spinner"></span></button>
+    </form>
+</div>
+<script>
+    ajaxCompleted = function (xhr) {
+        let calert = new AlertBox(xhr, true);
+        calert.show();
+    }
+
+    let roleChange = ()=>{
+        if ($('#roleSelect').val() == "@NPUR.Mentor")
+            $('#divisionBlock').removeClass('d-none');
+        else $('#divisionBlock').addClass('d-none');
+    }
+
+    $('#roleSelect').on('change', () => { roleChange() });
+    roleChange();
+</script>

@@ -1,0 +1,34 @@
+﻿@using NewGenBridge.Helpers
+@model Division
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUp('division-menu-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-content">
+            <form class="v-form b-form" asp-action="CreateDivision" asp-controller="Branch"
+                  data-ajax="true"
+                  data-ajax-begin="submitFormSpin(this)"
+                  data-ajax-complete="ajaxCompleted">
+                <div class="v-form-block">
+                    <input placeholder="Division name" id="divisionName" asp-for="Name" required/>
+                </div>
+                <button class="action-button spinner-button">Create<span class="spinner"></span></button>
+            </form>
+        </div>
+        <script>
+            ajaxCompleted = function (xhr){
+                if (xhr.responseText.includes('#')) {
+                    let calert = new AlertBox(xhr.responseText, false);
+                    calert.show();
+                }
+                else {
+                    let calert = new AlertBox(xhr.responseText, true);
+                    calert.show();
+                }
+            }
+        </script>
+    </<div>
+</div>

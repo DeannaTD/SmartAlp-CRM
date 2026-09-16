@@ -1,0 +1,51 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model List<LessonProgressViewModel>
+@{
+    string imageLink = "../Projects/Levels/" + @ViewBag.LevelIconLink;
+    if(ViewBag.Status != UserStatus.Active)
+    {
+        <script>
+            let calert = new AlertBox("Your account is not active. Please, contact your manager");
+            calert.show();
+        </script>
+    }
+    else
+    {
+        <h2>@Html.T("lessons")</h2>
+        <p class="label">@Html.T("list_of_your_lessons")</p>
+        <ul class="progress-list">
+            @foreach (var lesson in Model)
+            {
+                <li class="progress-card">
+                    <div class="flex-centered">
+                        <img src="@imageLink" alt="Level logo" class="level-logo" />
+                    </div>
+                    <div>
+                        <p class="progress-lesson-name">@lesson.Name</p>
+                        <p class="progress-level-description">@ViewBag.Description</p>
+                        @*
+                        <a href="@Url.Action("Lesson","Level", new {lessonId = 0, lessonLink = lesson.Link})" class="progress-lesson-button">
+                            Go to the lesson ⟶
+                        </a>
+                        *@
+                        @if (lesson.IsOpened)
+                        {
+                            <a href="@Url.Content("~/" + lesson.Link + "/lesson.pdf")" target="_blank" class="progress-lesson-button">@Html.T("go_to_lesson") ⟶</a>
+                        }
+                    </div>
+                    <div class="flex-centered">
+                        @if (lesson.IsOpened)
+                        {
+                            <img src="~/img/green-checkmark.svg" alt="green checkmark" />
+                        }
+                        else
+                        {
+                            <img src="~/img/red-crossmark.svg" alt="red cross mark" />
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+}

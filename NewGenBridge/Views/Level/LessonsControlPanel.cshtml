@@ -1,0 +1,43 @@
+﻿@using NewGenBridge.Helpers
+@model List<Lesson>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div>
+    <h2>@ViewBag.LevelName (<a href="@Url.Action("EditLevel", "Level", new {levelId = ViewBag.LevelId})">@Html.T("edit")</a>)</h2>
+    <div class="lesson-add-group">
+        <form asp-action="CreateNewLesson" asp-controller="Level" method="post">
+            <input type="hidden" name="LevelId" value="@ViewBag.LevelId" />
+            <input type="text" name="Name" placeholder="@Html.T("lesson_title")" required />
+            <img src="~/img/upload.svg" alt="Upload icon" class="lesson-upload-icon pointer" id="lesson-create-trigger" style="max-width: 30px;">
+            <input name="File" class="d-none" type="file" accept=".pdf" id="lesson-create-input">
+            <input type="submit" value="@Html.T("add")" class="action-button">
+         </form>
+    </div>
+    <ol class="lesson-list">
+        @foreach(Lesson lesson in Model)
+        {
+            <li class="lesson-item">
+                <a href="@Url.Action("LessonEdit", "Level", new { lessonId = lesson.Id })" title="@Html.T("edit")" class="lesson-edit-link"
+                   data-ajax="true" data-ajax-update="#lesson-pop-up">
+                    @lesson.Name
+                </a>
+            </li>
+        }
+    </ol>
+    <div class="pop-up" id="lesson-pop-up"></div>
+</div>
+<script>
+    var createTrigger = document.getElementById('lesson-create-trigger');
+    var createInput = document.getElementById('lesson-create-input');
+
+    createTrigger.addEventListener('click', (e)=>{
+        $(createInput).trigger('click');
+    });
+
+    createInput.addEventListener('change', (e)=>{
+        if(createInput.files.length > 0){
+            createTrigger.setAttribute('src', '@Url.Content("~/img/check-file.svg")');
+        }
+    });
+</script>

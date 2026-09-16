@@ -1,0 +1,38 @@
+{
+  "countries": [
+    {
+      "code": "kz",
+      "info": [
+        {
+          "group_id": 43,
+          "level_id": 14
+        },
+        {
+          "group_id": 44,
+          "level_id": 10
+        },
+        {
+          "group_id": 42,
+          "level_id": 2
+        },
+        {
+          "group_id": 42,
+          "level_id": 2
+        }
+      ]
+    },
+    {
+      "code": "it",
+      "info": [
+        {
+          "group_id": 42,
+          "level_id": 2
+        },
+        {
+          "group_id": 48,
+          "level_id": 11
+        }
+      ]
+    }
+  ]
+}

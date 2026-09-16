@@ -1,0 +1,54 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@using System.Globalization
+@model IEnumerable<StudentAttendanceViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Html.T("your_attendance_history")</h2>
+<div class="calendar-container">
+@{
+    foreach(var date in Model)
+    {
+        string className = "";
+        DateOnly d = new DateOnly(date.Year, date.Month, 1);
+        int toSkip = (int)d.DayOfWeek;
+        toSkip = toSkip == 0 ? 6 : (toSkip - 1) % 7;
+        int skipped = 0;
+        int total = DateTime.DaysInMonth(date.Year, date.Month);
+        <div class="student-calendar">
+            <p class="text-center bold-text">@Html.T(DateHelper.GetMonthName(d.Month).ToLower()) @d.Year</p>
+            <div class="calendar-content">
+                <span class="calendar-th">@Html.T("mon")</span>
+                <span class="calendar-th">@Html.T("tue")</span>
+                <span class="calendar-th">@Html.T("wed")</span>
+                <span class="calendar-th">@Html.T("thu")</span>
+                <span class="calendar-th">@Html.T("fri")</span>
+                <span class="calendar-th">@Html.T("sat")</span>
+                <span class="calendar-th">@Html.T("sun")</span>
+                @for(int i = 1; i<=total; i++)
+                {
+                    if(toSkip > skipped)
+                    {
+                        skipped++;
+                        i--;
+                        <span class="calendar-value"></span>
+                    }
+                    else
+                    {
+                        Attendance? attendance = date.Attendances.Find(a => a.Date.Day == i);
+                        if(attendance is null)
+                        {
+                            <span class="calendar-value">@i</span>
+                        }
+                        else{
+                            className = attendance.AttendanceStatus == 1 ? "present" : "absent";
+                            <span class="calendar-value @className">@i</span>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    }
+}
+</div>

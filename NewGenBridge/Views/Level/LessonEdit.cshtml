@@ -1,0 +1,85 @@
+﻿@using NewGenBridge.Helpers
+@model Lesson
+@{
+    Layout = null;
+}
+
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUp('lesson-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-content" style="width: 500px;">
+            <form class="v-form" asp-action="LessonUpdate" asp-controller="Level"
+                  data-ajax="true"
+                  data-ajax-begin="submitFormSpin(this)"
+                  data-ajax-success="ajaxCompleted"
+                  enctype="multipart/form-data">
+                <input type="hidden" name="lessonId" value="@Model.Id" />
+                <input type="file" name="lessonFile" class="d-none" accept=".pdf" id="lesson-file-input">
+                <div class="v-form-block">
+                    <input type="text" name="lessonName" value="@Model.Name" placeholder="@Html.T("lesson_title")" />
+                </div>
+                <div class="v-form-block">
+                    @if(Model.FileLink != null)
+                    {
+                        <a href="@Url.Content("~/" + Model.FileLink + "/lesson.pdf")" target="_blank" id="file-name">@Html.T("view") (@Model.FileLink)</a>
+                    }
+                    else
+                    {
+                        <a href="#" id="file-name">@Html.T("no_file_uploaded")</a>
+                    }
+                    <span class="d-block secondary-button pointer text-center" id="lesson-upload-input">@Html.T("upload")</span>
+                </div>
+                <button class="action-button spinner-button">@Html.T("save")<span class="spinner"></span></button>
+            </form>
+            <p class="alert-note">
+                @Html.T("lesson_delete_note0")
+            </p>
+            <a href="@Url.Action("DeleteLesson", "Level", new { lessonId = Model.Id })"
+                data-ajax="true"
+                data-ajax-success="ajaxCompletedNR"
+                class="danger-button full-button" disabled>@Html.T("delete")</a>
+        </div>
+    </div>
+</div>
+<script>
+    var uploadTrigger = document.getElementById('lesson-upload-input');
+    var uploadInput = document.getElementById('lesson-file-input');
+
+    uploadTrigger.addEventListener('click', (e)=>{
+        $(uploadInput).trigger('click');
+    });
+
+    uploadInput.addEventListener('change', (e)=>{
+        let fileNameSpan = document.getElementById('file-name');
+        if(uploadInput.files.length > 0){
+            fileNameSpan.textContent = uploadInput.files[0].name;
+        } else {
+            fileNameSpan.textContent = "No file uploaded";
+        }
+    });
+
+    var dalert;
+
+    ajaxCompleted = function (xhr) {
+        let calert = new AlertBox(xhr, true);
+        calert.show();
+    }
+
+    ajaxCompletedNR = function (xhr) {
+        dalert.update(xhr);
+        dalert.makeButton();
+    }
+
+    document.querySelector('.danger-button').addEventListener('click', (e) => {
+        if (!confirm("@Html.T("are_you_sure")")) e.preventDefault();
+        else {
+            dalert = new AlertBox("This process may take some time. Please, do not reload the page",
+            true, true);
+            dalert.show();
+        }
+    });
+</script>

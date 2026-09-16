@@ -1,0 +1,97 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model List<BillViewModel>
+
+<style>
+    li.active a {
+        padding: 0 3px;
+        border-bottom: 1px solid;
+    }
+</style>
+
+<table class="table access-table" style="width: 100%;" id="contract-table">
+    <tr>
+        <th>@Html.T("bill")</th>
+        <th>@Html.T("contract")</th>
+        <th>@Html.T("student_name")</th>
+        <th>@Html.T("amount")</th>
+        <th>@Html.T("due_date")</th>
+        <th colspan="2">@Html.T("status")</th>
+    </tr>
+    @foreach (var bill in Model.OrderByDescending(b => b.PaymentDate))
+    {
+        <tr data-student="@bill.StudentName">
+            <td>@bill.PaymentNumber</td>
+            <td>@bill.ContractNumber</td>
+            <td>@bill.StudentName</td>
+            <td>@bill.Sum</td>
+            <td>@bill.PaymentDate.ToString("dd.MM.yyyy")</td>
+            <td>
+                <input type="checkbox" id="@bill.BillId" @(@bill.Status ? "checked" : "") class="payment-trigger" />
+                <span>
+                    @if (bill.Status)
+                    {
+                        <text>@Html.T("paid")</text>
+                    }
+                </span>
+            </td>
+            <td>
+                <a href="#" data-trigger="billUpload">@Html.T("upload")</a>
+                <form method="post" asp-action="BillUpload" asp-controller="Contract" enctype="multipart/form-data" class="d-none">
+                    <input type="file" name="file" onchange="askIfSure(this)" />
+                    <input type="hidden" name="paymentNumber" value="@bill.PaymentNumber" />
+                </form>
+                @if (bill.HasFile)
+                {
+                    <a href="@Url.Action("BillDownload", new { paymentNumber = bill.PaymentNumber })" class="link-true" target="_blank">@Html.T("download")</a>
+                }
+            </td>
+        </tr>
+    }
+</table>
+<ul class="pages-container">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <li>
+            <a href="@Url.Action("BillTable", "Contract", new { page = ViewBag.CurrentPage - 1, name = ViewBag.Name })" class="page-number">@Html.T("previous")</a>
+        </li>
+    }
+    @{
+        int totalPages = ViewBag.TotalPages;
+        int currentPage = ViewBag.CurrentPage;
+        <li class="@(currentPage == 1 ? "active" : "")">
+            <a href="@Url.Action("BillTable", "Contract", new {page = 1, name = ViewBag.Name})" class="page-number">1</a>
+        </li>
+        if (currentPage > 3)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        for (int i = Math.Max(2, currentPage - 1); i <= Math.Min(totalPages - 1, currentPage + 1); i++)
+        {
+            <li class="@(currentPage == i ? "active" : "")">
+                <a href="@Url.Action("BillTable", "Contract", new { page = i, name = ViewBag.Name })">@i</a>
+            </li>
+        }
+        if (currentPage < totalPages - 2)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        if (totalPages > 1)
+        {
+            <li class="@(currentPage == totalPages ? "active" : "")">
+                <a href="@Url.Action("BillTable", "Contract", new { page = totalPages, name = ViewBag.Name })">@totalPages</a>
+            </li>
+        }
+    }
+
+    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+    {
+        <li>
+            <a href="@Url.Action("BillTable", "Contract", new { page = ViewBag.CurrentPage + 1, name = ViewBag.Name })" class="page-number">@Html.T("next")</a>
+        </li>
+    }
+</ul>

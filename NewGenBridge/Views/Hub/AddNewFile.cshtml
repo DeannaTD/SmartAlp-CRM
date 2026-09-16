@@ -1,0 +1,52 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model CreateHubFileViewModel 
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Upload" asp-controller="Hub"
+      class="settings-grid" enctype="multipart/form-data">
+    <div class="profile-image-form ">
+        <label>@Html.T("file")</label>
+        <div class="profile-image-input">
+            <img src="~/img/upload.svg" alt="Load profile picture">
+            <p class="profile-image-name">@Html.T("s_upload_title")</p>
+            <p class="profile-image-warning">@Html.T("s_upload_subtitle") 250MB</p>
+        </div>
+        <input asp-for="File" class="d-none" type="file" data-nin="hubfile" required>
+    </div>
+    <div>
+        <span class="label settings-label">@Html.T("file_name")</span>
+        <br />
+        <input asp-for="Name" type="text" class="level-input" required />
+    </div>
+    <div>
+        <span class="label settings-label">@Html.T("description")</span>
+        <br />
+        <input asp-for="Description" type="text" class="level-input" required />
+    </div>
+    <div>
+    @foreach(string role in ViewBag.Roles)
+    {
+        <input name="SelectedRoles" type="checkbox" value="@role" id="@role"/>
+        <label for="@role">@Html.T(role.ToLower())</label><br />
+    }
+    </div>
+    <button class="centered-button action-button profile-form-button">@Html.T("upload")</button>
+</form>
+
+<script>
+    let pictureInputButton = document.querySelector(".profile-image-input");
+    let pictureInput = document.querySelector("[data-nin='hubfile']");
+    pictureInputButton.addEventListener('click', () => {
+        $(pictureInput).trigger('click');
+    });
+
+    pictureInput.addEventListener('change', () => {
+        let value = pictureInput.value;
+        document.querySelector('.profile-image-name').innerText = value.split('\\').pop();
+        document.querySelector('.profile-image-warning').style.display = 'none';
+    });
+</script>

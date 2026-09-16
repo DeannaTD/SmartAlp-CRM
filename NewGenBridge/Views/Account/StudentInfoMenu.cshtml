@@ -1,0 +1,131 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model StudentInfoViewModel
+@{
+    Layout = null;
+}
+
+<div class="pop-up-wrapper">
+    <div class="pop-up-container wide-pop-up">
+        <div class="pop-up-header">
+            <div class="status-toggler">
+                <a class="action-link"
+                   data-ajax="true" data-ajax-complete="blockedComplete"
+                    href="@Url.Action("ToggleUserStatus", "Account", new{userId = Model.StudentId, statusId = UserStatus.Blocked})" )">
+                    @if (Model.StatusId == UserStatus.Blocked) {<text>@Html.T("unblock")</text>}
+                    else {<text>@Html.T("block")</text> }
+                </a>
+                <a class="action-link" data-ajax="true" data-ajax-complete="archivedComplete"
+                   href="@Url.Action("ArchiveStudent", "Account", new { studentId = Model.StudentId })">@Html.T("archive")</a>
+            </div>
+            <button class="close-icon" onclick="closePopUp('lesson-select-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-content">
+            <form class="v-form" asp-action="UpdateStudent" asp-controller="Account"
+                  data-ajax="true" data-ajax-complete="ajaxCompleted">
+                <input type="hidden" asp-for="@Model.StatusId" />
+                <input type="hidden" asp-for="@Model.StudentId" />
+                <div class="form-grid">
+                    <div class="v-form-block">
+                        <label>@Html.T("parent_name"):</label>
+                        <input asp-for="@Model.ParentName" required/>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("phone_number"):</label>
+                        <input asp-for="@Model.PhoneNumber" required/>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("first_name"):</label>
+                        <input asp-for="@Model.FirstName" required/>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("last_name"):</label>
+                        <input asp-for="@Model.LastName" required/>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("date_of_birth"):</label>
+                        <input asp-for="@Model.DateOfBirth" required/>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("started_on"):</label>
+                        <input asp-for="@Model.Started" required/>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("note"):</label>
+                        <input asp-for="@Model.Note" />
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("level"):</label>
+                        <p class="false-input">@Model.LevelName</p>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("group"):</label>
+                        <div class="select-wrapper">
+                            <select asp-for="GroupId" asp-items="@ViewBag.BranchList" id="group-select"></select>
+                        </div>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("mentor"):</label>
+                        <select asp-items="@ViewBag.GroupsMentors" id="mentor-select"></select>
+                    </div>
+                </div>
+                <input type="submit" class="action-button centered-button" value="@Html.T("save")" />
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var groupSelect = document.getElementById("group-select");
+    var mentorSelect = document.getElementById("mentor-select");
+    mentorSelect.value = groupSelect.value;
+    groupSelect.addEventListener('change', (e) => {
+        mentorSelect.value = groupSelect.value;
+    });
+
+    mentorSelect.addEventListener('mousedown', (e) => { e.preventDefault() })
+
+    ajaxCompleted = function (xhr) {
+        if (xhr.responseText.includes('#')) {
+            let calert = new AlertBox(xhr.responseText, false);
+            calert.show();
+        }
+        else {
+            let calert = new AlertBox(xhr.responseText, true);
+            calert.show();
+        }
+    }
+
+    blockedComplete = function (xhr) { 
+        let cAlert;
+        if (xhr.status != 200) {
+            calert = new AlertBox("Error occured", false);
+            calert.show();
+            return;
+        }
+        let [_, status] = xhr.responseText.split(' ');
+        if (status == @UserStatus.Active) {
+            calert = new AlertBox('Student has been unblocked', false);
+            document.querySelector('.status-toggler>a:first-child').innerText = 'Block student';
+            calert.show();
+        }
+        else {
+            calert = new AlertBox('Student has been blocked', false);
+            document.querySelector('.status-toggler>a:first-child').innerText = 'Unblock student';
+            calert.show();
+        }
+    }
+
+    archivedComplete = function(xhr){
+        let calert;
+        if (xhr.status == 200) { 
+            calert = new AlertBox("Student has been archived", true);
+            calert.show();
+        }
+        else{
+            calert = new AlertBox("Something went wrong (error code: #VEJSE56)", false);
+        }
+    }
+    
+</script>

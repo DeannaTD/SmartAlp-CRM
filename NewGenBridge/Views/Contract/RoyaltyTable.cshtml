@@ -1,0 +1,83 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model List<Royalty>
+
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var contractInfoList = ViewBag.NamesList;
+}
+
+<style>
+    .link-true {
+        text-decoration: underline !important;
+        text-decoration-color: var(--main-color);
+    }
+
+    .abs-container {
+        position: relative;
+    }
+
+    #searchBar {
+        width: 50%;
+        position: relative;
+        z-index: 1;
+    }
+
+    .drop-down-ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        position: absolute;
+        width: 50%;
+        margin-top: -.5rem;
+        padding-top: .5rem;
+        border: 1px solid var(--main-color);
+        border-top: 0;
+        box-sizing: border-box;
+        z-index: 0;
+        max-height: 30vh;
+        overflow-y: scroll;
+    }
+
+        .drop-down-ul > li {
+            background: var(--light-color);
+            cursor: pointer;
+
+            span {
+                display: block;
+                padding: .5rem;
+            }
+        }
+
+    #li-not-found {
+        padding: .5rem;
+    }
+
+    .drop-down-ul > li:hover {
+        background: var(--main-color);
+    }
+
+    .pages-container {
+        display: flex;
+        margin: 1rem 0;
+        padding: 0;
+        list-style: none;
+        justify-content: center;
+        gap: 1rem;
+    }
+</style>
+<h2>@Html.T("royalty")</h2>
+
+<!--
+FIX INSERT
+-->
+
+<div id="contract-list-container">
+    @await Html.PartialAsync("_RoyaltyTablePartial", Model)
+</div>
+
+<!--
+FIX END
+-->

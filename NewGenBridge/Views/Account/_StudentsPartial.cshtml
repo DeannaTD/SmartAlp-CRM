@@ -1,0 +1,46 @@
+﻿@using NewGenBridge.Services
+@inject BranchService branchService
+@{
+    int index = 0;
+    IEnumerable<int?> branches = ViewBag.BranchesId;
+    List<SelectListItem> groupList = [];
+    foreach (int? branchId in branches)
+    {
+        Branch branch = branchService.GetBranchByIdAsync(branchId ?? 0).Result;
+        List<Group> group = branchService.GetGroupsByBranchId(branchId ?? 0);
+        groupList.AddRange(group.Select(
+            g => new SelectListItem
+            {
+                Value = g.Id.ToString(),
+                Text = branch.Name + ", " + g.Name + " " + g.Day + " " + g.Time.ToString("hh\\:mm")
+            }));
+    }
+
+}
+
+<table class="access-table">
+    <tr>
+        <th class="index-td">№</th>
+        <th>@Html.T("name")</th>
+        <th>@Html.T("group")</th>
+        <th>@Html.T("action")</th>
+    </tr>
+    @foreach (var student in Model)
+    {
+        <tr>
+            <td class="text-center">@(++index)</td>
+            <td>@student.FullName</td>
+            <td class="td-select-wrapper">
+                <form asp-action="ToggleUserStatus" asp-controller="Account" data-ajax="true">
+                    <input type="hidden" name="userId" value="@student.Id" />
+                    <input type="hidden" name="statusId" value="@Html.T(@UserStatus.Active.ToString().ToLower())" />
+                    <div class="select-wrapper">
+                        <select name="groupId" asp-items="@groupList" data-init="@student.GroupId"></select>
+                    </div>
+                </form>
+            </td>
+            <td class="form-trigger @ViewData["className"]">@ViewData["actionName"]</td>
+        </tr>
+    }
+</table>
+

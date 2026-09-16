@@ -1,0 +1,66 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@inject NewGenBridge.Services.BranchService _branchService
+@model StudentRegistrationViewModel
+@{
+    Layout = null;
+
+}
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUp('student-create-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-content">
+            <form asp-action="RegisterStudent" asp-controller="Account" class="student-registration-form"
+            data-ajax="true"
+            data-ajax-begin="submitFormSpin(this)"
+            data-ajax-complete="ajaxCompleted">
+                <input type="hidden" asp-for="GroupId" value="@ViewBag.GroupId" />
+                <input type="hidden" asp-for="PaymentAmount" value="0">
+                <input type="hidden" asp-for="StudentPhoneNumber" value="0">
+                <div class="v-form-block">
+                    <label>@Html.T("parent_name"):<span class="asterisk">*</span></label>
+                    <input type="text" asp-for="ParentName" autocomplete="off" required>
+                </div>
+                <div class ="v-form-block">
+                    <label>@Html.T("phone_number"):<span class="asterisk">*</span></label>
+                    <input type="text" asp-for="PhoneNumber" autocomplete="off" required>
+                </div>
+                <div class="v-form-block">
+                    <label>@Html.T("first_name"):<span class="asterisk">*</span></label>
+                    <input type="text" asp-for="FirstName" autocomplete="off" required>
+                </div>
+                <div class="v-form-block">
+                    <label>@Html.T("last_name"):<span class="asterisk">*</span></label>
+                    <input type="text" asp-for="LastName" autocomplete="off" required>
+                </div>
+                <div class="v-form-block flex-stretch">
+                    <div class="v-form-block">
+                        <label>@Html.T("date_of_birth"):<span class="asterisk">*</span></label>
+                        <input type="date" asp-for="DateOfBirth" required>
+                    </div>
+                    <div class="v-form-block">
+                        <label>@Html.T("started_on"):<span class="asterisk">*</span></label>
+                        <input type="date" asp-for="DateStarted" required>
+                    </div>
+                </div>
+                <div class="v-form-block">
+                    <label>@Html.T("note"):</label>
+                    <input type="text" asp-for="Note" autocomplete="off">
+                </div>
+                <button class="action-button centered-button spinner-button">
+                    @Html.T("register")<spin class="spinner"></spin>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    ajaxCompleted = function (xhr) {
+        let calert = new AlertBox(xhr.responseText, true);
+        calert.show();
+    }
+</script>

@@ -1,0 +1,239 @@
+﻿@using NewGenBridge.Services
+@model NewGenBridge.ViewModels.ContractSignViewModel
+@{
+    Layout = null;
+    var prices = Json.Serialize(ViewBag.Prices);
+    var currentLanguage = Context.Request.Cookies["lang"] ?? "en";
+}
+
+<!DOCTYPE html>
+<html lang="@currentLanguage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://smartalpacademy.com/css/normalize.css">
+    <link rel="stylesheet" href="https://smartalpacademy.com/css/style.css">
+    <link rel="stylesheet" href="https://smartalpacademy.com/css/addings.css">
+    <link rel="stylesheet" href="https://smartalpacademy.com/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/css/contract.css" />
+    <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .contract-header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .secondary-nav{
+            margin-right: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contract-header">
+        <img class="logo" src="~/img/smartalp-logo.svg"/>
+        <nav class="secondary-nav" aria-label="secondary navigation">
+            <form asp-controller="Master" asp-action="SetLanguage" method="get" class="no-form">
+                <select name="lang" onchange="this.form.submit()">
+                    <option value="en" selected="@(currentLanguage == "en")">EN</option>
+                    <option value="fr" selected="@(currentLanguage == "fr")">FR</option>
+                    <option value="it" selected="@(currentLanguage == "it")">IT</option>
+                    <option value="tr" selected="@(currentLanguage == "tr")">TR</option>
+                    <option value="de" selected="@(currentLanguage == "de")">DE</option>
+                    <option value="ru" selected="@(currentLanguage == "ru")">RU</option>
+                </select>
+            </form>
+        </nav>
+    </div>
+    <main class="l-section">
+        <div class="modal-bg">
+            <div id="modal-popup" >
+                <p id="modal-popup__title">@Html.T("contract_signed")</p>
+                <p id="modal-popup__text">@Html.T("contract_thanks")</p>
+                <a href="#" id="modal-popup__link">@Html.T("view_contract")</a>
+                <a href="https://smartalpacademy.com" id="modal-popup__button">@Html.T("close")</a>
+            </div>
+        </div>
+        <h1 class="text-title__variant">@Html.T("enrollment")</h1>
+        
+        <form asp-action="Sign" asp-controller="Contract" class="contract-form l-rsection"
+              data-ajax="true"
+              data-ajax-begin="formBegin"
+              data-ajax-success="formSuccess"
+              data-ajax-failure="formFailure">
+            <input type="hidden" name="DurationInMonth" value="" id="DurationInMonth"/>
+            <div class="flex-division">
+                <div class="select-wrapper">
+                    <select asp-items="@ViewBag.Branches" id="branchId" name="BranchId">
+                    </select>
+                </div>
+            </div>
+            <div class="poster-badge poster-badge__switcher">
+                <div class="active-switcher"></div>
+                <input type="radio" name="LevelId" id="robotics" checked class="d-none" value="10">
+                <label class="badge-label" for="robotics">Robotics</label>
+                <input type="radio" name="LevelId" id="fgs" class="d-none" value="2">
+                <label class="badge-label" for="fgs">Scratch</label>
+                
+                <input type="radio" name="LevelId" id="fga" class="d-none" value="14">
+                <label class="badge-label" for="fga">App Inventor</label>
+                <input type="radio" name="LevelId" id="fgh" class="d-none" value="12">
+                <label class="badge-label" for="fgh">HTML</label>
+                <input type="radio" name="LevelId" id="fgc" class="d-none" value="13">
+                <label class="badge-label" for="fgc">CSS</label>
+
+                <input type="radio" name="LevelId" id="smartdigits" class="d-none" value="11">
+                <label class="badge-label" for="smartdigits">SmartDigits</label>
+                <input type="radio" name="LevelId" id="art" class="d-none" value="7">
+                <label class="badge-label" for="art">Art-program SmART-Alp</label>
+            </div>
+
+            <div class="grid-c3">
+                <div class="form-container">
+                    <label for="" class="l-mdl text-n7">@Html.T("parent_name")</label>
+                    <input type="text" name="ParentName" id="">
+                </div>
+                <div class="form-container">
+                    <label for="" class="l-mdl text-n7">@Html.T("first_name")</label>
+                    <input type="text" name="FirstName" id="">
+                </div>
+                <div class="form-container">
+                    <label for="" class="l-mdl text-n7">@Html.T("last_name")</label>
+                    <input type="text" name="LastName" id="">
+                </div>
+                <div class="form-container">
+                    <label for="" class="l-mdl text-n7">@Html.T("date_of_birth")</label>
+                    <input type="date" name="DateOfBirth" id="">
+                </div>
+                <div class="form-container">
+                    <label for="" class="l-mdl text-n7">@Html.T("phone_number")</label>
+                    <input type="tel" name="PhoneNumber" id="">
+                </div>
+                <div class="form-container">
+                    <label for="" class="l-mdl text-n7">@Html.T("address")</label>
+                    <input type="text" name="Address" id="">
+                </div>
+            </div>
+            <div class="contract-text">
+                
+            </div>
+            <div class="grid-c3">
+                <div class="form-container signature-block">
+                    <div>
+                        <label for="signature" class="text-n7">@Html.T("signature")</label>
+                        <input type="checkbox" id="signature" name="signature" required>
+                    </div>
+                    <span class="text-n7">@Html.T("date"): @(DateTime.Now.ToString("dd-MM-yyyy"))</span>
+                </div>
+                <div class="form-container">
+                    <label for="" class="l-mdl text-n7">@Html.T("parent_name")</label>
+                    <input type="text" name="ParentName" id="">
+                </div>
+            </div>
+            <input type="submit" value="@Html.T("submit")" class="button button-pa">
+        </form>
+    </main>
+
+    <script>
+        let labels = document.querySelectorAll('.badge-label');
+        let switcher = document.querySelector('.active-switcher');
+        labels.forEach(label => {
+            label.addEventListener('click', () => {
+                let translate = label.offsetLeft - 16;
+                switcher.style.transform = `translateX(${translate}px)`;
+                let width = label.offsetWidth + 32;
+                switcher.style.width = `${width}px`;
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let checkedLabel = document.querySelector('.badge-label[for="robotics"]');
+            let translate = checkedLabel.offsetLeft - 16;
+            switcher.style.transform = `translateX(${translate}px)`;
+            let width = checkedLabel.offsetWidth + 32;
+            switcher.style.width = `${width}px`;
+        });
+
+        const prices = @Html.Raw(prices);
+        let branchId = document.getElementById('branchId').value;
+        let defaultContract = "";
+            console.log(prices);
+
+        function setPrice(){
+            let bId = document.getElementById('branchId').value;
+            let cId = document.querySelector('input[name="LevelId"]:checked').value;
+            let price1 = prices.find(p => p.branchId == bId && p.levelId == cId)?.sum;
+            let price2 = prices.find(p => p.branchId == bId && p.levelId == cId)?.materialsPrice;
+            let duration = prices.find(p => p.branchId == bId && p.levelId == cId)?.durationInMonths;
+            let contractText = defaultContract.replace(/{MonthlyPrice}/g, price1);
+            contractText = contractText.replace(/{MaterialsPrice}/g, price2);
+            contractText = contractText.replace(/{DurationInMonths}/g, duration);
+            let begin = new Date();
+            let contractDateBegin = `${gpn(begin.getDate())}.${gpn(begin.getMonth() + 1)}.${begin.getFullYear()}`;
+            let end = new Date();
+            duration = parseInt(duration);
+            end.setMonth(end.getMonth() + duration);
+            let contractDateEnd = `${gpn(end.getDate())}.${gpn(end.getMonth() + 1)}.${end.getFullYear()}`;
+
+            contractText = contractText.replace(/{ContractDateBegin}/g, contractDateBegin);
+            contractText = contractText.replace(/{ContractDateEnd}/g, contractDateEnd);
+
+            document.querySelector('#DurationInMonth').value = duration;
+            document.querySelector('.contract-text').innerHTML = contractText;
+        }
+
+        function gpn(number) {
+            return number < 10 ? '0' + number : number;
+        }
+        function setContractText(){
+            let contractDiv = document.querySelector('.contract-text');
+            let url = '@Url.Action("GetContractText", "Contract")';
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: { branchId: branchId },
+                success: function(data){
+                    contractDiv.innerHTML += "<pre style='white-space: pre-wrap;'>" + data + "</pre>";
+                    defaultContract = contractDiv.innerHTML;
+                    setPrice();
+                },
+                error: function(data){
+                    console.log(data);
+                }
+            });
+        }
+
+        document.querySelectorAll('input[name="LevelId"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                setPrice();
+            });
+        });
+
+        document.querySelector('#branchId').addEventListener('change', () => {
+            branchId = document.getElementById('branchId').value;
+            document.querySelector('.contract-text').innerHTML = '';
+            setContractText();
+        });
+
+        setContractText();
+
+        function formBegin(){
+            $('.contract-form input[type="submit"]').prop('disabled', true).val('@Html.T("submitting")');
+        }
+
+        function formSuccess(xhr){
+            document.querySelector('.modal-bg').classList.add('active');
+            let link = "@Url.Action("DownloadContract", "Contract", new { id = "contractId" })";
+            document.querySelector('a#modal-popup__link').href = link.replace("contractId", xhr);
+        }
+
+        function formFailure(){
+            alert('Not all form fields were filled out. Please try again.');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

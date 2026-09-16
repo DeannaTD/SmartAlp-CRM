@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>NewGenBridge: User manual</h1>
+    <h2>Content:</h2>
+    <ul class="navigation">
+        <li><a href="#ui-overview">User interface overview</a></li>
+        <li><a href="#group-management">Students and groups</a></li>
+        <li><a href="#lesson-overview">Levels and lessons</a></li>
+        <li><a href="#profile-settings">Profile settings</a></li>
+    </ul>
+    <section id="ui-overview">
+        <h2>User interface overview</h2>
+        <p>When you log in to the system, you will see the following screen:</p>
+        <img src="img/manager/ui-overview-mentor.png" alt="Home screen" class="full-screen">
+        <p>Home screen is a page where you can track lessons, but we are open to hear what you will want to see on the home screen after trying the system in work.</p>
+        <p>On the left side of the screen, you will see the navigation bar. Here you can access all the features of the system.</p>
+        <p>On the right top corder, there is a quick actions bar with "Log out" and "Home" links.</p>
+    </section>
+    <section id="group-management">
+        <h2>Students and groups</h2>
+        <p>Groups are used to organize students. When beginning a lesson, open a current group by clicking on it on the main screen</p>
+        <h3>Tracking attendance</h3>
+        <p>Attendance is checked and tracked by mentors.</p>
+        <p>There are three attendance statuses: present (red), absent (green) and unchecked (none).</p>
+        <p>Attendance of students is loaded by week. You can use arrows around the date to navigate through attendance history.</p>
+        <p>To change attendance status, click on the cell corresponding to the student and date, and then press "Save".</p>
+        <p><img src="img/alert.svg" alt="Alert sign" class="alert">Attendances are not saved automatically, pressing "Save" is mandatory for each week.</p>
+        <video controls width="500">
+            <source src="video/check-attendance.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <h3>Tracking student progress</h3>
+        <p>You can assign a new lesson to a student when they are finished with their previous one. To do it, follow the steps:</p>
+        <ol>
+            <li>Click on the edit icon next to student's name</li>
+            <li>Choose student's level and lesson</li>
+            <li>Click "Save"</li>
+        </ol>
+        <p>Then ask a student to reload the page, and they will see a renewed document.</p>
+    </section>
+    <section id="lesson-overview">
+        <h2>Levels and lessons</h2>
+        <p>Levels and lessons are used to organize the learning process. Each student has a level and a lesson assigned to them.</p>
+        <p>You can look at each lesson individually by clicking on "Lessons" link in the navigation menu.</p>
+        <p>Here you can see all the lessons; to see the content of a lesson click on it's name and you will be redirected to the following view:</p>
+        <img src="img/manager/lesson-view.png" alt="Lesson overview" class="full-screen">
+        <p>Student sees the lesson content the exact same way</p>
+    </section>
+    <section id="profile-settings">
+        <h2>Profile settings</h2>
+        <p>To change your profile settings, click on the "Settings" link in the navigation bar. You will see the following screen:</p>
+        <img src="img/admin/settings-overview.png" alt="Settings screen" class="full-screen">
+        <p>Here you can change your password and profile picture. It is not possible to change any other personal information</p>
+    </section>
+</body>
+</html>

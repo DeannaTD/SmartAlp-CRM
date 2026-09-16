@@ -1,0 +1,48 @@
+﻿@using NewGenBridge.Models
+@model Branch
+@{
+    Layout = null;
+}
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUp('division-menu-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-content">
+            <form class="v-form b-form" asp-controller="Branch" asp-action="Create"
+            data-ajax="true"
+            data-ajax-begin="submitFormSpin(this)"
+            data-ajax-complete="ajaxCompleted">
+                <input type="hidden" asp-for="DivisionId" value="@Model.DivisionId"/>
+                <div class="v-form-block">
+                    <input asp-for="Name" id="branchName" placeholder="@Html.T("name")" required/>
+                </div>
+                <div class="v-form-block">
+                    <input asp-for="Address" id="branchAddress" placeholder="@Html.T("address")" required/>
+                </div>
+                <div class="v-form-block">
+                    <div class="select-wrapper">
+                        <select asp-for="TimeZoneId" asp-items="@ViewBag.TimeZones">
+                            <option value="" disabled selected>@Html.T("select_time_zone")</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="action-button spinner-button">@Html.T("create")<span class="spinner"></span></button>
+            </form>
+            <script>
+                ajaxCompleted = function (xhr){
+                    if (xhr.responseText.includes('#')) {
+                        let calert = new AlertBox(xhr.responseText, false);
+                        calert.show();
+                    }
+                    else {
+                        let calert = new AlertBox(xhr.responseText, true);
+                        calert.show();
+                    }
+                }
+            </script>
+        </div>
+    </div>
+</div>

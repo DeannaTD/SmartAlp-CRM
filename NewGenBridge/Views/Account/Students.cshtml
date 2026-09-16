@@ -1,0 +1,106 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.Services
+@using NewGenBridge.ViewModels
+@inject BranchService branchService
+@model List<StudentManagerViewModel>
+
+@{
+    int index = 0;
+    IEnumerable<int?> branches = ViewBag.BranchesId;
+    List<SelectListItem> groupList = [];
+    foreach(int? branchId in branches)
+    {
+        Branch branch = branchService.GetBranchByIdAsync(branchId ?? 0).Result;
+        List<Group> group = branchService.GetGroupsByBranchId(branchId ?? 0);
+        groupList.AddRange(group.Select(
+            g => new SelectListItem 
+            { 
+                Value = g.Id.ToString(), 
+                Text = branch.Name + ", " + g.Name + " " + g.Day + " " + g.Time.ToString("hh\\:mm")
+            }));
+    }
+    string className = "";
+    string actionName = "";
+    string resultMessage = "";
+    var contractInfoList = ViewBag.NamesList;
+    ViewData["Title"] = Html.T("students");
+    
+}
+
+
+<h2>
+    @if (ViewBag.StatusId == UserStatus.Blocked)
+    {
+        className = "block-table-link";
+        actionName = "Unblock";
+        resultMessage = "Student has been unblocked";
+        <text>Blocked students</text>
+    }
+    else if (ViewBag.StatusId == UserStatus.Archived)
+    {
+        className = "archive-table-link";
+        actionName = "Restore";
+        resultMessage = "Student has been restored";
+        <text>Archived students</text>
+    }
+</h2>
+<div class="abs-container" tabindex="0" style="outline:none; margin-bottom: 1rem;">
+    <input type="search" id="searchBar" autocomplete="off" placeholder="@Html.T("enter_student_name")" value="@(ViewBag.Name ?? "")" />
+    <ul class="drop-down-ul d-none" id="searchList">
+        <li id="li-not-found" class="d-none">@Html.T("nothing_found")</li>
+        @foreach (var student in contractInfoList)
+        {
+            <li data-student="@student.StudentName">
+                <span>
+                    @student.StudentName
+                </span>
+            </li>
+        }
+    </ul>
+</div>
+<!--
+FIX SEARCH
+
+-->
+
+<div id="contract-list-container">
+    @{
+        var data = new ViewDataDictionary(ViewData)
+        {
+            { "className", className },
+            { "actionName", actionName }
+        };
+    }
+    @await Html.PartialAsync("_StudentsPartial", Model, data)
+</div>
+
+<!-- FIX INSERT -->
+
+
+<script>
+    var selects = document.querySelectorAll("select");
+    selects.forEach(select => {
+        let value = select.getAttribute("data-init");
+        if (value > 0) select.value = value;
+    });
+
+    function ajaxCompleted(){
+        let calert = new AlertBox("@resultMessage", true);
+        calert.show();
+    }
+
+    var triggers = document.querySelectorAll(".form-trigger");
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', (e)=>{
+            let row = trigger.parentElement;
+            let form = row.querySelector("form");
+            $.ajax({
+                type: "POST",
+                url: form.getAttribute("action"),
+                data: $(form).serialize(),
+                success: ajaxCompleted()
+            });
+        })
+    })
+    
+</script>

@@ -1,0 +1,82 @@
+﻿@model List<KitRequest>
+
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<SelectListItem> statuses = new List<SelectListItem>();
+    statuses.Add(new SelectListItem(Html.T("new"), RequestStatus.New.ToString()));
+    statuses.Add(new SelectListItem(Html.T("pending"), RequestStatus.Pending.ToString()));
+    statuses.Add(new SelectListItem(Html.T("completed"), RequestStatus.Completed.ToString()));
+}
+<style>
+    .contract-edit-list {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    .contract-edit-link {
+        color: #2D3748;
+    }
+</style>
+
+<h2>
+    @Html.T("kit_requests")
+</h2>
+<ul class="contract-edit-list">
+    @{
+        <li>@Html.T("create_request_for")</li>
+        foreach (Company company in ViewBag.Companies)
+        {
+            <li class="contract-edit-item">
+                <a href="@Url.Action("CreateKitRequest", "Branch", new { companyId = company.Id })" class="contract-edit-link"
+                   data-ajax="true" data-ajax-update="#division-menu-pop-up">@company.Name</a>
+            </li>
+        }
+    }
+</ul>
+<table class="table access-table">
+    <tr>
+        <th>№</th>
+        <th>@Html.T("request_date")</th>
+        <th>@Html.T("amount_of_kits")</th>
+        <th>@Html.T("company")</th>
+        <th>@Html.T("status")</th>
+    </tr>
+    @{
+        int i = 1;
+    }
+    @foreach (var request in Model)
+    {
+        <tr>
+            <td>@(i++)</td>
+            <td>@request.Created.ToString("dd/MM/yyyy")</td>
+            <td>@request.Amount</td>
+            <td>@request.Company.Name</td>
+            <td>
+                <div class="select-wrapper">
+                    <select asp-for="@request.Status" asp-items="@statuses" data-rid="@request.Id" class="status-select"></select>
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+<div class="pop-up" id="division-menu-pop-up"></div>
+<script>
+    $('.status-select').on('change', function () {
+        let requestId = $(this).data('rid');
+        let newStatus = $(this).val();
+        $.ajax({
+            url: '@Url.Action("UpdateKitRequestStatus", "Branch")',
+            method: 'POST',
+            data: { requestId: requestId, newStatus: newStatus },
+            error: function (xhr) {
+                let calert = new AlertBox(xhr.responseText, true);
+                calert.show();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,84 @@
+﻿@using NewGenBridge.ViewModels
+@model HubFile
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string> selectedRoles = ViewBag.Available;
+}
+<style>
+    .level-input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+<form asp-action="EditKBase" asp-controller="Hub" id="kbase-form"
+      class="settings-grid" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" required />
+    @if(!ViewBag.IsUrl)
+    {
+        <div class="profile-image-form ">
+            <label>@Html.T("file")</label>
+            <div class="profile-image-input">
+                <img src="~/img/upload.svg" alt="Load profile picture">
+                <p class="profile-image-name">@Html.T("s_upload_title")</p>
+                <p class="profile-image-warning">@Html.T("s_upload_subtitle"): 250Mb</p>
+            </div>
+            <input name="UploadedFile" class="d-none" type="file" data-nin="hubfile">
+        </div>
+    }
+    else{
+        <div>
+            <span class="label settings-label">YouTube URL</span>
+            <br />
+            <input name="VideoUrl" type="text" class="level-input" value="@(ViewBag.IsUrl? Model.FilePath: "")" />
+        </div>
+    }
+    <div>
+        <span class="label settings-label">@Html.T("file_name")</span>
+        <input name="FileName" type="text" class="level-input" value="@Model.FileName" required />
+    </div>
+    <div>
+        <span class="label settings-label">@Html.T("description")</span>
+        <input name="FileDescription" type="text" class="level-input" value="@Model.FileDescription" required />
+    </div>
+    <div>
+        @foreach (string role in ViewBag.Roles)
+        {
+            <input name="SelectedRoles" type="checkbox" value="@role" id="@role" @(selectedRoles.Contains(role) ? "checked" : "") />
+            <label for="@role">@Html.T(role.ToLower())</label>
+
+            <br />
+        }
+    </div>
+    <button class="centered-button action-button profile-form-button">@Html.T("save")</button>
+</form>
+
+<script>
+    let pictureInputButton = document.querySelector(".profile-image-input");
+    let pictureInput = document.querySelector("[data-nin='hubfile']");
+    pictureInputButton.addEventListener('click', () => {
+        $(pictureInput).trigger('click');
+    });
+
+    pictureInput.addEventListener('change', () => {
+        let value = pictureInput.value;
+        document.querySelector('.profile-image-name').innerText = value.split('\\').pop();
+        document.querySelector('.profile-image-warning').style.display = 'none';
+    });
+
+    let form = document.querySelector('#kbase-form');
+
+    form.addEventListener('submit', (e) => {
+        let fileProvided = pictureInput.value !== '';
+        let videoUrlProvided = document.querySelector('input[name="VideoUrl"]').value !== '';
+        if (fileProvided && videoUrlProvided) {
+            e.preventDefault();
+            // alert('Html.T("kbase_file_or_video")');
+            alert('Please provide either a file or a YouTube URL, not both.');
+        } else if (!fileProvided && !videoUrlProvided) {
+            e.preventDefault();
+            // alert('Html.T("kbase_file_or_video_required")');
+            alert('Please provide either a file or a YouTube URL.');
+        }
+    });
+</script>

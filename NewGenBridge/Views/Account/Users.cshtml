@@ -1,0 +1,83 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model List<MentorManagerViewModel>
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var statuses = UserStatus.GetCollection();
+    SelectList statusList = new SelectList(from status in statuses select new
+                                           {
+                                               Id = status.Item1,
+                                               Name = Html.T(status.Item2.ToLower())
+                                           }, "Id", "Name");
+    int index = 1;
+    string title = ViewBag.Title;
+    ViewData["Title"] = Html.T(title.ToLower());
+}
+<h2>@Html.T(title.ToLower())</h2>
+<div class="false-form">
+    <div class="select-wrapper">
+        <select asp-items="@statusList"></select>
+    </div>
+</div>
+
+<table class="access-table">
+    <tr>
+        <th>№</th>
+        <th>@Html.T("name")</th>
+        <th>@Html.T("username")</th>
+        <th>@Html.T("status")</th>
+        <th colspan="2">@Html.T("action")</th>
+    </tr>
+    @foreach(var user in Model)
+    {
+        bool isBlocked = user.StatusId == UserStatus.Blocked;
+        bool isArchived = user.StatusId == UserStatus.Archived;
+        <tr id="@user.Id" class="@("st" + user.StatusId)">
+            <td class="text-center">@(index++)</td>
+            <td>@user.FirstName @user.LastName</td>
+            <td>@user.UserName</td>
+            <td class="text-center mentor-status-td">@Html.T(UserStatus.GetName(user.StatusId).ToLower())</td>
+            <td class ="block-table-link">
+                <a href="@Url.Action("ToggleUserStatus", "Account", new{userId = user.Id, statusId = UserStatus.Blocked})"
+                    data-ajax="true" data-ajax-complete="ajaxCompleted">@(isBlocked ? Html.T("unblock") : Html.T("block"))</a>
+            </td>
+            <td class="archive-table-link">
+                <a href="@Url.Action("ToggleUserStatus", "Account", new{userId = user.Id, statusId = UserStatus.Archived})"
+                   data-ajax="true" data-ajax-complete="ajaxCompleted">@(isArchived ? Html.T("restore") : Html.T("archive"))</a>
+            </td>
+        </tr>
+    }
+</table>
+<script>
+    var statuses = JSON.parse("@UserStatus.GetJsonCollection()".replaceAll('&quot;', '"'));
+    var select = document.querySelector('.select-wrapper>select');
+    ajaxCompleted = function (xhr) {
+        if(xhr.status == 200){
+            location.reload();
+        }
+        else{
+            let calert = new AlertBox("Something went wrong (error code: #VEJSE56)", false);
+            calert.show();
+        }
+    }
+
+    select.addEventListener('change', (e) => {
+        let value = select.value;
+        let trs = document.querySelectorAll('.access-table tr:not(:first-child)');
+        let index = 1;
+        if (value == @UserStatus.All) trs.forEach(tr => {
+            tr.style.display = 'table-row'; 
+            tr.querySelector('td:first-child').innerText = index++;
+        });
+        else trs.forEach(tr => {
+            if (tr.className != "st" + value)
+                tr.style.display = 'none';
+            else {
+                tr.style.display = 'table-row'; tr.querySelector('td:first-child').innerText = index++;
+            }
+        });
+    });
+</script>

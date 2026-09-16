@@ -1,0 +1,25 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+
+@model Country
+
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUpUpdate('attendance-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-content">
+            <h2>Добавить страну</h2>
+            <form id="add-country-form" asp-action="ApiSettingsAdd" asp-controller="Master">
+                <div class="form-group">
+                    <label for="country-code">Код страны</label>
+                    <input type="text" id="country-code" asp-for="Code" required />
+                </div>
+                <button type="submit" class="action-button centered-button spinner-button">Добавить</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/atmenu.js"></script>

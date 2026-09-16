@@ -1,0 +1,124 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.Services
+@inject LevelService _levelService
+@model List<Lesson>
+
+@{
+    int lid = 0;
+    Level level = null;
+    var groupedLessons = Model.OrderBy(l => l.LevelId)
+                              .GroupBy(l => l.LevelId).ToList();
+}
+
+<style>
+    .dropdown-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        > li {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .dropdown-trigger {
+        display: grid;
+        grid-template-columns: 1fr 5rem;
+        align-items: center;
+        cursor: pointer;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        box-shadow: 0 1.5rem 5vw -.5rem var(--main-color-through);
+        border-radius: 1rem;
+        ;
+
+        > img {
+            justify-self: center;
+            transform: rotate(180deg);
+            transition: transform 0.3s ease;
+        }
+    }
+
+        .dropdown-trigger ~ .progress-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+    .progress-card {
+        box-shadow: inset 0 1.5rem 5vw -.5rem var(--main-color-through);
+    }
+</style>
+
+<h2>@Html.T("lessons")</h2>
+<p class="label">@Html.T("list_of_your_lessons")</p>
+<ul class="dropdown-list">
+    @foreach(var group in groupedLessons)
+    {
+        level = await _levelService.GetLevelByIdAsync(group.Key);
+        <li>
+            <div class="dropdown-trigger">
+                <h3>@level.Name</h3>
+                <img src="~/img/toggle-arrow.svg" />
+            </div>
+            <ul class="progress-list">
+            @foreach(var lesson in group)
+            {
+                <li class="progress-card">
+                    <div class="flex-centered">
+                        <img src="@("../Projects/Levels/" + lesson.LevelId + ".png")" alt="LevelLogo" class="level-logo" />
+                    </div>
+                    <div>
+                        <p class="progress-lesson-name">@lesson.Name</p>
+                        <p class="progress-level-description">@level.Description</p>
+                        @{
+                            if (lesson.FileLink == "OPEN")
+                            {
+                                <a href="@Url.Content("~/Projects/" + LabelCreator.CreateProjectLabel(lesson.LevelId, lesson.Id) + "/lesson.pdf")" class="progress-lesson-button">
+                                    @Html.T("go_to_lesson") ⟶
+                                </a>
+                            }
+                        }
+                    </div>
+                    @*TODO: put div.flex-centered out of if-else statement*@
+                    @if (lesson.FileLink == "OPEN")
+                    {
+                        <div class="flex-centered">
+                            <img src="~/img/green-checkmark.svg" alt="green checkmark" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex-centered">
+                            <img src="~/img/red-crossmark.svg" alt="green checkmark" />
+                        </div>
+                    }
+                </li>
+            }
+            </ul>
+        </li>
+        
+    }
+</ul>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
+
+        dropdownTriggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const progressList = trigger.nextElementSibling;
+                const arrowIcon = trigger.querySelector('img');
+
+                if (progressList.style.maxHeight) {
+                    progressList.style.maxHeight = null;
+                    arrowIcon.style.transform = 'rotate(180deg)';
+                } else {
+                    progressList.style.maxHeight = progressList.scrollHeight + 'px';
+                    arrowIcon.style.transform = 'rotate(270deg)';
+                }
+            });
+        });
+    });
+</script>

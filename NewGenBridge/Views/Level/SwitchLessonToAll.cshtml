@@ -1,0 +1,78 @@
+﻿@using NewGenBridge.ViewModels
+@model SwitchLessonViewModel
+@{
+    Layout = null;
+}
+
+<style>
+    .h-form-thin{
+        align-items: center;
+        padding-top: 16px;
+    }
+
+    .select-wrapper-thin select{
+        width: 100%;
+    }
+</style>
+
+<form asp-action="SwitchLessonToAll" asp-controller="Account" class="h-form h-form-thin"
+    data-ajax="true"
+    id="switch-lesson-form"
+    data-ajax-success="alertSwitchLesson('Lesson switched successfully!')"
+    data-ajax-failure="alertSwitchLesson('Failed to switch lesson.')">
+    <input asp-for="GroupId" type="hidden" value="@Model.GroupId" />
+    <div class="h-form-block">
+        <label>@Html.T("level")</label>
+        <div class="select-wrapper-thin">
+            <select asp-items="@ViewBag.Levels" id="la-levelId">
+            </select>
+        </div>
+    </div>
+    <div class="h-form-block">
+        <label>@Html.T("current_lesson")</label>
+        <div class="select-wrapper-thin">
+            <select asp-items="@ViewBag.Lessons" id="la-lessonId" asp-for="LessonId">
+            </select>
+        </div>
+    </div>
+    <button class="action-button" style="align-self: flex-end;">@Html.T("switch_lesson")</button>
+</form>
+
+<script>
+    var currentLesson = '@Model.LessonId'
+    function PopulateLessons(){
+        var levelId = $('#la-levelId').val();
+        var url = '@Url.Action("GetLessonSelectListGroup", "Level")';
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: { levelId: levelId },
+            success: function (data) {
+                $('#la-lessonId').empty();
+                $.each(data, function (i, item) {
+                    let option = $('<option>').text(item.text).attr('value', item.value);
+                    if(currentLesson != "" && currentLesson == item.value){
+                        option.attr('selected', 'selected');
+                        currentLesson == "";
+                    }
+                    $('#la-lessonId').append(option);
+                });
+                //$('#switch-lesson-form').submit();
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    PopulateLessons();
+    $('#la-levelId').on('change', PopulateLessons);
+
+    function alertSwitchLesson(message){
+        let calert = new AlertBox(message, false, false);
+        calert.show();
+    }
+
+    //  $('#la-lessonId').on('change', () => {
+    //     $('#switch-lesson-form').submit();
+    // })
+</script>

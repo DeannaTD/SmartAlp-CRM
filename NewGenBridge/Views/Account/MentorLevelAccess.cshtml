@@ -1,0 +1,71 @@
+﻿@using NewGenBridge.ViewModels
+@model List<MentorLevelAccessViewModel>
+@{
+    int i = 1;
+    ViewData["Title"] = Html.T("level_access");
+}
+<style>
+    .access-table{
+        width: 100% !important;
+    }
+
+    .m-0{
+        margin: 0.5rem 0;
+    }
+
+    .t-link:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+<h2>@Html.T("level_access")</h2>
+<table class="access-table">
+    <tr>
+        <th>№</th>
+        <th>@Html.T("mentor_lesson_access")</th>
+        <th>@Html.T("level_access")</th>
+    </tr>
+    @foreach(var mentor in Model)
+    {
+        <tr>
+            <td class="text-center">@(i++)</td>
+            <td>
+                <a href="@Url.Action("MentorLessonAccess", "Account", new {mentorId = mentor.MentorId})" class="t-link">
+                    @mentor.MentorName <span>(@Html.T("lesson_access"))</span>
+                </a>
+            </td>
+            <td>
+                @foreach(var access in mentor.LevelAccesses)
+                {
+                    <p class="m-0">
+                        @access.LevelName: <input data-lid="@access.LevelId" data-uid="@mentor.MentorId" type="checkbox" @(access.HasAccess ? "checked" : "")/>
+                    </p>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<script>
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', function(){
+            let userId = this.getAttribute('data-uid');
+            let levelId = this.getAttribute('data-lid');
+            let hasAccess = this.checked;
+            fetch(`@Url.Action("ToggleMentorLevelAccess", "Account")?userId=${userId}&levelId=${levelId}&hasAccess=${hasAccess}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if(!response.ok){
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                let calert = new AlertBox("Something went wrong (error code: #VEJSE57)", false);
+                calert.show();
+                // Revert checkbox state
+                this.checked = !hasAccess;
+            });
+        });
+    });
+</script>

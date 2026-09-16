@@ -1,0 +1,197 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital@0;1&display=swap");
+* {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                              not supported by any browser */
+}
+
+body::-webkit-scrollbar {
+  width: 4px;               /* ширина scrollbar */
+  
+}
+body::-webkit-scrollbar-track {
+  /* background: rgb(70, 70, 69);    */
+  border:3px solid #cdcbcb;
+
+}
+body::-webkit-scrollbar-thumb {
+  /* background-color: blue;    цвет плашки */
+  border-radius: 20px;       /* закругления плашки */
+  border: 3px solid rgb(145, 141, 132); 
+ height: 20px;
+}
+
+.project-container {
+  width: 80%;
+  margin-left: 5%;
+}
+
+.project-container ol,
+.project-container ul {
+  margin: 2rem 0;
+}
+
+.project-container li,
+.project-container p {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+.project-container iframe {
+  width: 485px;
+}
+
+.list_nontype {
+  list-style-type: none;
+  padding: 0;
+}
+
+.list_nontype > li {
+  padding-left: 4rem;
+}
+
+.list_nontype > li:first-child,
+.list_nontype > li:last-child {
+  padding-left: 2rem;
+}
+
+.list_nontype.doctype > li:nth-child(2) {
+  padding-left: 2rem;
+}
+
+.list_nontype.plain > li {
+  padding-left: 2rem;
+}
+
+.inner_item .list_nontype > li {
+  padding-left: 2rem;
+}
+
+.inner_item .list_nontype > li:first-child,
+.inner_item .list_nontype > li:last-child {
+  padding-left: 0;
+}
+
+.description-block__text img {
+  max-width: 70vw;
+}
+
+.code_container {
+  color: white;
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: sans-serif;
+  -webkit-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background: black;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  border-radius: 10px;
+}
+
+.code_container * {
+  font-family: 'Source Code Pro', monospace !important;
+}
+
+.code_list {
+  color: white;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: sans-serif;
+  -webkit-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  list-style-position: inside;
+  display: block;
+  border-radius: 10px 0 0 10px;
+  background: black;
+  margin: 0 !important;
+  padding: 0 1rem;
+  border-right: 1px solid gray;
+}
+
+.code_container .list_nontype {
+  margin: 0;
+}
+
+.comment {
+  color: #888;
+  font-style: italic;
+}
+
+.tag {
+  color: #f92672;
+}
+
+.attr {
+  color: #A6E22E;
+}
+
+.value {
+  color: #E6DB74;
+}
+
+.selector {
+  color: #A6E22E;
+}
+
+.number {
+  color: #AE81FF;
+}
+
+.selector::after {
+  content: " ";
+}
+
+.styles {
+  color: #66D9EF;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.accent {
+  font-weight: 600;
+}
+
+.code_line .styles.italic:not(.styles_inline)::after {
+  content: " ";
+}
+
+.code_line {
+  display: inline-block;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  background-color: black;
+  color: white;
+  font-family: 'Source Code Pro', monospace !important;
+}
+
+.code_container + .code_container {
+  margin-top: 2rem;
+}
+
+.striked {
+  -webkit-text-decoration-color: #FFF;
+          text-decoration-color: #FFF;
+  -webkit-text-decoration-line: line-through;
+          text-decoration-line: line-through;
+  -webkit-text-decoration-style: solid;
+          text-decoration-style: solid;
+}
+/*# sourceMappingURL=projectStyle.css.map */

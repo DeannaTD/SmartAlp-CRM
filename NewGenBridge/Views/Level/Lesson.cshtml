@@ -1,0 +1,42 @@
+﻿@if(ViewBag.isHTML)
+{
+    <div id="lessonView"></div>
+    <script>
+        let container = document.getElementById('lessonView');
+        $('#lessonView').load("@ViewBag.lessonLink");
+    </script>
+}
+else
+{
+    <div id="lessonView"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        const url = "@ViewBag.lessonLink";
+        const container = document.getElementById("lessonView");
+
+        pdfjsLib.getDocument(url).promise.then(pdf => {
+            for (let num = 1; num <= pdf.numPages; num++) {
+                pdf.getPage(num).then(page => {
+                    const viewport = page.getViewport({ scale: 1.5 });
+
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+
+                    container.appendChild(canvas);
+
+                    page.render({
+                        canvasContext: ctx,
+                        viewport: viewport,
+                        background: "rgba(0,0,0,0)"
+                    });
+                });
+            }
+        });
+    </script>
+
+}
+
+

@@ -1,0 +1,9 @@
+﻿@model string[]
+
+@{
+    foreach(string message in Model)
+    {
+        <p>@message</p>
+    }
+}
+<a href="@Url.Action("Index", "Master")">Назад на мастер-страницу</a>

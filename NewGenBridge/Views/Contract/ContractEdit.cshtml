@@ -1,0 +1,33 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model ContractEditViewModel
+
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .login-form-group{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 16px;
+    }
+</style>
+<div>
+    <form class="v-form" asp-action="SaveContractEdit" asp-controller="Contract">
+    <input name="BranchId" type="hidden" value="@Model.BranchId" />
+    <div class="login-form-group">
+        <label>@Html.T("contract_header") <span>(@Html.T("not_displayed_to_users"))</span></label>
+        <textarea class="false-input" rows="10" name="HeadSegment">@Model.HeadSegment</textarea>
+    </div>
+    <div class="login-form-group">
+        <label>@Html.T("contract_body") <span>(@Html.T("displayed_to_users"))</span></label>
+        <textarea class="false-input" rows="20" name="MainSegment">@Model.MainSegment</textarea>
+    </div>
+    <div class="login-form-group">
+        <label>@Html.T("contract_footer") <span>(@Html.T("not_displayed_to_users"))</span></label>
+        <textarea class="false-input" rows="10" name="FooterSegment">@Model.FooterSegment</textarea>
+    </div>
+    <input type="submit" value="@Html.T("save")" class="centered-button action-button profile-form-button" />
+    </form>
+</div>

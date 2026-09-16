@@ -1,0 +1,37 @@
+﻿@model List<Translation>
+<style>
+
+</style>
+<form class="translation-form" asp-action="AddTranslation" asp-controller="Master">
+    <input name="key" placeholder="Key" />
+    <input name="en" placeholder="English" />
+    <input name="fr" placeholder="French" />
+    <input name="it" placeholder="Italian" />
+    <input name="tr" placeholder="Turkish" />
+    <input name="de" placeholder="Deutch" />
+    <input name="ru" placeholder="Russian" />
+    <input type="submit" value="Add translation">
+</form>
+<table class="access-table">
+    <tr>
+        <th>Key</th>
+        <th>English</th>
+        <th>French</th>
+        <th>Italian</th>
+        <th>Turkish</th>
+        <th>German</th>
+        <th>Russian</th>
+    </tr>
+    @foreach(var translation in Model)
+    {
+           <tr>
+            <td>@translation.NPKey</td>
+            <td>@translation.EnValue</td>
+            <td>@translation.FrValue</td>
+            <td>@translation.ItValue</td>
+            <td>@translation.TrValue</td>
+            <td>@translation.DeValue</td>
+            <td>@translation.RuValue</td>
+        </tr>
+    }
+</table>

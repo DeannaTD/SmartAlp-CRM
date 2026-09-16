@@ -1,0 +1,19 @@
+﻿@using NewGenBridge.Helpers
+@{
+    if(User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Html.T("Home");
+}
+
+<h2>@Html.T("welcome_to_smartalp")!</h2>
+
+<p>@Html.T("we_are_pleased_to")</p>
+
+<p>@Html.T("by_joining_smartalp")</p>
+
+<p>@Html.T("your_decision_to_open")</p>
+
+<p>@Html.T("we_appreciate_your_initiative")</p>
+<p>@Html.T("on_behalf_of_the_entire")</p>
+
+<p>@Html.T("we_look_forward")</p>

@@ -1,0 +1,44 @@
+﻿@using NewGenBridge.Helpers
+@model List<Division>
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Html.T("structure")</h2>
+@if (User.IsInRole(NPUR.Admin))
+{
+    <a href="@Url.Action("CreateDivision", "Branch")" class="action-link"
+    data-ajax="true" data-ajax-update="#division-menu-pop-up">@Html.T("add_new_division")</a>
+}
+<div class="structure-container">
+    @foreach(Division division in Model)
+     {
+        <div class="structure-card">
+            <p class="division-name">
+                @if(User.IsInRole(NPUR.Admin))
+                {
+                    <a href="@Url.Action("EditDivision", "Branch", new {divisionId = division.Id})"
+                    data-ajax="true" data-ajax-update="#division-menu-pop-up">@division.Name</a>
+                }
+                else
+                {
+                    <span>@division.Name</span>
+                }
+                <a href="@Url.Action("Create", "Branch", new{divisionId = division.Id})"
+                   data-ajax="true" data-ajax-update="#division-menu-pop-up" title="@Html.T("add_new_branch")">[+]</a>
+            </p>
+            @foreach(Branch branch in division.Branches)
+            {
+                <div class="structure-record">
+                    <div class="structure-name">@branch.Name</div>
+                    <div class="structure-name">@branch.Address</div>
+                    <div class="structure-menu">
+                        <a href="@Url.Action("Edit", "Branch", new {branchId = branch.Id})" title="@Html.T("edit")" data-ajax="true" data-ajax-update="#division-menu-pop-up"><img src="../img/edit.svg" /></a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<div class="pop-up" id="division-menu-pop-up"></div>

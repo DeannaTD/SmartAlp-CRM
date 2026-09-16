@@ -1,0 +1,259 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+.text-title__variant {
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: 600;
+    letter-spacing: -0.23px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.poster-badge__switcher {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-radius: 64px;
+}
+
+.active-switcher {
+    position: absolute;
+}
+
+.contract-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .poster-badge
+
+{
+    width: 100%;
+}
+
+.grid-c3 {
+    column-gap: 20px;
+    row-gap: 38px;
+    width: 100%;
+    margin-top: 32px;
+}
+
+}
+
+.contract-form label {
+    cursor: pointer;
+    position: relative;
+}
+
+.l-rsection {
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+.active-switcher {
+    background-color: white;
+    top: 8px;
+    bottom: 8px;
+    left: 0;
+    border-radius: 64px;
+    transition: all .3s ease;
+}
+
+.grid-c3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.form-container input[type="text"],
+.form-container input[type="date"],
+.form-container input[type="tel"] {
+    display: block;
+    width: 100%;
+    background-color: #F9FAFB;
+    border: 1px solid #D0D5DD;
+    color: #101828;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.l-mdl {
+    display: block;
+    margin-bottom: 18px;
+}
+
+.contract-title {
+    font-weight: 700;
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+}
+
+.contract-text {
+    margin-top: 48px;
+    text-align: justify;
+    p
+
+{
+    margin: 0;
+}
+
+.lvl-1 {
+    margin-left: 24px;
+}
+
+.lvl-2 {
+    margin-left: 48px;
+}
+
+}
+
+.signature-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 32px;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+input[type="submit"] {
+    width: calc(30% + 16px);
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.select-wrapper {
+    position: relative;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    select{
+        width: 100%;
+        appearance: none;
+        cursor: pointer;
+    }
+
+}
+.contract-form .flex-division{
+    width: 100%;
+}
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 1rem;
+    background: url('../img/arrow-down-gray.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+}
+
+select {
+    padding: 1rem;
+    border: 1px solid #EBEBEB;
+    border-radius: .5rem;
+    font-size: 1rem;
+    color: black;
+    outline: none;
+    font-family: "Verdana", sans-serif;
+}
+
+.flex-division {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    gap: 24px;
+}
+
+.modal-bg {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+}
+
+.modal-bg.active {
+    display: block;
+}
+
+#modal-popup__button {
+    display: inline-block;
+    padding: 1rem 4rem;
+    background-color: #EF5C0D;
+    color: #FFFFFF;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+}
+
+#modal-popup__link {
+    display: flex;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    color: #4286f4;
+    margin-bottom: 1rem;
+}
+
+#modal-popup__link::before{
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("../img/pdf.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#modal-popup {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    background: #FFFFFF;
+    border: 1px solid #EF5C0D;
+    border-radius: 16px;
+    text-align: center;
+    padding: 2rem;
+}
+
+#modal-popup__title{
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+#modal-popup__text{
+    font-size: 1.2rem;
+}
+
+.logo {
+    max-height: 64px;
+    margin-top: 16px;
+    margin-left: 64px;
+}

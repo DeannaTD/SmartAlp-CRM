@@ -1,0 +1,44 @@
+﻿@using NewGenBridge.ViewModels
+@model LoginViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewGenBridge</title>
+    <link rel="stylesheet" href="~/css/login.css">
+    <title>SmartAlp Academy</title>
+</head>
+<body>
+    <section class="login-container">
+        <div class="login-filler"></div>
+        <div class="login-formContainer">
+            <form asp-action="Login" asp-controller="Account" class="login-form">
+                <div class="login-validation" asp-validation-summary="All"></div>
+                <h1>@Html.T("welcome")!</h1>
+                <div class="login-form-group">
+                    <label>@Html.T("username")</label>
+                    <input type="text" asp-for="UserName">
+                </div>
+                <div class="login-form-group">
+                    <label>@Html.T("password")</label>
+                    <input type="password" asp-for="Password">
+                </div>
+                <div class="login-form-group">
+                    <input type="checkbox" id="rememberMe" class="hidden" asp-for="RememberMe">
+                    <label for="rememberMe" class="login-checkboxLabel">
+                        <span class="login-customCheckbox">
+                            <img src="~/img/login-check.svg" alt="login checkbox">
+                        </span>
+                        <span>@Html.T("remember_me")</span>
+                    </label>
+                </div>
+                <input type="submit" value="@Html.T("log_in")">
+            </form>
+        </div>
+    </section>
+</body>
+</html>

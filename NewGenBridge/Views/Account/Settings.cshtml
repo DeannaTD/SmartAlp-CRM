@@ -1,0 +1,78 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@model SettingsViewModel
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Html.T("settings");
+}
+<section class="setting-section">
+    <h2>@Html.T("profile_settings")</h2>
+    <div class="settings-grid">
+        @using (Html.BeginForm("ChangeProfilePicture", "Account", FormMethod.Post, new { @class = "profile-image-form", @enctype = "multipart/form-data" }))
+        {
+            <form asp-action="ChangeProfilePicture" asp-controller="Account"
+                  class="profile-image-form" enctype="multipart/form-data">
+                <label>@Html.T("profile_picture")</label>
+                <div class="profile-image-input">
+                    <img src="~/img/upload.svg" alt="@Html.T("s_upload_title")">
+                    <p class="profile-image-name">@Html.T("s_upload_title")</p>
+                    <p class="profile-image-warning">@Html.T("s_upload_subtitle"): 30Mb</p>
+                </div>
+                <input name="picture" class="d-none" type="file" accept=".png,.jpg,.jpeg" required>
+            </form>
+        }
+        <div>
+            <span class="label settings-label">@Html.T("full_name")</span>
+            <p class="false-input">@Model.FirstName @Model.LastName</p>
+        </div>
+        <div>
+            <span class="label settings-label">@Html.T("username")</span>
+            <p class="false-input">@Model.UserName</p>
+        </div>
+        <button class="centered-button action-button profile-form-button">@Html.T("save_changes")</button>
+    </div>
+</section>
+<section class="setting-section">
+    <h2>@Html.T("change_password")</h2>
+    <span class="form-validation"></span>
+    <form class="password-form" asp-action="ChangePassword" asp-controller="Account"
+        data-ajax="true"
+        data-ajax-begin="submitFormSpin(this)"
+        data-ajax-success="endFormSpin(this, true, 'Password has been updated')"
+        data-ajax-failure="passwordFailed">
+        <div>
+            <label>@Html.T("new_password") (@Html.T("s_password_subtitle"))<span class="asterisk">*</span></label>
+            <input type="password" name="newPassword" id="labelN" pattern=".{5,}" required>
+        </div>
+        <div>
+            <label>@Html.T("current_password")<span class="asterisk">*</span></label>
+            <input type="password" name="currentPassword" id="labelO" required>
+        </div>
+        <div>
+            <label>@Html.T("confirm_new_password")<span class="asterisk">*</span></label>
+            <input type="password" id="labelC" required>
+        </div>
+        <button id="passwordButton" type="submit" class="centered-button action-button spinner-button profile-form-button">
+            @Html.T("update_password")<span class="spinner"></span>
+        </button>
+    </form>
+</section>
+<script src="~/js/settings.js"></script>
+<script>
+    passwordFailed = (j)=>{
+        let errors = j.responseJSON;
+        let validationSpan = document.querySelector('.form-validation');
+        let button = document.getElementById('passwordButton');
+        validationSpan.style.display = 'block'
+        validationSpan.innerHTML = "";
+        errors.forEach(error => {
+            if(validationSpan.innerHTML == "")
+            validationSpan.innerHTML += error
+            else
+            validationSpan.innerHTML += `<br/>${error}`
+        });
+        button.classList.remove('spin');
+        button.disabled = false;
+    }
+</script>

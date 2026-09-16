@@ -1,0 +1,61 @@
+﻿@using NewGenBridge.Helpers
+@model IEnumerable<HubFile>
+@{
+    bool isAdmin = User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor);
+    if (isAdmin) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+<style>
+    .link-true {
+        text-decoration: underline !important;
+        text-decoration-color: var(--main-color);
+    }
+</style>
+<h2>@Html.T("hub")</h2>
+@if(isAdmin)
+{
+    <p>
+        <a href="@Url.Action("Upload", "Hub")">@Html.T("Upload")</a>
+    </p>
+}
+<table class="table access-table" style="min-width: 100%;">
+    <tr>
+        <th>№</th>
+        <th>@Html.T("file_name")</th>
+        <th>@Html.T("description")</th>
+        <th>@Html.T("upload_date")</th>
+        @if(isAdmin)
+        {
+            <th colspan="2">@Html.T("action")</th>
+        }
+    </tr>
+@foreach(HubFile file in Model)
+{
+    <tr>
+        <td>@(i++)</td>
+        <td>
+            <a href="@Url.Action("Download", "Hub", new {id = file.Id})" target="_blank" class="link-true">
+                @file.FileName
+            </a>
+        </td>
+        <td>@file.FileDescription</td>
+        <td>
+            @file.UploadedAt.ToString("dd.MM.yyyy")
+        </td>
+        @if(isAdmin)
+        {
+            <td>
+                <a href="@Url.Action("Edit", "Hub", new {fileid = file.Id})">
+                    @Html.T("edit")
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("Delete", "Hub", new {fileid = file.Id})" onclick="return confirm('@Html.T("are_you_sure")')">
+                    @Html.T("delete")
+                </a>
+            </td>
+        }
+    </tr>
+}
+</table>

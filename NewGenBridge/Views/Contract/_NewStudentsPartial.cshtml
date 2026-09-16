@@ -1,0 +1,115 @@
+﻿@model List<Lead>
+@using NewGenBridge.Services
+@inject BranchService branchService
+@inject LevelService levelService
+
+@{
+    int index = 0;
+    List<Level> levels = levelService.GetLevelsOnly();
+    List<SelectListItem> levelList = levels.Select(level => new SelectListItem
+    {
+        Value = level.Id.ToString(),
+        Text = level.Name
+    }).ToList();
+}
+
+<table class="access-table">
+    <tr>
+        <th>@Html.T("parent_name")</th>
+        <th>@Html.T("first_name")</th>
+        <th>@Html.T("last_name")</th>
+        <th>@Html.T("phone_number")</th>
+        <th>@Html.T("level")</th>
+        <th>@Html.T("branch")</th>
+        <th colspan="2">@Html.T("action")</th>
+    </tr>
+    @foreach (var lead in Model)
+    {
+        <tr data-lead-id="@lead.Id" data-lead-cid="@(lead.ContractId ?? 0)">
+            <td data-lead-info="parentName">@lead.ParentName</td>
+            <td data-lead-info="firstName">@lead.FirstName</td>
+            <td data-lead-info="lastName">@lead.LastName</td>
+            <td data-lead-info="phoneNumber">@lead.PhoneNumber</td>
+            <td class="td-select-wrapper">
+                <div class="select-wrapper">
+                    <select name="levelId" asp-items="@levelList" data-init="@lead.LevelId" data-lead-info="levelId"></select>
+                </div>
+            </td>
+            @{
+                IEnumerable<int?> branches = ViewBag.BranchesId;
+                List<SelectListItem> groupList = [];
+                foreach (int? branchId in branches)
+                {
+                    Branch branch = branchService.GetBranchByIdAsync(branchId ?? 0).Result;
+                    List<Group> group = branchService.GetGroupsByBranchId(branchId ?? 0);
+                    groupList.AddRange(group.Select(
+                        g => new SelectListItem
+                        {
+                            Value = g.Id.ToString(),
+                            Text = branch.Name + ", " + g.Name + " " + g.Day + " " + g.Time.ToString("hh\\:mm")
+                        }));
+                }
+            }
+            <td class="td-select-wrapper">
+                <div class="select-wrapper">
+                    <select name="groupId" asp-items="@groupList" data-lead-info="groupId"></select>
+                </div>
+            </td>
+            <td class="form-trigger block-table-link register-button">@Html.T("register")</td>
+            <td class="form-trigger archive-table-link delete-button">@Html.T("delete")</td>
+        </tr>
+    }
+</table>
+<ul class="pages-container">
+    @if (ViewBag.CurrentPage > 1)
+    {
+        <li>
+            <a href="@Url.Action("NewStudents", "Contract", new { page = ViewBag.CurrentPage - 1, name = ViewBag.Name })" class="page-number">@Html.T("previous")</a>
+        </li>
+    }
+    @{
+        int totalPages = ViewBag.TotalPages;
+        int currentPage = ViewBag.CurrentPage;
+        <li class="@(currentPage == 1 ? "active" : "")">
+            <a href="@Url.Action("NewStudents", "Contract", new { page = 1, name = ViewBag.Name })" class="page-number">1</a>
+        </li>
+        if (currentPage > 3)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        for (int i = Math.Max(2, currentPage - 1); i <= Math.Min(totalPages - 1, currentPage + 1); i++)
+        {
+            <li class="@(currentPage == i ? "active" : "")">
+                <a href="@Url.Action("NewStudents", "Contract", new { page = i, name = ViewBag.Name })">@i</a>
+            </li>
+        }
+        if (currentPage < totalPages - 2)
+        {
+            <li class="disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+        if (totalPages > 1)
+        {
+            <li class="@(currentPage == totalPages ? "active" : "")">
+                <a href="@Url.Action("NewStudents", "Contract", new { page = totalPages, name = ViewBag.Name })">@totalPages</a>
+            </li>
+        }
+    }
+
+    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+    {
+        <li>
+            <a href="@Url.Action("NewStudents", "Contract", new { page = ViewBag.CurrentPage + 1, name = ViewBag.Name })" class="page-number">@Html.T("next")</a>
+        </li>
+    }
+</ul>
+<script>
+    var selects = document.querySelectorAll("select");
+    selects.forEach(select => {
+        let value = select.getAttribute("data-init");
+        if (value > 0) select.value = value;
+    });
+</script>

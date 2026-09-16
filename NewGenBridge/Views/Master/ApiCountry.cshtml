@@ -1,0 +1,138 @@
+﻿@using NewGenBridge.Services
+@inject LevelService _levelService
+@inject BranchService _branchService
+
+@model ApiData
+
+@{
+    ViewData["Title"] = "Настройки стран API";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var branches = await _branchService.GetBranchesAsync();
+    var levels = await _levelService.GetLevelsAsync();
+
+    List<SelectListItem> groupList = [];
+    foreach (Branch branch in branches)
+    {
+        List<Group> group = _branchService.GetGroupsByBranchId(branch.Id);
+        groupList.AddRange(group.Select(
+            g => new SelectListItem
+            {
+                Value = g.Id.ToString(),
+                Text = branch.Name + ", " + g.Name + " " + Html.T(g.Day.ToString().ToLower()) + " " + g.Time.ToString("hh\\:mm")
+            }));
+    }
+
+    List<SelectListItem> levelList = levels.Select(
+        l => new SelectListItem
+        {
+            Value = l.Id.ToString(),
+            Text = l.Name
+        }).ToList();
+}
+<style>
+    .grid-api-header{
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr;
+        >div{
+            font-weight: bold;
+            background-color: var(--main-color);
+            padding: 1rem;
+            text-align: center;
+        }
+     }
+
+     .grid-api-cell{
+         border: 1px solid var(--main-color);
+     }
+
+     fieldset{
+         display: grid;
+         grid-template-columns: 1fr 4fr;
+         border: none;
+         padding: 0;
+
+         .grid-api-cell{
+             display: flex;
+             align-items: center;
+             justify-content: center;
+         }
+     }
+
+     .grid-api-block{
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+      }
+
+      .no-input{
+          border: none;
+          width: 100%;
+      }
+
+      a.trigger-link {
+          display: block;
+      }
+
+      .add-button{
+        display: block;
+        width: fit-content;
+      }
+      .add-button:hover{
+          color: white;
+      }
+</style>
+<div style="margin-bottom: .5rem;">
+    <a class="button action-button add-button"
+    asp-controller="Master" asp-action="ApiSettingsAdd"
+    data-ajax="true" data-ajax-update="#attendance-pop-up">Добавить страну</a>
+</div>
+<div class="pop-up" id="attendance-pop-up"></div>
+<form class="grid-api" asp-action="ApiSettingsSave" asp-controller="Master">
+    <div class="grid-api-header">
+        <div class="grid-api-cell">Код страны</div>
+        <div class="grid-api-cell">Группа</div>
+        <div class="grid-api-cell">Уровень</div>
+    </div>
+    @for(int i = 0; i<Model.Countries.Count; i++)
+    {
+        <fieldset>
+            <div class="grid-api-cell">
+                <div>
+                    <a href="@Url.Action("ApiSettingsNewGroup", "Master", new{countryCode = Model.Countries[i].Code})" style="padding: .5rem;" class="trigger-link"><img src="/img/add.svg" /></a>
+                    <a href="@Url.Action("ApiSettingsDelete", "Master", new{countryCode = Model.Countries[i].Code})" style="padding: .5rem;" class="trigger-link"><img src="/img/delete.svg" /></a>
+                </div>
+                <input asp-for="Countries[i].Code" class="no-input" value="@Model.Countries[i].Code"/>
+            </div>
+            <div class="grid-api-block">
+            @if(Model.Countries[i].Info.Count == 0)
+            {
+                <div class="grid-api-cell"></div>
+                <div class="grid-api-cell"></div>
+            }
+            else
+            for(int j = 0; j < Model.Countries[i].Info.Count; j++)
+            {
+                Group group = await _branchService.GetGroupByIdAsync(Model.Countries[i].Info[j].GroupId);
+                Level level = levels.FirstOrDefault(l => l.Id == Model.Countries[i].Info[j].LevelId);
+                <div class="grid-api-cell">
+                    <div class="select-wrapper no-input">
+                        <select class="no-input" asp-for="Countries[i].Info[j].GroupId" asp-items="@groupList" data-init="@group.Id"></select>
+                    </div>
+                </div>
+                <div class="grid-api-cell">
+                    <div class="select-wrapper no-input">
+                        <select class="no-input" asp-for="Countries[i].Info[j].LevelId" asp-items="@levelList" data-init="@level.Id"></select>
+                    </div>
+                </div>
+            }
+            </div>
+        </fieldset>
+    }
+    <input type="submit" value="Сохранить" class="action-button centered-button spinner-button" />
+</form>
+<script>
+    var selects = document.querySelectorAll("select");
+    selects.forEach(select => {
+        let value = select.getAttribute("data-init");
+        if (value > 0) select.value = value;
+    });
+</script>

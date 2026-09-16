@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>NewGenBridge: User manual</h1>
+    <h2>Content:</h2>
+    <ul class="navigation">
+        <li><a href="#ui-overview">User interface overview</a></li>
+        <li><a href="#structure-overview">Structure of the system</a></li>
+        <li><a href="#creating-users">Creating users</a></li>
+        <li><a href="#structure-management">Managing the structure</a></li>
+        <li><a href="#branch-management">Managing groups</a></li>
+        <li><a href="#access-management">Access management</a></li>
+        <li><a href="#profile-settings">Profile settings</a></li>
+    </ul>
+    <section id="ui-overview">
+        <h2>User interface overview</h2>
+        <p>When you first log in to the app, you will see the following screen:</p>
+        <img src="img/visor/ui-overview.png" alt="Screenshot of the app" class="full-screen">
+        <p>The app consists of the following elements:</p>
+        <ol>
+            <li>Navigation bar</li>
+            <li>Main content area</li>
+            <li>Quick actions bar</li>
+        </ol>
+        <h3>Navigation bar</h3>
+        <p>The navigation bar allows you to navigate through the app. It contains the following links:</p>
+        <ul>
+            <li>Structure</li>
+            <li>Branch menu</li>
+            <li>Access</li>
+            <li>Add user</li>
+            <li>Settings</li>
+            <li>Logout</li>
+        </ul>
+        <p>Navigation bar is opened by default, but if you want to toggle it, press the arrow icon.</p>
+        <h3>Content area</h3>
+        <p>The content area displays the main content of the app. It will change depending on which link you click in the navigation bar.</p>
+        <h3>Quick actions bar</h3>
+        <p>The quick actions bar contains two icons for "Log out" and "Home" links.</p>
+    </section>
+    <section id="structure-overview">
+        <h2>Structure of the system</h2>
+        <p>The system is divided into the following sections:</p>
+        <ul>
+            <li>Division</li>
+            <li>Branch</li>
+            <li>Group</li>
+        </ul>
+        <img src="img/visor/structure-overview.png" alt="Structure of the system" class="full-screen">
+        <h3>Account status</h3>
+        <p>Each user in the system has one of the following statuses:</p>
+        <ul>
+            <li>Active</li>
+            <li>Blocked</li>
+            <li>Archived</li>
+        </ul>
+        <p>Active users can log in to the system and perform actions. Blocked users cannot log in, but their data is still stored in the system. Archived users are hidden from the system and cannot log in.</p>
+    </section>
+    <section id="creating-users">
+        <h2>Creating users</h2>
+        <p>To create a new user, click on the "Add user" link in the navigation bar. You will see the following screen:</p>
+        <img src="img/visor/add-user.png" alt="Add user screen" class="full-screen">
+        <p>Fill in the form with the user's information and press "Create".</p>
+        <p>User login information is generated automatically and will be shown in the confirmation window. By default password is equal to username (<span class="alert">must be changed by user after login</span>).
+            If username happens to be too short to be set as a password, "1234" is added to the end of it. For example:</p>
+        <p>User named "James Potter" will have following credetials: "jpotter" as username, "jpotter" as password</p>
+        <p>User named "James Lee" will have following credentials: "jlee" as username, "jlee1234" as password</p>
+        <p>To create a user under the role "Mentor", you need to assign them a division from a drop-down list. This action is not needed to add managers.</p>
+    </section>
+    <section id="structure-management">
+        <h2>Managing the structure</h2>
+        <p>To manage the structure of the system, click on the "Structure" link in the navigation bar. You will see the following screen:</p>
+        <img src="img/visor/structure.png" alt="Structure management screen" class="full-screen">
+        <h3>Branch management</h3>
+        <ul>
+            <li>
+                To create a new branch:
+                <ol>
+                    <li>Press on a plus sign next to division name</li>
+                    <li>Enter the name of the branch</li>
+                    <li>Enter the address - it can be a locaiton or a description of the branch</li>
+                    <li>Press "Create"</li>
+                    <li>Wait for the confirmation and page reload</li>
+                </ol>
+                <video controls width="500">
+                    <source src="video/create-branch.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </li>
+            <li>
+                To edit an existing branch:
+                <ol>
+                    <li>Press on the "Edit" icon next to the branch you want to edit</li>
+                    <li>Change the name or address of the branch (name must not be empty)</li>
+                    <li>Press "Save"</li>
+                    <li>Wait for the confirmation and page reload</li>
+                </ol>
+                <video controls width="500">
+                    <source src="video/edit-branch.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </li>
+            <li>
+                To delete an existing branch:
+                <ol>
+                    <li>Press on the name of the branch you want to delete</li>
+                    <li>Press "Delete"</li>
+                    <li>Wait for the confirmation and page reload</li>
+                    <li class="alert"><img class="alert" src="img/alert.svg" alt="Alert sign"> <span>Deleting a branch <b><u>will erase</u></b> all the data of it's groups and students. This data cannot be restored</span></li>
+                </ol>
+                <video controls width="500">
+                    <source src="video/delete-branch.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </li>
+        </ul>
+    </section>
+    <section id="branch-management">
+        <h2>Groups</h2>
+        <p>Branches contain groups and students. Group is the lowest level of the system. To manage them, click on the "Branch menu" link in the navigation bar. You will see the following screen:</p>
+        <img src="img/visor/branch-overview.png" alt="Branch menu screen" class="full-screen">
+        <p>In this section you can create and edit groups, add new students and look over the attendance of each of them.</p>
+        <h3>Group management</h3>
+        <div class="column-2">
+            <ul>
+                <li>
+                    To create a new group:
+                    <ol>
+                        <li>Press on a plus sign next to branch name</li>
+                        <li>Choose group's timetable and assign a mentor</li>
+                        <li>Press "Create"</li>
+                        <li>Wait for the confirmation and page reload</li>
+                    </ol>
+                    <video controls width="500">
+                        <source src="video/create-group.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </li>
+                <li>
+                    To edit an existing group:
+                    <ol>
+                        <li>Press on the group you want to edit</li>
+                        <li>Change group's timetable or assigned mentor</li>
+                        <li class="alert"><img class="alert" src="img/alert.svg" alt="Alert sign"><span>Changes to group's settings are saved automatically (without pressing confirmation buttons) and cannot be restored to original values</span></li>
+                    </ol>
+                    <video controls width="500">
+                        <source src="video/edit-group.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </li>
+            </ul>
+            <div>
+                <img src="img/visor/group-overview.png" alt="Group menu">
+            </div>
+        </div>
+        <h3>Student management</h3>
+        <div class="column-2">
+            <ul>
+                <li>
+                    To add a new student:
+                    <ol>
+                        <li>Press on a "Add new student" link in group view</li>
+                        <li>Enter student's information</li>
+                        <li>Press "Create"</li>
+                        <li>Wait for the confirmation and page reload</li>
+                    </ol>
+                </li>
+                <li>
+                    To edit an existing student:
+                    <ol>
+                        <li>Press on a card icon next to the student you want to edit</li>
+                        <li>You can change student's information</li>
+                        <li>Press "Save"</li>
+                        <li>Wait for the confirmation and page reload</li>
+                    </ol>
+                </li>
+                <li>
+                    To transfer student to another group:
+                    <ol>
+                        <li>Press on a card icon next to the student you want to edit</li>
+                        <li>Choose a new group in "Group" drop-down menu</li>
+                        <li>Press "Save"</li>
+                        <li>Wait for the confirmation and page reload</li>
+                    </ol>
+                </li>
+                <li>
+                    To deactivate student's account:
+                    <ol>
+                        <li>Press on a card icon next to the student you want to block/archive</li>
+                        <li>Press on "Block student" or "Archive student" to change account status</li>
+                        <li>Wait for the confirmation</li>
+                        <li>If you blocked a student, press "Save"</li>
+                        <li>Blocked student will be shown with a lock icon next to the name</li>
+                        <li>Archived student will no longer be visible in group view</li>
+                        <li class="alert"><img class="alert" src="img/alert.svg" alt="Alert sign"> <span>Deactivating of an account does not lead to information loss, but removes an access to log in</span></li>
+                    </ol>
+                </li>
+            </ul>
+            <div>
+                <img src="img/visor/student-edit.png" alt="Student edit menu">
+            </div>
+        </div>
+    </section>
+    <section id="access-management">
+        <h2>Access management</h2>
+        <p>Access management allows you to control users and their access to the system. To manage access, click on the "Access" link in the navigation bar. You will see the following screen:</p>
+        <img src="img/visor/access-overview.png" alt="Access management screen" class="full-screen">
+        <h3>Access management</h3>
+        <ul>
+            <li>
+                To add an access to a manager:
+                <ol>
+                    <li>Press on a plus sign next to a needed branch</li>
+                    <li>Choose a manager in the drop-down menu</li>
+                    <li>Press "Create"</li>
+                    <li>Wait for the confirmation and page reload</li>
+                </ol>
+            </li>
+            <li>
+                To remove an access:
+                <ol>
+                    <li>Press on a minus sign next to the name of a user</li>
+                    <li>Wait for the confirmation and page reload</li>
+                </ol>
+            </li>
+        </ul>
+        <h3>Users listings</h3>
+        <p>Above the access management table you can see links to see users in the system in role "Manager". Press on the link to see the listing of users.</p>
+        <img src="img/visor/users-overview.png" alt="Users listing" class="full-screen">
+        <p>On this page you can block/unblock and archive/restore user accounts by pressing the corresponding action cell</p>
+    </section>
+    <section id="profile-settings">
+        <h2>Profile settings</h2>
+        <p>To change your profile settings, click on the "Settings" link in the navigation bar. You will see the following screen:</p>
+        <img src="img/visor/settings-overview.png" alt="Settings screen" class="full-screen">
+        <p>Here you can change your password and profile picture. It is not possible to change any other personal information</p>
+    </section>
+</body>
+</html>

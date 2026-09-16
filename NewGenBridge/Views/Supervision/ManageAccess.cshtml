@@ -1,0 +1,88 @@
+﻿@using NewGenBridge.ViewModels
+@using NewGenBridge.Helpers
+@model List<ManagerAccessViewModel>
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Html.T("access_management")</h2>
+<p>
+    <a href="@Url.Action("ShowUsers", "Account", new {isManager = true})" class="action-link">@Html.T("managers_list")</a>
+    @if(User.IsInRole(NPUR.Admin))
+    {
+        <a href="@Url.Action("ShowUsers", "Account")" class="action-link">@Html.T("supervisors_list")</a>
+    }
+</p>
+<table class="table access-table">
+    @if(User.IsInRole(NPUR.Supervisor))
+    {
+        <tr>
+            <th>@Html.T("branch")</th>
+            <th>@Html.T("managers")</th>
+        </tr>
+    }
+    @foreach (ManagerAccessViewModel record in Model)
+    {
+        if(record.BranchId == -1)
+        {
+            <tr>
+                <th colspan="2">@record.StructureName</th>
+            </tr>
+            @if (User.IsInRole(NPUR.Admin))
+            {
+                <tr>
+                    <td>@Html.T("supervisors")
+                        <a href="@Url.Action("AddAccess", "Branch", new{divisionId = record.DivisionId, branchId = record.BranchId})"
+                           data-ajax="true" data-ajax-update="#access-pop-up"
+                           title="@Html.T("grant_access")">[+]</a>
+                    </td>
+                    <td>
+                        @foreach(var userData in record.ManagersIds)
+                        {
+                            <p>@userData.Item2
+                                <a href="@Url.Action("RemoveAccess", "Branch", new{userId = userData.Item1, divisionId = record.DivisionId, branchId = record.BranchId})"
+                                title="@Html.T("remove_access")"
+                                data-ajax="true" data-ajax-success="ajaxCompleted">[-]</a>
+                            </p>
+                        }
+                        
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>
+                    @record.StructureName
+                    <a href="@Url.Action("AddAccess", "Branch", new{divisionId = record.DivisionId, branchId = record.BranchId})"
+                                            data-ajax="true" data-ajax-update="#access-pop-up"
+                                            title="@Html.T("add")">[+]</a>
+                </td>
+                <td>
+                    @foreach (var userData in record.ManagersIds)
+                    {
+                        <p>@userData.Item2
+                            <a href="@Url.Action("RemoveAccess", "Branch", new{userId = userData.Item1, divisionId = record.DivisionId, branchId = record.BranchId})"
+                            title="@Html.T("remove_access")"
+                            data-ajax="true" data-ajax-success="ajaxCompleted">[-]</a></p>
+                    }
+                    
+                </td>
+            </tr>
+        }
+    }
+</table>
+<script>
+    ajaxCompleted = function (xhr) {
+        if (xhr.includes('#')) {
+            let calert = new AlertBox(xhr, false);
+            calert.show();
+        }
+        else {
+            let calert = new AlertBox(xhr, true);
+            calert.show();
+        }
+    }
+</script>
+<div class="pop-up" id="access-pop-up"></div>

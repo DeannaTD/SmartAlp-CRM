@@ -1,0 +1,134 @@
+﻿@using NewGenBridge.Services
+@model List<Company>
+@inject BranchService _branchService
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .company-form{
+        width: 80%;
+        border: 1px solid var(--main-color);
+        border-radius: .5rem .5rem 0 0;
+    }
+
+    .branch-list-item{
+        display: block;
+    }
+
+    .form-block{
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        padding-left: 1rem;
+        >label{
+            display: flex;
+            align-items: center;
+        }
+
+        >input{
+            border: 0;
+            border-bottom: 1px solid var(--main-color);
+            border-radius: 0;
+        }
+    }
+
+    .submit-button{
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        color: #808080;
+        transition: all .5s ease;
+    }
+
+    .submit-button:hover {
+        text-decoration: 1px solid underline var(--accent-color);
+        color: var(--accent-color);
+        cursor: pointer;
+    }
+    .agreement-table {
+        width: 80%;
+        padding-left: 1rem;
+    }
+
+    span.agreement-button {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        display: block;
+        a{
+            color: var(--accent-color);
+        }
+    }
+
+    .agreemeent-block {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 2rem;
+        margin-bottom: 1rem;
+    }
+</style>
+<h2>@Html.T("company_data")</h2>
+<div>
+    @foreach (var company in Model)
+    {
+        Branch branch = await _branchService.GetBranchByIdAsync(company.BranchId);
+        <form class="company-form"
+        asp-action="UpdateCompany" asp-controller="Branch">
+            <span class="bold-text branch-list-item">@company.Name - @branch.Name</span>
+            <input type="hidden" name="Id" value="@company.Id" />
+            <input type="hidden" name="BranchId" value="@company.BranchId" />
+            <div class="form-block">
+                <label>@Html.T("company_name")</label>
+                <input type="text" name="Name" value="@company.Name" required/>
+            </div>
+            <div class="form-block">
+                <label>@Html.T("executive_name")</label>
+                <input type="text" name="ExecutiveName" value="@company.ExecutiveName" required />
+            </div>
+            <div class="form-block">
+                <label>@Html.T("phone_number")</label>
+                <input type="text" name="PhoneNumber" value="@company.PhoneNumber" required />
+            </div>
+            <div class="form-block">
+                <label>@Html.T("email")</label>
+                <input type="text" name="Email" value="@company.Email" required />
+            </div>
+            <div class="form-block">
+                <label>@Html.T("tax_id")</label>
+                <input type="text" name="TaxId" value="@company.TaxId" required />
+            </div>
+            <div class="form-block">
+                <label>@Html.T("bank_account_number")</label>
+                <input type="text" name="BackAccount" value="@company.BackAccount" required />
+            </div>
+            <div class="form-block">
+                <label>@Html.T("bank_name")</label>
+                <input type="text" name="BankName" value="@company.BankName" required />
+            </div>
+            <div class="form-block">
+                <label>@Html.T("bic_full")</label>
+                <input type="text" name="BankId" value="@company.BankId" required />
+            </div>
+            <div class="form-block">
+                <label>@Html.T("address")</label>
+                <input type="text" name="Address" value="@(company.Address ?? "")" required />
+            </div>
+            <input type="submit" value="@Html.T("save_changes")" class="submit-button" />
+
+            @if (User.IsInRole(NPUR.Manager) || User.Identity.Name == "dsotc")
+            {
+                <div class="agreement-table">
+                    <span class="agreement-button">
+                        <a href="@Url.Action("GenerateAgreement", "Branch", new { companyId = company.Id })">@Html.T("generate_agreement")</a>
+                    </span>
+                    @foreach (var agreement in company.Agreements)
+                    {
+                        <div class="agreemeent-block">
+                            <span>@agreement.Created.ToString("dd/MM/yyyy")</span>
+                            <a asp-action="DownloadAgreement" asp-controller="Branch" asp-route-aid="@agreement.Id">@agreement.Id</a>
+                        </div>
+                    }
+                </div>
+            }
+        </form>
+    }
+</div>

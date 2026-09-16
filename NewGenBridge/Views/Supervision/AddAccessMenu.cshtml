@@ -1,0 +1,60 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@inject NewGenBridge.Services.AccountService accountService
+@model AddAccessViewModel
+@{
+    Layout = null;
+    List<SelectListItem> users = [];
+    List<NPUser> npUsers;
+    if(Model.BranchId == -1)
+        npUsers = await accountService.GetUsersInRoleAsync(NPUR.Supervisor);
+    else
+        npUsers = await accountService.GetUsersInRoleAsync(NPUR.Manager);
+    foreach (var user in npUsers)
+    {
+        users.Add(new SelectListItem(user.FirstName + " " + user.LastName, user.Id));
+    }
+}
+<div class="pop-up-wrapper">
+    <div class="pop-up-container">
+        <div class="pop-up-header">
+            <button class="close-icon" onclick="closePopUp('access-pop-up')">
+                <img src="~/img/close.svg" alt="">
+            </button>
+        </div>
+        <div class="pop-up-content">
+            <form class="v-form b-form" asp-controller="Branch" asp-action="AddAccess"
+            data-ajax="true"
+            data-ajax-begin="submitFormSpin(this)"
+            data-ajax-success="ajaxCompleted">
+                <input type="hidden" asp-for="DivisionId" value="@Model.DivisionId" />
+                <input type="hidden" asp-for="BranchId" value="@Model.BranchId" />
+                <div class="v-form-block">
+                    <label>Access for:</label>
+                    <p class="false-input">@Model.StructureName</p>
+                </div>
+                <div class="v-form-block">
+                    <label>To user:</label>
+                    <div class="select-wrapper">
+                        <select asp-for="UserId" asp-items="@users"></select>
+                    </div>
+                </div>
+                <button class="action-button spinner-button">Create<span class="spinner"></span></button>
+            </form>
+            <script>
+                ajaxCompleted = function (xhr) {
+                    if (xhr.includes('#')) {
+                        let calert = new AlertBox(xhr, false);
+                        calert.show();
+                    }
+                    else {
+                        let calert = new AlertBox(xhr, true);
+                        calert.show();
+                    }
+                    closePopUp('access-pop-up');
+                }
+            </script>
+        </div>
+    </div>
+</div>
+

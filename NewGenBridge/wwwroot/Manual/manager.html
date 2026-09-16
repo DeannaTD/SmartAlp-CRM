@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>NewGenBridge: User manual</h1>
+    <h2>Content:</h2>
+    <ul class="navigation">
+        <li><a href="#ui-overview">User interface overview</a></li>
+        <li><a href="#structure-overview">Structuve overview</a></li>
+        <li><a href="#user-registration">Register new users</a></li>
+        <li><a href="#deactivate-account">Block and archive</a></li>
+        <li><a href="#group-management">Creating and managing groups</a></li>
+        <li><a href="#attendance-management">Tracking attendance</a></li>
+        <li><a href="#profile-settings">Profile settings</a></li>
+    </ul>
+    <section id="ui-overview">
+        <h2>User interface overview</h2>
+        <p>When you log in to the system, you will see the following screen:</p>
+        <img src="img/manager/ui-overview.png" alt="Home screen" class="full-screen">
+        <p>Home screen is empty, we are open to hear what you will want to see on the home screen after trying the system in work.</p>
+        <p>On the left side of the screen, you will see the navigation bar. Here you can access all the features of the system.</p>
+        <p>On the right top corder, there is a quick actions bar with "Log out" and "Home" links.</p>
+    </section>
+    <section id="structure-overview">
+        <h2>Structure of the system</h2>
+        <p>The system is divided into the following sections:</p>
+        <ul>
+            <li>Division</li>
+            <li>Branch</li>
+            <li>Group</li>
+        </ul>
+        <img src="img/visor/structure-overview.png" alt="Structure of the system" class="full-screen">
+        <h3>Account status</h3>
+        <p>Each user in the system has one of the following statuses:</p>
+        <ul>
+            <li>Active</li>
+            <li>Blocked</li>
+            <li>Archived</li>
+        </ul>
+        <p>Active users can log in to the system and perform actions. Blocked users cannot log in, but their data is still stored in the system. Archived users are hidden from the system and cannot log in.</p>
+    </section>
+    <section id="user-registration">
+        <h2>Register new users</h2>
+        <p>You can create new mentors and students</p>
+        <p>User login information is generated automatically and will be shown in the confirmation window.</p>
+        <p>By default password is equal to username (<span class="alert">must be changed by user after login</span>).</p>
+        <p>If username happens to be too short to be set as a password, "1234" is added to the end of it. For example:</p>
+        <p>User named "James Potter" will have following credetials: "jpotter" as username, "jpotter" as password</p>
+        <p>User named "James Lee" will have following credentials: "jlee" as username, "jlee1234" as password</p>
+        <h3>To register a mentor:</h3>
+        <ol>
+            <li>Click on the "Mentors" link in the navigation bar</li>
+            <li>Click on the green plus icon: "Add new mentor"</li>
+            <li>Fill in the form and click "Save"</li>
+        </ol>
+        <video controls width="500">
+            <source src="video/create-mentor.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <h3>To register a student:</h3>
+        <ol>
+            <li>Click on the "Branch menu" link in the navigation bar</li>
+            <li>Click on the group you want to add a student to</li>
+            <li>Click on the link: "Add new student"</li>
+            <li>Fill in the form and click "Save"</li>
+        </ol>
+        <video controls width="500">
+            <source src="video/create-student-manager.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
+    <section id="deactivate-account">
+        <h2>Block and archive</h2>
+        <p>If for some reasons you want to prevent a user to have an access to a system, you can block or archive them. Blocking is set as a temporary access restriction, while archive can be seen as account deactivation.</p>
+        <h3>Mentor account</h3>
+        <p>Mentor accounts are managed from the "Mentors" section in navigation bar. There you can see the full list of mentors and change their statuses.</p>
+        <p>To block or archive a mentor, follow these steps:</p>
+        <ol>
+            <li>Click on the "Mentors" link in the navigation bar</li>
+            <li>Find the mentor you want to block or archive</li>
+            <li>Click on the "Block" or "Archive" button</li>
+        </ol>
+        <p>Follow the same steps to unblock or restore accounts of mentors.</p>
+        <img src="img/manager/mentor-overview.png" alt="Mentor screen" class="full-screen">
+
+        <h3>Student account</h3>
+        <p>Blocked students are shown with a red lock icon next to their name. Archived students are no longer shown in groups.</p>
+        <p>You can see the full lists of blocked students in "Blocked" section of navigation menu</p>
+        <p>You can see the full lists of archived students in "Archived" section of navigation menu</p>
+        <p>To block or archive a student, follow these steps:</p>
+        <ol>
+            <li>Click on the "Branch menu" link in the navigation bar</li>
+            <li>Click on the group the student is in</li>
+            <li>Find the student you want to block or archive</li>
+            <li>Click on a card icon next to the student you want to block or archive</li>
+            <li>Click on the "Block student" or "Archive student" link</li>
+            <li>If you blocked a student, press "Save"</li>
+        </ol>
+        <video controls width="500">
+            <source src="video/block-student.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p>To unblock student:</p>
+        <ol>
+            <li>Click on the "Branch menu" link in the navigation bar</li>
+            <li>Click on the group the student is in</li>
+            <li>Find the student you want to unblock</li>
+            <li>Click on a card icon next to the student's name</li>
+            <li>Click on the "Unblock student"</li>
+            <li>Press "Save"</li>
+        </ol>
+        <p>Alternatively:</p>
+        <ol>
+            <li>Click on the "Blocked" link in the navigation bar</li>
+            <li>Find the student you want to unblock</li>
+            <li>Choose a group, if you want to move student to another one</li>
+            <li>Click on the "Unblock" action</li>
+        </ol>
+        <p>To restore student's account from archive:</p>
+        <ol>
+            <li>Click on the "Archived" link in the navigation bar</li>
+            <li>Find the student you want to restore</li>
+            <li>Choose a group you want to assign to a student</li>
+            <li>Click on the "Restore" action</li>
+        </ol>
+    </section>
+    <section id="group-management">
+        <h2>Creating and managing groups</h2>
+        <p>Groups are used to organize students. Each group can have one mentor assigned to it. To create a new group, follow these steps:</p>
+        <ol>
+            <li>Click on the "Branch menu" link in the navigation bar</li>
+            <li>Click on a plus icon next to the branch's name: "Add new group"</li>
+            <li>Choose group's timetable</li>
+            <li>Assign a mentor (group cannot exist without mentor)</li>
+            <li>Click "Save"</li>
+        </ol>
+        <video controls width="500">
+            <source src="video/create-group-manager.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p>You can always edit group's information, but it is not possible to delete it.</p>
+        <p>To edit group:</p>
+        <ol>
+            <li>Click on the "Branch menu" link in the navigation bar</li>
+            <li>Click on the group you want to edit</li>
+            <li>Change the needed information</li>
+            <li>Note: no need to press "Save" button, just close the pop-up window</li>
+        </ol>
+    </section>
+    <section id="attendance-management">
+        <h2>Tracking attendance</h2>
+        <div class="column-2">
+            <div>
+                <p>Attendance is checked and tracked by mentors.</p>
+                <p>There are three attendance statuses: present (red), absent (green) and unchecked (none).</p>
+                <p>To see attendance:</p>
+                <ol>
+                    <li>Click on the "Branch menu" link in the navigation bar</li>
+                    <li>Click on the group you want to see attendance for</li>
+                </ol>
+                <p>Attendance of students is loaded by week. You can use arrows around the date to navigate through attendance history.</p>
+                <p>To change attendance status, click on the cell corresponding to the student and date, and then press "Save".</p>
+                <p><img src="img/alert.svg" alt="Alert sign" class="alert">Attendances are not saved automatically, pressing "Save" is mandatory for each week.</p>
+            </div>
+            <img src="img/manager/attendance-overview.png" alt="Attendance screen" style="width:50vw;">
+        </div>
+    </section>
+    <section id="profile-settings">
+        <h2>Profile settings</h2>
+        <p>To change your profile settings, click on the "Settings" link in the navigation bar. You will see the following screen:</p>
+        <img src="img/admin/settings-overview.png" alt="Settings screen" class="full-screen">
+        <p>Here you can change your password and profile picture. It is not possible to change any other personal information</p>
+    </section>
+</body>
+</html>

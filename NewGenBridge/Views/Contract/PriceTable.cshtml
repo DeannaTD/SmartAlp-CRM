@@ -1,0 +1,59 @@
+﻿@using NewGenBridge.Helpers
+@using NewGenBridge.ViewModels
+@using System.Globalization
+@inject NewGenBridge.Services.LevelService _levelService
+
+@model List<PriceRecordViewModel>
+
+@{
+    if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    else Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Level> levels = _levelService.GetLevelsOnly();
+    //Todo: move to css file
+    //Todo: add validation to numbers
+}
+<style>
+    .fake-input{
+        border: none;
+        padding: 0;
+    }
+    
+    .action-button{
+        margin-top: 16px;
+    }
+</style>
+<h2>@Html.T("prices")</h2>
+<form asp-action="UpdatePrice" asp-controller="Contract">
+    <table class="table access-table">
+        <tr>
+            <th style="width:2rem;">№</th>
+            <th>@Html.T("branch")</th>
+            <th>@Html.T("course")</th>
+            <th>@Html.T("price")</th>
+            <th>@Html.T("materials")</th>
+            <th>@Html.T("duration")</th>
+        </tr>
+        @for(int i = 0; i<Model.Count; i++)
+        {
+            var record = Model[i];
+            <tr>
+                <td>@(i+1)</td>
+                <td>@record.DivisionName @record.BranchName</td>
+                <td>@levels.Find(level => level.Id == record.LevelId)?.Name</td>
+                <td>
+                    <input type="hidden" name="[@i].BranchId" value="@record.BranchId" />
+                    <input type="hidden" name="[@i].LevelId" value="@record.LevelId" />
+                    <input type="hidden" name="[@i].PriceId" value="@record.PriceId" />
+                    <input type="number" name="[@i].Sum" value="@(record.Sum.ToString("F2", CultureInfo.InvariantCulture))" step="0.01" class="fake-input"/>
+                </td>
+                <td>
+                    <input type="number" name="[@i].MaterialPrice" value="@(record.MaterialPrice?.ToString("F2", CultureInfo.InvariantCulture))" step="0.01" class="fake-input" />
+                </td>
+                <td>
+                    <input type="number" name="[@i].Duration" value="@record.Duration" class="fake-input" step="1" min="0"/>
+                </td>
+            </tr>
+        }
+    </table>
+    <input type="submit" value="@Html.T("save")" class="action-button"/>
+</form>

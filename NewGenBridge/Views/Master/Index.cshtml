@@ -1,0 +1,97 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<NPUser> _userManager;
+@{
+    Layout = null;
+    var isUserAuthenticated = User.Identity.IsAuthenticated;
+    string userName = isUserAuthenticated ? User.Identity.Name : "Гость";
+    string userId = _userManager.GetUserId(User);
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            a{
+                color: black;
+            }
+
+            .danger-zone *{
+                color: #721c24;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Пользователь: @userName</p>
+        <p>Id пользователя: @userId</p>
+        <hr />
+        <ul class="danger-zone">
+            <li>
+                <a href="@Url.Action("InitializeRoles", "Master")">Добавить роли</a>
+            </li>
+            <li>
+                <a href="@Url.Action("InitializeStatus", "Master")">Добавить статусы</a>
+            </li>
+            <li>
+                <a href="@Url.Action("CreateFolders", "Master")">Добавить папки профиля и проектов</a>
+            </li>
+            <li><a href="">API настройки</a></li>
+        </ul>
+        <hr />
+        <h2>Филиалы</h2>
+        <ul>
+            <li>
+                <a href="@Url.Action("Index", "Branch")">Список филиалов и групп</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Create", "Branch")">Добавить филиал</a>
+            </li>
+            <li>
+                <a href="@Url.Action("CreateGroup", "Branch", new {branchId = 1})">Добавить группу (в первый филиал)</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Group", "Branch", new { groupId = 2 })">Показать учеников группы</a>
+            </li>
+        </ul>
+        <hr />
+        <h2>Пользователи</h2>
+        <ul>
+            <li>
+                <a href="@Url.Action("Login", "Account")">Войти в аккаунт</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Register", "Account")">Добавить пользователя</a>
+            </li>
+            <li>
+                <a href="@Url.Action("RegisterStudent", "Account", new {groupId = 1})">Добавить студента</a>
+            </li>
+            <li>
+                <a href="@Url.Action("ShowAllUsersWithRoles", "Master")">Все пользователи</a>
+            </li>
+        </ul>
+        <hr />
+        <h2>Уроки</h2>
+        <ul>
+            <li>
+                <a href="@Url.Action("CreateLevel", "Level")">Добавить уровень</a>
+            </li>
+            <li>
+                <a href="@Url.Action("CreateLesson", "Level", new {levelId = 1})">Добавить урок</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Level")">Показать все уроки</a>
+            </li>
+        </ul>
+        <hr />
+        <h2>Меню</h2>
+        <ul>
+            <li>
+                <a href="@Url.Action("Index", "Home")">Главная студента</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Branch", new{ mentorId = "" })">Главная ментора</a>
+            </li>
+        </ul>
+    </body>
+</html>

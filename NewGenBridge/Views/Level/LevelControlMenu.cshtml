@@ -1,0 +1,75 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .file-control-container{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+    .file-control-container li{
+        list-style: none;
+        border: 2px solid #B6D3FF;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+        padding: 1rem;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .file-control-title, .file-control-text {
+        margin: 0;
+    }
+
+    .file-control-title{
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .file-control-logo{
+        max-width: 100px;
+    }
+
+    .delete-level-button{
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+</style>
+
+<div>
+    <ul class="file-control-container">
+        <li style="justify-content: center; border-style: dashed;" data-link="@Url.Action("CreateLevel", "Level")" onclick="goToDataLink(this)">
+            <img class="file-control-logo" src="~/img/add.svg" style="width: 50px;"/>
+            <p class="file-control-title">@Html.T("add_level")</p>
+        </li>
+        @foreach(var level in Model)
+        {
+            <li data-link="@Url.Action("LessonsControlPanel", "Level", new { levelId = level.Id })" onclick="goToDataLink(this)">
+                <a href="@Url.Action("DeleteLevel", "Level", new { levelId = level.Id })" class="delete-level-button pointer">
+                    <img src="~/img/close.svg" alt="">
+                </a>
+                <img class="file-control-logo" src="../Projects/Levels/@(level.Id).png" onerror="defaultPicture(this)" />
+                <p class="file-control-title">@level.Name</p>
+                <p class="file-control-text">@level.Description</p>
+            </li>
+        }
+    </ul>
+</div>
+<script>
+    let src = "";
+    var deleteLevel = document.querySelectorAll('.delete-level-button');
+    deleteLevel.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            if (!confirm("@Html.T("are_you_sure")")) e.preventDefault();
+        })
+    });
+    let defaultPicture = function(img){
+        img.src='../img/level-icon-placeholder.svg';
+    }
+</script>
