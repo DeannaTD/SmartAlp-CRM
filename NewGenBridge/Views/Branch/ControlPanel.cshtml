@@ -5,29 +5,30 @@
     if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
     else Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>
+<header class="page-heading"><div><h1>
     @Html.T("branch")
     @if(User.Identity.Name == "dsotc")
     {
         <a style="text-decoration: underline;" href="@Url.Action("ApiSettings", "Master")">(API - @Html.T("settings"))</a>
     }
-</h2>
+</h1><p>@Html.W("branch_hint")</p></div></header>
+<label for="branch-scope">@Html.T("branch")</label>
+<select id="branch-scope"><option value="all">@Html.W("all_branches")</option>@foreach(var branch in Model){<option value="@branch.BranchId">@branch.BranchName</option>}</select>
+<p id="branch-scope-status" class="visually-hidden" role="status"></p>
 <div class="branches-container">
     @foreach(var branch in Model){
-        <ul class="branch-list">
-            <li class="bold-text branch-list-item">
+        <ul class="branch-list" data-branch="@branch.BranchId">
+            <li class="bold-text branch-list-item"><h2>@branch.BranchName</h2>
                 <a href="@Url.Action("CreateGroup", "Branch", new {branchId = @branch.BranchId})" title="@Html.T("add_new_group")"
                    data-ajax="true" data-ajax-update="#group-create-pop-up">
-                    @branch.BranchName [+]
+                    @Html.T("add_new_group")
                 </a>
             </li>
             @foreach(GroupInBranchViewModel group in branch.GroupsInfo){
                 <li class="branch-list-item">
                     <a href="@Url.Action("GroupAttendance", "Attendance", new{groupId = group.GroupId, date = DateTime.Now})"
                        data-ajax="true" data-ajax-update="#attendance-pop-up">
-                        @group.GroupName @Html.T(group.Day.ToString().ToLower()) @group.TimeString [@group.StudentsCount]
-                        <br />
-                        @Html.T("mentor"): @group.MentorName
+                        <span><strong>@group.GroupName</strong><span class="branch-group-meta">@Html.T(group.Day.ToString().ToLower()) · @group.TimeString · @Html.T("students"): @group.StudentsCount<br />@Html.T("mentor"): @group.MentorName</span></span><span class="branch-journal-label">@Html.T("attendance") <partial name="_WorkspaceArrow" /></span>
                     </a>
                 </li>
             }
@@ -36,3 +37,8 @@
 </div>
 <div class="pop-up" id="group-create-pop-up"></div>
 <div class="pop-up" id="attendance-pop-up"></div>
+<script>
+(()=>{const select=document.getElementById('branch-scope');const valid=new Set([...select.options].map(o=>o.value));const saved=new URL(location.href).searchParams.get('branchId');if(valid.has(saved))select.value=saved;
+function apply(){document.querySelectorAll('[data-branch]').forEach(b=>b.hidden=select.value!=='all'&&b.dataset.branch!==select.value);document.getElementById('branch-scope-status').textContent=select.selectedOptions[0].textContent;const url=new URL(location.href);if(select.value==='all')url.searchParams.delete('branchId');else url.searchParams.set('branchId',select.value);history.replaceState(null,'',url);}
+select.addEventListener('change',apply);apply();})();
+</script>

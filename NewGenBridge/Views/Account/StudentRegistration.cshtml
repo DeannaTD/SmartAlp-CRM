@@ -1,4 +1,4 @@
-﻿@using NewGenBridge.Helpers
+@using NewGenBridge.Helpers
 @using NewGenBridge.ViewModels
 @inject NewGenBridge.Services.BranchService _branchService
 @model StudentRegistrationViewModel
@@ -17,38 +17,38 @@
             <form asp-action="RegisterStudent" asp-controller="Account" class="student-registration-form"
             data-ajax="true"
             data-ajax-begin="submitFormSpin(this)"
-            data-ajax-complete="ajaxCompleted">
+            data-ajax-success="studentCreated" data-ajax-failure="studentCreateFailed">
                 <input type="hidden" asp-for="GroupId" value="@ViewBag.GroupId" />
                 <input type="hidden" asp-for="PaymentAmount" value="0">
                 <input type="hidden" asp-for="StudentPhoneNumber" value="0">
                 <div class="v-form-block">
-                    <label>@Html.T("parent_name"):<span class="asterisk">*</span></label>
+                    <label for="ParentName">@Html.T("parent_name"):<span class="asterisk">*</span></label>
                     <input type="text" asp-for="ParentName" autocomplete="off" required>
                 </div>
                 <div class ="v-form-block">
-                    <label>@Html.T("phone_number"):<span class="asterisk">*</span></label>
+                    <label for="PhoneNumber">@Html.T("phone_number"):<span class="asterisk">*</span></label>
                     <input type="text" asp-for="PhoneNumber" autocomplete="off" required>
                 </div>
                 <div class="v-form-block">
-                    <label>@Html.T("first_name"):<span class="asterisk">*</span></label>
+                    <label for="FirstName">@Html.T("first_name"):<span class="asterisk">*</span></label>
                     <input type="text" asp-for="FirstName" autocomplete="off" required>
                 </div>
                 <div class="v-form-block">
-                    <label>@Html.T("last_name"):<span class="asterisk">*</span></label>
+                    <label for="LastName">@Html.T("last_name"):<span class="asterisk">*</span></label>
                     <input type="text" asp-for="LastName" autocomplete="off" required>
                 </div>
                 <div class="v-form-block flex-stretch">
                     <div class="v-form-block">
-                        <label>@Html.T("date_of_birth"):<span class="asterisk">*</span></label>
+                        <label for="DateOfBirth">@Html.T("date_of_birth"):<span class="asterisk">*</span></label>
                         <input type="date" asp-for="DateOfBirth" required>
                     </div>
                     <div class="v-form-block">
-                        <label>@Html.T("started_on"):<span class="asterisk">*</span></label>
+                        <label for="DateStarted">@Html.T("started_on"):<span class="asterisk">*</span></label>
                         <input type="date" asp-for="DateStarted" required>
                     </div>
                 </div>
                 <div class="v-form-block">
-                    <label>@Html.T("note"):</label>
+                    <label for="Note">@Html.T("note"):</label>
                     <input type="text" asp-for="Note" autocomplete="off">
                 </div>
                 <button class="action-button centered-button spinner-button">
@@ -59,8 +59,16 @@
     </div>
 </div>
 <script>
-    ajaxCompleted = function (xhr) {
-        let calert = new AlertBox(xhr.responseText, true);
-        calert.show();
-    }
+    studentCreated = function (message) {
+        const ok = message.startsWith('Created successfully');
+        const form = document.querySelector('#student-create-pop-up form');
+        if(form){const button=form.querySelector('button');button.disabled=false;button.classList.remove('spin');}
+        new AlertBox(message, ok).show();
+        if(ok) {closePopUp('student-create-pop-up');document.getElementById('student-search-submit')?.click();}
+    };
+    studentCreateFailed = function () {
+        const button=document.querySelector('#student-create-pop-up form button');
+        if(button){button.disabled=false;button.classList.remove('spin');}
+        new AlertBox(@Json.Serialize(Html.W("save_error")), false).show();
+    };
 </script>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
@@ -28,7 +28,7 @@ namespace NewGenBridge.Controllers
         public async Task<IActionResult> Index()
         {
             NPUser? user = await _userManager.GetUserAsync(User);
-            if (user is null) return Unauthorized();
+            if (user is null) return Challenge();
             if (User.IsInRole(NPUR.Student)) return Forbid();
             IEnumerable<HubFile> files = [];
             if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor))
@@ -85,11 +85,14 @@ namespace NewGenBridge.Controllers
         public async Task<IActionResult> Download(int id)
         {
             HubFile file = await _hubService.GetByIdAsync(id);
+            if (file is null) return NotFound();
             string path = Path.Combine(_webHost.WebRootPath, "Uploads", file.FilePath);
             if (!System.IO.File.Exists(path)) return NotFound();
             string contentType = GetContentType(path);
             string fullFileName = $"{file.FileName}{Path.GetExtension(file.FilePath)}";
-            Response.Headers.ContentDisposition = $"inline; filename=\"{fullFileName}\"";
+            var disposition = new Microsoft.Net.Http.Headers.ContentDispositionHeaderValue("inline");
+            disposition.SetHttpFileName(fullFileName);
+            Response.GetTypedHeaders().ContentDisposition = disposition;
             var fileBytes = await System.IO.File.ReadAllBytesAsync(path);
             return File(fileBytes, contentType);
         }
@@ -153,7 +156,7 @@ namespace NewGenBridge.Controllers
         public async Task<IActionResult> KnowledgeBaseIndex()
         {
             NPUser? user = await _userManager.GetUserAsync(User);
-            if (user is null) return Unauthorized();
+            if (user is null) return Challenge();
             if (User.IsInRole(NPUR.Student)) return Forbid();
             IEnumerable<HubFile> files = [];
             if (User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor))

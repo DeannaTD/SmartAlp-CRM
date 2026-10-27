@@ -1,260 +1,56 @@
 ﻿@using NewGenBridge.Helpers
-@using NewGenBridge.Services
 @using NewGenBridge.ViewModels
-
 @model List<StudentManagerViewModel>
-@*
-@{
-    var bids = ViewBag.Bids as List<int?>;
+@{ ViewData["Title"] = Html.T("students");
+ foreach(var item in (List<SelectListItem>)ViewBag.GroupList) {
+   foreach(var day in Enum.GetNames<DayOfWeek>()) item.Text = item.Text.Replace(" " + day + " ", " · " + Html.T(day.ToLower()) + " ");
+ }
 }
-
-<form asp-action="CalculateSomething" method="post">
-
-    @for (int i = 0; i < bids.Count; i++)
-    {
-        <input type="hidden" name="bids[@i]" value="@(bids[i])" />
-    }
-
-    <button type="submit">Отправить</button>
+<header class="page-heading">
+ <div><h1>@Html.T("students")</h1><p>@Html.W("students_hint")</p></div>
+ <button type="button" class="accent-button" id="student-add-toggle" aria-expanded="false" aria-controls="student-add-panel">@Html.T("add_new_student")</button>
+</header>
+<section id="student-add-panel" class="student-add-panel" hidden>
+ <label for="add-student-group">@Html.W("choose_group")</label>
+ <div class="student-search-toolbar"><select id="add-student-group" asp-items="ViewBag.GroupList"><option value="">—</option></select>
+ <a id="add-student-open" class="accent-button" hidden data-ajax="true" data-ajax-update="#student-create-pop-up">@Html.W("continue")</a></div>
+</section>
+<form method="get" action="@Url.Action("Students", "Account")" class="student-filter-form" id="student-filters">
+ <div class="student-filter-field student-filter-search"><label for="searchBar">@Html.T("name")</label><input type="search" name="name" id="searchBar" placeholder="@Html.T("enter_student_name")" value="@ViewBag.Name" /></div>
+ <div class="student-filter-field"><label for="student-branch">@Html.T("branch")</label><select id="student-branch" name="branchId" data-selected="@ViewBag.BranchId" asp-items="ViewBag.BranchList"><option value="0">@Html.W("all_branches")</option></select></div>
+ <div class="student-filter-field"><label for="student-group">@Html.T("group")</label><select id="student-group" name="groupId" data-selected="@ViewBag.GroupId" asp-items="ViewBag.GroupList"><option value="0">@Html.W("all_groups")</option></select></div>
+ <div class="student-filter-field"><label for="student-status">@Html.T("status")</label><select id="student-status" name="statusId" data-selected="@ViewBag.StatusId">
+ @foreach(var status in new[] {0,1,2,3}) { <option value="@status">@(status == 0 ? Html.W("all_statuses") : Html.T(UserStatus.GetName(status).ToLower()))</option> }
+ </select></div>
+ <div class="student-filter-buttons"><button class="secondary-button" id="student-search-submit">@Html.W("find")</button><a href="@Url.Action("Students", "Account")">@Html.W("reset")</a></div>
 </form>
-
-*@
-@{
-    string className = "";
-    string actionName = "";
-    string resultMessage = "User Updated";
-    var contractInfoList = ViewBag.NamesList;
-    var branchIds = ViewBag.BranchesId as IEnumerable<int?>;
-    ViewData["Title"] = @Html.T("students");
-}
-
-<style>
-    .pages-container {
-        display: flex;
-        margin: 1rem 0;
-        padding: 0;
-        list-style: none;
-        justify-content: center;
-        gap: 1rem;
-    }
-
-    .input-text {
-        padding: 0;
-        background: none;
-        border: none;
-        width: 100%;
-    }
-
-    .m-none {
-        margin: 0;
-    }
-
-    .abs-container {
-        position: relative;
-    }
-
-    #searchBar {
-        width: 50%;
-        position: relative;
-        z-index: 1;
-    }
-
-    .drop-down-ul {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        position: absolute;
-        width: 50%;
-        margin-top: -.5rem;
-        padding-top: .5rem;
-        border: 1px solid var(--main-color);
-        border-top: 0;
-        box-sizing: border-box;
-        z-index: 0;
-        max-height: 30vh;
-        overflow-y: scroll;
-    }
-
-        .drop-down-ul > li {
-            background: var(--light-color);
-            cursor: pointer;
-
-            span {
-                display: block;
-                padding: .5rem;
-            }
-        }
-
-    #li-not-found {
-        padding: .5rem;
-    }
-
-    .drop-down-ul > li:hover {
-        background: var(--main-color);
-    }
-</style>
-<h2>
-    @Html.T("students")
-    (
-    <a href="@Url.Action("NewStudents", "Contract")"> 
-        @Html.T("new_user_registration")
-    </a>
-    )
-    @if (ViewBag.StatusId == UserStatus.Blocked)
-    {
-        className = "block-table-link";
-        actionName = "Unblock";
-        resultMessage = "Student has been unblocked";
-        <text>Blocked students</text>
-    }
-    else if (ViewBag.StatusId == UserStatus.Archived)
-    {
-        className = "archive-table-link";
-        actionName = "Restore";
-        resultMessage = "Student has been restored";
-        <text>Archived students</text>
-    }
-</h2>
-
-<div class="abs-container" tabindex="0" style="outline:none; margin-bottom: 1rem;">
-    <input type="search" id="searchBar" autocomplete="off" placeholder="@Html.T("enter_student_name")" value="@(ViewBag.Name ?? "")" />
-    <ul class="drop-down-ul d-none" id="searchList">
-        <li id="li-not-found" class="d-none">@Html.T("nothing_found")</li>
-        @foreach (var student in contractInfoList)
-        {
-            <li data-student="@student.FullName">
-                <span>
-                    @student.FullName
-                </span>
-            </li>
-        }
-    </ul>
-</div>
-<!--
-    FIX SEARCH
--->
-
-<div id="contract-list-container">
-    @await Html.PartialAsync("_StudentsAllPartial", Model)
-</div>
-
-<!--
-    FIX INSERT
-     new ViewDataDictionary(ViewData) {{"statusId", ViewBag.StatusId}}
--->
-
+<div class="student-results-heading"><p>@Html.W("found_students"): <strong>@ViewBag.ResultCount</strong></p><a href="@Url.Action("NewStudents", "Contract")">@Html.W("requests")</a></div>
+<p id="student-search-status" role="status" aria-live="polite"></p>
+<div id="contract-list-container">@await Html.PartialAsync("_StudentsAllPartial", Model)</div>
 <div class="pop-up" id="lesson-select-pop-up"></div>
-<script src="~/js/atmenu.js"></script>
+<div class="pop-up" id="student-create-pop-up"></div>
 <script>
-    var selects = document.querySelectorAll("select");
-    selects.forEach(select => {
-        let value = select.getAttribute("data-init");
-        if (value > 0) select.value = value;
-    });
-
-    function ajaxCompleted(){
-        let calert = new AlertBox("@resultMessage", true);
-        calert.show();
-    }
-
-    function ajaxFailure(){
-        let calert = new AlertBox("An error occured", true);
-        calert.show();
-    }
-
-    var triggers = document.querySelectorAll(".form-trigger");
-    triggers.forEach(trigger => {
-        trigger.addEventListener('click', (e)=>{
-            let row = trigger.parentElement;
-            let form = row.querySelector("form");
-            $.ajax({
-                type: "POST",
-                url: form.getAttribute("action"),
-                data: $(form).serialize(),
-                success: ajaxCompleted()
-            });
-        })
-    });
-
-        (function(){
-        const baseUrl = "@Url.Action("Students", "Account")";
-        let searchBar = document.querySelector("#searchBar");
-        let searchDrop = document.querySelector("#searchList");
-        let items = document.querySelectorAll('#searchList>li');
-        let notFound = document.querySelector('#li-not-found');
-
-        function loadContracts(url) {
-            const fetchUrl = url || baseUrl;
-            fetch(fetchUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                .then(r => {
-                    if (!r.ok) throw new Error('Network error');
-                    return r.text();
-                })
-                .then(html => {
-                    document.getElementById('contract-list-container').innerHTML = html;
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-        }
-
-        searchBar.addEventListener('focus', () => {
-            searchDrop.classList.remove('d-none');
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target != searchBar)
-                searchDrop.classList.add('d-none');
-        });
-
-         searchBar.addEventListener('input', (e) => {
-            let searchValue = searchBar.value.toUpperCase();
-            let found = 0;
-            for (const opt of items) {
-                const toShow = opt.innerText.toUpperCase().includes(searchValue);
-                found += toShow;
-                opt.classList.toggle('d-none', !toShow);
-            }
-            notFound.classList.toggle('d-none', found);
-        });
-
-        searchBar.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const value = searchBar.value.trim();
-                if (!value) {
-                    loadContracts(baseUrl);
-                }
-            }
-        });
-
-        document.getElementById('contract-list-container').addEventListener('click', function (e) {
-            const link = e.target.closest('a.page-number');
-            if (!link) return;
-            e.preventDefault();
-            const href = link.getAttribute('href');
-            fetch(href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                .then(r => r.text())
-                .then(html => {
-                    document.getElementById('contract-list-container').innerHTML = html;
-                })
-                .catch(err => console.error(err));
-        });
-
-        function attachItemClickHandlers() {
-            for (const item of items) {
-                if (item === notFound) continue;
-                item.removeEventListener('click', item._copHandler);
-                item._copHandler = function () {
-                    const student = item.getAttribute('data-student') || item.innerText.trim();
-                    searchBar.value = item.innerText;
-                    searchDrop.classList.add('d-none');
-                    loadContracts(baseUrl + '?page=1&name=' + encodeURIComponent(student));
-                };
-                item.addEventListener('click', item._copHandler);
-            }
-        }
-        attachItemClickHandlers();
-    })();
-
+function initializeStudentGroups() {
+ document.querySelectorAll('#contract-list-container select[data-init]').forEach(s => { if(Number(s.dataset.init)>0) s.value=s.dataset.init; });
+}
+initializeStudentGroups();
+function ajaxCompleted(){ document.getElementById('student-filters').requestSubmit(); }
+function ajaxFailure(){ document.getElementById('student-search-status').textContent=@Json.Serialize(Html.W("save_error")); }
+(() => {
+ const panel=document.getElementById('student-add-panel'), toggle=document.getElementById('student-add-toggle');
+ toggle.addEventListener('click',()=>{panel.hidden=!panel.hidden;toggle.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)document.getElementById('add-student-group').focus();});
+ document.getElementById('add-student-group').addEventListener('change',function(){const a=document.getElementById('add-student-open');a.hidden=!this.value;a.href='@Url.Action("RegisterStudent", "Account")?groupId='+encodeURIComponent(this.value);});
+ document.querySelectorAll('#student-filters [data-selected]').forEach(s=>s.value=s.dataset.selected);
+ const branches=@Json.Serialize(ViewBag.GroupBranches), branch=document.getElementById('student-branch'), group=document.getElementById('student-group');
+ function filterGroups(){for(const option of group.options){option.hidden=option.value!=='0' && branch.value!=='0' && String(branches[option.value])!==branch.value;option.disabled=option.hidden;}if(group.selectedOptions[0]?.disabled)group.value='0';}
+ branch.addEventListener('change',filterGroups);filterGroups();
+ document.getElementById('contract-list-container').addEventListener('click', e=>{
+  const trigger=e.target.closest('.form-trigger');if(!trigger)return;
+  const row=trigger.closest('tr'),form=row.querySelector('form'),select=form.querySelector('select');
+  if(!select.value || select.value==='-1'){select.focus();return;}
+  if(!confirm(@Json.Serialize(Html.W("confirm_action"))+': '+trigger.textContent.trim()+'\n'+row.querySelector('td').innerText.trim()+'\n'+select.selectedOptions[0].textContent))return;
+  trigger.disabled=true;
+  $.ajax({type:'POST',url:form.action,data:$(form).serialize(),success:ajaxCompleted,error:()=>{trigger.disabled=false;ajaxFailure();}});
+ });
+})();
 </script>

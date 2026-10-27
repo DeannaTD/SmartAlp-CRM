@@ -27,15 +27,16 @@
         </div>
         <div class="pop-up-header">
             <div class="attendance-date">
-                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = previousDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-left.svg" alt=""></a>
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = previousDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-left.svg" alt="@Html.W("change_week")"></a>
                 <span class="accent-text">@dates[0].ToString("dd/MM/yyyy") - @dates[6].ToString("dd/MM/yyyy")</span>
-                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = nextDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-right.svg" alt=""></a>
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = nextDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-right.svg" alt="@Html.W("change_week")"></a>
             </div>
         </div>
         }
         else if(User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Manager) || User.IsInRole(NPUR.Supervisor))
         {
         <div class="pop-up-header-pre" style="position: relative; display: block;">
+            <details class="attendance-settings"><summary>@Html.W("group_settings")</summary>
             <div id="group-edit">
                 <script>
                     $("#group-edit").load("@Url.Action("EditGroup", "Branch", new { groupId = ViewBag.GroupId })")
@@ -46,31 +47,34 @@
                         $("#lesson-all-edit").load("@Url.Action("SwitchLessonToAll", "Level", new { groupId = ViewBag.GroupId })")
                     </script>
                 </div>
+            </details>
             <button class="close-icon" onclick="closePopUpUpdate('attendance-pop-up')" style="position: absolute; top: 0; right: 0;">
                 <img src="~/img/close.svg" alt="">
             </button>
         </div>
         <div class="pop-up-header">
             <div class="attendance-date">
-                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = previousDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-left.svg" alt=""></a>
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = previousDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-left.svg" alt="@Html.W("change_week")"></a>
                 <span class="accent-text">@dates[0].ToString("dd/MM/yyyy") - @dates[6].ToString("dd/MM/yyyy")</span>
-                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = nextDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-right.svg" alt=""></a>
+                <a href="@Url.Action("GroupAttendance", "Attendance", new {groupId = ViewBag.GroupId, date = nextDate})" data-ajax="true" data-ajax-update="#attendance-pop-up"><img src="~/img/arrow-right.svg" alt="@Html.W("change_week")"></a>
             </div>
             <a href="@Url.Action("RegisterStudent", "Account", new{groupId = ViewBag.GroupId})" class="action-link"
                    data-ajax="true" data-ajax-update="#student-create-pop-up">@Html.T("add_new_student")</a>
         </div>
         }
         <div class="pop-up-content">
-            <table class="attendance-table" style="width: 100%;">
+            <div class="attendance-toolbar"><h2>@Html.T("attendance")</h2><a class="secondary-button" href="@Url.Action("GroupAttendance", "Attendance", new { groupId = ViewBag.GroupId, date = DateTime.Today })" data-ajax="true" data-ajax-update="#attendance-pop-up">@Html.W("today")</a></div><p>@Html.W("attendance_hint")</p>
+            <p id="attendance-status" role="status" aria-live="polite"></p>
+            <table data-unmarked="@Html.W("unmarked")" data-present="@Html.W("present")" data-absent="@Html.W("absent")" data-saved="@Html.W("saved")" data-error="@Html.W("save_error")" class="attendance-table" style="width: 100%;">
                 <tr>
                     <th colspan="2">@Html.T("name")</th>
-                    <th>@Html.T("mon")<br />@dates[0].ToString(@"dd/MM")</th>
-                    <th>@Html.T("tue")<br />@dates[1].ToString(@"dd/MM")</th>
-                    <th>@Html.T("wed")<br />@dates[2].ToString(@"dd/MM")</th>
-                    <th>@Html.T("thu")<br />@dates[3].ToString(@"dd/MM")</th>
-                    <th>@Html.T("fri")<br />@dates[4].ToString(@"dd/MM")</th>
-                    <th>@Html.T("sat")<br />@dates[5].ToString(@"dd/MM")</th>
-                    <th>@Html.T("sun")<br />@dates[6].ToString(@"dd/MM")</th>
+                    <th class="@(dates[0].Date == DateTime.Today ? "attendance-today" : "")">@Html.T("mon")<br />@dates[0].ToString(@"dd/MM")</th>
+                    <th class="@(dates[1].Date == DateTime.Today ? "attendance-today" : "")">@Html.T("tue")<br />@dates[1].ToString(@"dd/MM")</th>
+                    <th class="@(dates[2].Date == DateTime.Today ? "attendance-today" : "")">@Html.T("wed")<br />@dates[2].ToString(@"dd/MM")</th>
+                    <th class="@(dates[3].Date == DateTime.Today ? "attendance-today" : "")">@Html.T("thu")<br />@dates[3].ToString(@"dd/MM")</th>
+                    <th class="@(dates[4].Date == DateTime.Today ? "attendance-today" : "")">@Html.T("fri")<br />@dates[4].ToString(@"dd/MM")</th>
+                    <th class="@(dates[5].Date == DateTime.Today ? "attendance-today" : "")">@Html.T("sat")<br />@dates[5].ToString(@"dd/MM")</th>
+                    <th class="@(dates[6].Date == DateTime.Today ? "attendance-today" : "")">@Html.T("sun")<br />@dates[6].ToString(@"dd/MM")</th>
                 </tr>
                 @foreach(AttendanceViewModel atModel in Model)
                 {
@@ -99,7 +103,7 @@
                         </td>
                         @foreach(Attendance attendance in atModel.Attendances)
                         {
-                            <td class="presence-check" data-state="@attendance.AttendanceStatus" data-id="@attendance.Id" data-stamp="@dates[i++].ToString("dd/MM/yyyy")"><span class="presence-check"></span></td>
+                            <td class="presence-check" data-state="@attendance.AttendanceStatus" data-id="@attendance.Id" data-stamp="@dates[i++].ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)"><span class="presence-check"></span></td>
                         }
                     </tr>
                 }

@@ -14,9 +14,9 @@
 <h2>@Html.T("mentors")</h2>
 <div class="false-form">
     <div class="select-wrapper">
-        <select asp-items="@statusList"></select>
+        <select asp-items="@statusList" aria-label="@Html.T("status")"></select>
     </div>
-    <a href="@Url.Action("Register", "Account")" title="@Html.T("add_user")"><img src="../img/add-greed.svg" /></a>
+    <a class="accent-button" href="@Url.Action("Register", "Account")">@Html.T("add_user")</a>
     <a href="@Url.Action("MentorLevelAccess", "Account")" style="text-decoration: underline;">
         @Html.T("mentor_level_access") (@Html.T("click_to_edit"))
     </a>

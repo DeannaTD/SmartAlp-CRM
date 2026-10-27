@@ -2,22 +2,38 @@
 @model List<Branch>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Html.W("schedule");
+    var days = Model.SelectMany(b => b.Groups).Select(g => g.Day).Distinct().OrderBy(d => ((int)d + 6) % 7);
 }
-<h2>@Html.T("welcome")!</h2>
-<div class="timetable-container">
+<header class="page-heading">
+    <div><h1>@Html.W("schedule")</h1><p>@Html.W("schedule_hint")</p></div>
+    <a href="@Url.Action("MentorIndex", "Level")" class="secondary-button">@Html.T("lessons")<partial name="_WorkspaceArrow" /></a>
+</header>
+<div class="schedule-filter" role="group" aria-label="@Html.W("schedule")">
+    <button type="button" data-schedule-day="all" aria-pressed="false">@Html.W("all_days")</button>
+    <button type="button" data-schedule-day="@((int)DateTime.Now.DayOfWeek)" data-schedule-initial="true" aria-pressed="true">@Html.W("today")</button>
+    @foreach (var day in days)
+    { <button type="button" data-schedule-day="@((int)day)" aria-pressed="false">@Html.T(day.ToString().ToLower())</button> }
+</div>
+<div class="mentor-schedule">
     @foreach (Branch branch in Model)
     {
-        <div class="timetable-card">
-            <p class="branch-name">@branch.Name</p>
-            @foreach (Group group in branch.Groups)
+        <section class="schedule-branch">
+            <h2>@branch.Name</h2>
+            <div class="schedule-rows">
+            @foreach (Group group in branch.Groups.OrderBy(g => ((int)g.Day + 6) % 7).ThenBy(g => g.Time))
             {
-                <p class="group-name">
-                    <a href="@Url.Action("GroupAttendance", "Attendance", new{groupId = group.Id, date = DateTime.Now})" data-ajax="true" data-ajax-update="#attendance-pop-up">
-                        @group.Name @Html.T(group.Day.ToString().ToLower()) @group.Time.ToString("hh\\:mm")
+                    <a class="schedule-row" data-day="@((int)group.Day)" href="@Url.Action("GroupAttendance", "Attendance", new{groupId = group.Id, date = DateTime.Now})" data-ajax="true" data-ajax-update="#attendance-pop-up">
+                        <time>@group.Time.ToString("hh\\:mm")</time>
+                        <span class="schedule-group"><strong>@group.Name</strong><span>@Html.T(group.Day.ToString().ToLower())</span></span>
+                        <span class="schedule-action">@Html.T("attendance")</span><partial name="_WorkspaceArrow" />
                     </a>
-                </p>
             }
-        </div>
+            </div>
+        </section>
     }
+</div>
+<div class="workspace-empty" id="schedule-empty" hidden="@(Model.Any(b => b.Groups.Any()))" role="status">
+    <h2>@Html.W("no_groups")</h2><p>@Html.W("no_groups_hint")</p>
 </div>
 <div class="pop-up" id="attendance-pop-up"></div>

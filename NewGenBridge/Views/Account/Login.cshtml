@@ -4,30 +4,30 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html>
+<html lang="@(Context.Request.Cookies["lang"] ?? "en")">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NewGenBridge</title>
     <link rel="stylesheet" href="~/css/login.css">
-    <title>SmartAlp Academy</title>
+    <link rel="stylesheet" href="~/css/workspace.css" asp-append-version="true">
 </head>
-<body>
+<body class="crm-ui login-page">
     <section class="login-container">
-        <div class="login-filler"></div>
+        <div class="login-filler"><img src="~/img/smartalp-brand.svg" alt="SmartAlp Academy" /></div>
         <div class="login-formContainer">
             <form asp-action="Login" asp-controller="Account" class="login-form">
                 <div class="login-validation" asp-validation-summary="All"></div>
                 <h1>@Html.T("welcome")!</h1>
                 <div class="login-form-group">
-                    <label>@Html.T("username")</label>
-                    <input type="text" asp-for="UserName">
+                    <label for="UserName">@Html.T("username")</label>
+                    <input type="text" asp-for="UserName" autocomplete="username">
                 </div>
                 <div class="login-form-group">
-                    <label>@Html.T("password")</label>
-                    <input type="password" asp-for="Password">
+                    <label for="Password">@Html.T("password")</label>
+                    <input type="password" asp-for="Password" autocomplete="current-password">
                 </div>
-                <div class="login-form-group">
+                <div class="login-form-group login-remember-row">
                     <input type="checkbox" id="rememberMe" class="hidden" asp-for="RememberMe">
                     <label for="rememberMe" class="login-checkboxLabel">
                         <span class="login-customCheckbox">

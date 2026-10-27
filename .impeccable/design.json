@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-25T19:10:30.376Z",
+  "title": "Design System: SmartAlp CRM",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Academy purple",
+        "tonalRamp": [
+          "oklch(15.00% 0.1916 293.78)",
+          "oklch(26.43% 0.1916 293.78)",
+          "oklch(37.86% 0.1916 293.78)",
+          "oklch(49.29% 0.1916 293.78)",
+          "oklch(60.71% 0.1916 293.78)",
+          "oklch(72.14% 0.1916 293.78)",
+          "oklch(83.57% 0.1916 293.78)",
+          "oklch(95.00% 0.1916 293.78)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Deep academy purple",
+        "tonalRamp": [
+          "oklch(15.00% 0.1953 291.50)",
+          "oklch(26.43% 0.1953 291.50)",
+          "oklch(37.86% 0.1953 291.50)",
+          "oklch(49.29% 0.1953 291.50)",
+          "oklch(60.71% 0.1953 291.50)",
+          "oklch(72.14% 0.1953 291.50)",
+          "oklch(83.57% 0.1953 291.50)",
+          "oklch(95.00% 0.1953 291.50)"
+        ]
+      },
+      "primary-soft": {
+        "role": "primary",
+        "displayName": "Soft academy purple",
+        "tonalRamp": [
+          "oklch(15.00% 0.0180 303.42)",
+          "oklch(26.43% 0.0180 303.42)",
+          "oklch(37.86% 0.0180 303.42)",
+          "oklch(49.29% 0.0180 303.42)",
+          "oklch(60.71% 0.0180 303.42)",
+          "oklch(72.14% 0.0180 303.42)",
+          "oklch(83.57% 0.0180 303.42)",
+          "oklch(95.00% 0.0180 303.42)"
+        ]
+      },
+      "primary-selection": {
+        "role": "primary",
+        "displayName": "Purple selection tint",
+        "tonalRamp": [
+          "oklch(15.00% 0.0423 303.68)",
+          "oklch(26.43% 0.0423 303.68)",
+          "oklch(37.86% 0.0423 303.68)",
+          "oklch(49.29% 0.0423 303.68)",
+          "oklch(60.71% 0.0423 303.68)",
+          "oklch(72.14% 0.0423 303.68)",
+          "oklch(83.57% 0.0423 303.68)",
+          "oklch(95.00% 0.0423 303.68)"
+        ]
+      },
+      "primary-strong": {
+        "role": "primary",
+        "displayName": "Strong purple text",
+        "tonalRamp": [
+          "oklch(15.00% 0.1574 290.42)",
+          "oklch(26.43% 0.1574 290.42)",
+          "oklch(37.86% 0.1574 290.42)",
+          "oklch(49.29% 0.1574 290.42)",
+          "oklch(60.71% 0.1574 290.42)",
+          "oklch(72.14% 0.1574 290.42)",
+          "oklch(83.57% 0.1574 290.42)",
+          "oklch(95.00% 0.1574 290.42)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0341 263.44)",
+          "oklch(26.43% 0.0341 263.44)",
+          "oklch(37.86% 0.0341 263.44)",
+          "oklch(49.29% 0.0341 263.44)",
+          "oklch(60.71% 0.0341 263.44)",
+          "oklch(72.14% 0.0341 263.44)",
+          "oklch(83.57% 0.0341 263.44)",
+          "oklch(95.00% 0.0341 263.44)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted slate",
+        "tonalRamp": [
+          "oklch(15.00% 0.0355 257.79)",
+          "oklch(26.43% 0.0355 257.79)",
+          "oklch(37.86% 0.0355 257.79)",
+          "oklch(49.29% 0.0355 257.79)",
+          "oklch(60.71% 0.0355 257.79)",
+          "oklch(72.14% 0.0355 257.79)",
+          "oklch(83.57% 0.0355 257.79)",
+          "oklch(95.00% 0.0355 257.79)"
+        ]
+      },
+      "secondary-text": {
+        "role": "neutral",
+        "displayName": "Secondary slate",
+        "tonalRamp": [
+          "oklch(15.00% 0.0350 265.11)",
+          "oklch(26.43% 0.0350 265.11)",
+          "oklch(37.86% 0.0350 265.11)",
+          "oklch(49.29% 0.0350 265.11)",
+          "oklch(60.71% 0.0350 265.11)",
+          "oklch(72.14% 0.0350 265.11)",
+          "oklch(83.57% 0.0350 265.11)",
+          "oklch(95.00% 0.0350 265.11)"
+        ]
+      },
+      "label": {
+        "role": "neutral",
+        "displayName": "Label slate",
+        "tonalRamp": [
+          "oklch(15.00% 0.0381 260.50)",
+          "oklch(26.43% 0.0381 260.50)",
+          "oklch(37.86% 0.0381 260.50)",
+          "oklch(49.29% 0.0381 260.50)",
+          "oklch(60.71% 0.0381 260.50)",
+          "oklch(72.14% 0.0381 260.50)",
+          "oklch(83.57% 0.0381 260.50)",
+          "oklch(95.00% 0.0381 260.50)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Soft divider",
+        "tonalRamp": [
+          "oklch(15.00% 0.0075 260.73)",
+          "oklch(26.43% 0.0075 260.73)",
+          "oklch(37.86% 0.0075 260.73)",
+          "oklch(49.29% 0.0075 260.73)",
+          "oklch(60.71% 0.0075 260.73)",
+          "oklch(72.14% 0.0075 260.73)",
+          "oklch(83.57% 0.0075 260.73)",
+          "oklch(95.00% 0.0075 260.73)"
+        ]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Field border",
+        "tonalRamp": [
+          "oklch(15.00% 0.0123 259.82)",
+          "oklch(26.43% 0.0123 259.82)",
+          "oklch(37.86% 0.0123 259.82)",
+          "oklch(49.29% 0.0123 259.82)",
+          "oklch(60.71% 0.0123 259.82)",
+          "oklch(72.14% 0.0123 259.82)",
+          "oklch(83.57% 0.0123 259.82)",
+          "oklch(95.00% 0.0123 259.82)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "White surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Quiet canvas",
+        "tonalRamp": [
+          "oklch(15.00% 0.0017 247.84)",
+          "oklch(26.43% 0.0017 247.84)",
+          "oklch(37.86% 0.0017 247.84)",
+          "oklch(49.29% 0.0017 247.84)",
+          "oklch(60.71% 0.0017 247.84)",
+          "oklch(72.14% 0.0017 247.84)",
+          "oklch(83.57% 0.0017 247.84)",
+          "oklch(95.00% 0.0017 247.84)"
+        ]
+      },
+      "danger": {
+        "role": "semantic",
+        "displayName": "Danger red",
+        "tonalRamp": [
+          "oklch(15.00% 0.1821 29.51)",
+          "oklch(26.43% 0.1821 29.51)",
+          "oklch(37.86% 0.1821 29.51)",
+          "oklch(49.29% 0.1821 29.51)",
+          "oklch(60.71% 0.1821 29.51)",
+          "oklch(72.14% 0.1821 29.51)",
+          "oklch(83.57% 0.1821 29.51)",
+          "oklch(95.00% 0.1821 29.51)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Page heading",
+        "purpose": "Primary workspace page titles; 24px mobile override."
+      },
+      "title": {
+        "displayName": "Course title",
+        "purpose": "Names inside course cards."
+      },
+      "body": {
+        "displayName": "Body and controls",
+        "purpose": "Default operational text and fields."
+      },
+      "table": {
+        "displayName": "Table text",
+        "purpose": "Compact rows and headings with tabular numerals."
+      },
+      "label": {
+        "displayName": "Login field label",
+        "purpose": "Explicit labels above login fields."
+      },
+      "button": {
+        "displayName": "Action label",
+        "purpose": "Primary, secondary and destructive actions."
+      }
+    },
+    "shadows": [
+      {
+        "name": "alert",
+        "value": "0 18px 48px rgb(16 24 40 / 18%)",
+        "purpose": "Alert container elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-state",
+        "value": "160ms",
+        "purpose": "Background, colour and border state transitions."
+      },
+      {
+        "name": "legacy-animation-duration",
+        "value": "180ms",
+        "purpose": "Existing --animation-duration variable."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0s",
+        "purpose": "Transition and animation durations when reduced motion is requested."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile-max",
+        "value": "760px"
+      },
+      {
+        "name": "compact-desktop-max",
+        "value": "1100px"
+      },
+      {
+        "name": "wide-min",
+        "value": "1600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Compact 42px-minimum-height workspace action.",
+      "html": "<button class=\"ds-primary ds-focus\" type=\"button\">Save</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;min-height:42px;border-radius:8px;font:600 14px/1.4 Inter,sans-serif;cursor:pointer;transition:background 160ms;background:var(--brand, #7f56d9);color:var(--surface, #fff);border:1px solid transparent;} .ds-primary:hover{background:var(--brand-hover, #6941c6);} .ds-primary:disabled{cursor:not-allowed;opacity:.55;} .ds-focus:focus-visible { outline: 3px solid var(--brand, #7f56d9); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-focus { transition-duration: 0s !important; } }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Compact 42px-minimum-height workspace action.",
+      "html": "<button class=\"ds-secondary ds-focus\" type=\"button\">Cancel</button>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;min-height:42px;border-radius:8px;font:600 14px/1.4 Inter,sans-serif;cursor:pointer;transition:background 160ms;background:var(--surface, #fff);color:var(--muted, #475467);border:1px solid #d0d5dd;} .ds-secondary:hover{background:var(--canvas, #f9fafb);} .ds-secondary:disabled{cursor:not-allowed;opacity:.55;} .ds-focus:focus-visible { outline: 3px solid var(--brand, #7f56d9); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-focus { transition-duration: 0s !important; } }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Destructive action; workspace.css does not define a separate hover colour.",
+      "html": "<button class=\"ds-danger ds-focus\" type=\"button\">Delete</button>",
+      "css": ".ds-danger{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;min-height:42px;border-radius:8px;font:600 14px/1.4 Inter,sans-serif;cursor:pointer;transition:background 160ms;background:#b42318;color:#fff;border:0;} .ds-danger:disabled{cursor:not-allowed;opacity:.55;} .ds-focus:focus-visible { outline: 3px solid var(--brand, #7f56d9); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-focus { transition-duration: 0s !important; } }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "White field with a purple border on focus and explicit keyboard outline.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-name\">Name</label><input class=\"ds-input ds-focus\" id=\"ds-name\" placeholder=\"Enter a name\" />",
+      "css": ".ds-field-label{display:block;margin:6px 0;font:14px/1.5 Inter,sans-serif;color:var(--ink, #101828);} .ds-input{border:1px solid #d0d5dd;border-radius:8px;padding:10px 12px;min-height:42px;color:var(--ink, #101828);background:var(--surface, #fff);font:14px/1.5 Inter,sans-serif;caret-color:var(--brand, #7f56d9);max-width:100%;} .ds-input::placeholder{color:#667085;} .ds-input:focus{border-color:var(--brand, #7f56d9);} .ds-input:disabled{cursor:not-allowed;opacity:.55;} .ds-focus:focus-visible { outline: 3px solid var(--brand, #7f56d9); outline-offset: 3px; }"
+    },
+    {
+      "name": "Workspace Navigation",
+      "kind": "nav",
+      "refersTo": "nav-current",
+      "description": "Current-page purple and quiet neutral hover in the white navigation rail.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Example navigation\"><a class=\"ds-nav-link ds-focus\" href=\"#courses\" aria-current=\"page\">Courses</a><a class=\"ds-nav-link ds-focus\" href=\"#prices\">Prices</a></nav>",
+      "css": ".ds-nav{display:flex;flex-direction:column;gap:4px;padding:20px 14px;background:var(--surface, #fff);width:216px;} .ds-nav-link{display:flex;align-items:center;min-height:44px;padding:11px 14px;border-radius:8px;color:var(--muted, #475467);font:500 14px/1.5 Inter,sans-serif;text-decoration:none;transition:background 160ms,color 160ms;} .ds-nav-link:hover{background:var(--canvas, #f9fafb);color:var(--ink, #101828);} .ds-nav-link[aria-current=page]{background:var(--brand, #7f56d9);color:#fff;} .ds-focus:focus-visible { outline: 3px solid var(--brand, #7f56d9); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-focus { transition-duration: 0s !important; } }"
+    },
+    {
+      "name": "Course Card",
+      "kind": "card",
+      "refersTo": "course-card",
+      "description": "Course-title surface with an independently targetable delete action; example copy is a component label, not product data.",
+      "html": "<article class=\"ds-card\"><a class=\"ds-card-title ds-focus\" href=\"#course\">Course title</a><p class=\"ds-card-text\">Course description</p><button class=\"ds-card-delete ds-focus\" type=\"button\" aria-label=\"Delete course\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><path d=\"M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7\"/></svg></button></article>",
+      "css": ".ds-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:16px;min-height:244px;padding:24px;background:var(--surface, #fff);border:1px solid var(--line, #e4e7ec);border-radius:12px;font-family:Inter,sans-serif;transition:border-color 160ms,background 160ms;} .ds-card:hover{border-color:#b9a1e7;background:#fefcff;} .ds-card-title{font-size:18px;line-height:1.4;letter-spacing:-.02em;color:var(--ink, #101828);text-decoration:none;} .ds-card-text{font-size:13px;line-height:1.65;color:#667085;margin:0;} .ds-card-delete{padding:5px;border:0;border-radius:6px;background:transparent;color:var(--muted, #475467);cursor:pointer;} .ds-card-delete svg{display:block;width:18px;height:18px;} .ds-card-delete:hover{background:#fef3f2;} .ds-focus:focus-visible { outline: 3px solid var(--brand, #7f56d9); outline-offset: 3px; } @media(prefers-reduced-motion:reduce){.ds-card{transition-duration:0s;}}"
+    },
+    {
+      "name": "Scrollable Table",
+      "kind": "custom",
+      "refersTo": "table",
+      "description": "Dense neutral table with tabular numerals and an independently focusable scroll region. Example text has no product meaning.",
+      "html": "<div class=\"ds-table-scroll ds-focus\" tabindex=\"0\" role=\"region\" aria-label=\"Example table\"><table class=\"ds-table\"><thead><tr><th>Course</th><th>Value</th></tr></thead><tbody><tr><td>Example item</td><td>—</td></tr></tbody></table></div>",
+      "css": ".ds-table-scroll{overflow:auto;max-width:100%;margin:20px 0;background:var(--surface, #fff);border:1px solid var(--line, #e4e7ec);border-radius:12px;} .ds-table{margin:0;width:100%;min-width:600px;border-collapse:separate;border-spacing:0;font:13px/1.5 Inter,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink, #101828);} .ds-table th,.ds-table td{padding:13px 16px;border-bottom:1px solid var(--line, #e4e7ec);text-align:left;vertical-align:middle;} .ds-table th{background:var(--canvas, #f9fafb);color:var(--muted, #475467);font-weight:600;white-space:nowrap;} .ds-table tr:last-child td{border-bottom:0;} .ds-table tr:hover td{background:#fcfaff;} .ds-focus:focus-visible { outline: 3px solid var(--brand, #7f56d9); outline-offset: 3px; } .ds-table-scroll:focus-visible{outline-offset:-3px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Clear, restrained operational interface",
+    "overview": "This phrase records the confirmed direction; no additional creative metaphor or visual anti-reference was confirmed. White navigation and content surfaces sit on a quiet grey canvas. Purple identifies selection and primary actions, with pale purple supporting grouped or selected content. Compact, readable forms and tables carry the working interface.\n\nThe existing SmartAlp identity is the visual authority. This system documents the implemented refresh, rather than inventing a replacement brand. Preserve the original academy mark and supplied course materials. Desktop is the primary operating context; narrow layouts keep the same workflows accessible.",
+    "keyCharacteristics": [
+      "White working surfaces and a quiet grey canvas.",
+      "Purple actions and selection with restrained tonal support.",
+      "Inter typography and compact, readable operational content.",
+      "Original SmartAlp identity and materials.",
+      "A desktop navigation rail with responsive access to the same work."
+    ],
+    "rules": [
+      {
+        "name": "The Functional Accent Rule",
+        "body": "Use strong purple for actions, selection and focus; use its pale tint to support grouping and contextual emphasis.",
+        "section": "colors"
+      },
+      {
+        "name": "The Quiet Surface Rule",
+        "body": "Separate ordinary working regions with tone and borders; reserve the documented shadow for alerts.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** reuse the self-hosted Inter font and the original SmartAlp logo.",
+      "**Do** use white working surfaces, quiet neutral dividers and purple actions or selection.",
+      "**Do** preserve readable table density, horizontal table scrolling and visible keyboard focus.",
+      "**Do** retain role conditions, routes, translations, field names, validation and event handlers when extending the interface.",
+      "**Do** use real course materials and actual product data."
+    ],
+    "donts": [
+      "**Don't** replace the established academy identity with invented logos or decorative imagery.",
+      "**Don't** turn ordinary workspace cards into elevated promotional panels.",
+      "**Don't** remove or hide required actions to simplify a layout.",
+      "**Don't** introduce fabricated statistics or marketing claims as interface content."
+    ]
+  }
+}

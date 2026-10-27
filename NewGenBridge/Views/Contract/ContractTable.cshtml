@@ -1,4 +1,4 @@
-﻿@using NewGenBridge.Helpers
+@using NewGenBridge.Helpers
 @using NewGenBridge.Services
 @inject ContractService _contractService
 
@@ -101,7 +101,11 @@
 }
 </ul>
 <div class="abs-container" tabindex="0" style="outline:none; margin-bottom: 1rem;">
+    <label for="searchBar" class="visually-hidden">@Html.T("enter_student_name")</label>
     <input type="search" id="searchBar" autocomplete="off" placeholder="@Html.T("enter_student_name")" value="@(ViewBag.Name ?? "")" />
+    <button type="button" class="secondary-button" id="contract-find">@Html.W("find")</button>
+    <button type="button" class="search-reset" id="contract-reset">@Html.W("reset")</button>
+    <p id="contract-search-status" role="status"></p>
     <ul class="drop-down-ul d-none" id="searchList">
         <li id="li-not-found" class="d-none">@Html.T("nothing_found")</li>
         @foreach (var student in contractInfoList)
@@ -135,6 +139,7 @@ FIX END
         let notFound = document.querySelector('#li-not-found');
 
         function loadContracts(url) {
+            document.getElementById("contract-search-status").textContent = @Json.Serialize(Html.W("loading"));
             const fetchUrl = url || baseUrl;
             fetch(fetchUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(r => {
@@ -143,9 +148,10 @@ FIX END
                 })
                 .then(html => {
                     document.getElementById('contract-list-container').innerHTML = html;
+                    document.getElementById('contract-search-status').textContent = '';
                 })
                 .catch(err => {
-                    console.error(err);
+                    document.getElementById("contract-search-status").textContent = @Json.Serialize(Html.W("results_error"));
                 });
         }
 
@@ -173,9 +179,8 @@ FIX END
             if (e.key === 'Enter') {
                 e.preventDefault();
                 const value = searchBar.value.trim();
-                if (!value) {
-                    loadContracts(baseUrl);
-                }
+                searchDrop.classList.add('d-none');
+                loadContracts(baseUrl + '?page=1&name=' + encodeURIComponent(value));
             }
         });
 
@@ -188,6 +193,7 @@ FIX END
                 .then(r => r.text())
                 .then(html => {
                     document.getElementById('contract-list-container').innerHTML = html;
+                    document.getElementById('contract-search-status').textContent = '';
                 })
                 .catch(err => console.error(err));
         });
@@ -206,6 +212,8 @@ FIX END
             }
         }
         attachItemClickHandlers();
+        document.getElementById('contract-find').onclick=()=>{searchDrop.classList.add('d-none');loadContracts(baseUrl+'?page=1&name='+encodeURIComponent(searchBar.value.trim()));};
+        document.getElementById('contract-reset').onclick=()=>{searchBar.value='';searchDrop.classList.add('d-none');loadContracts(baseUrl);};
     })();
 </script>
                     

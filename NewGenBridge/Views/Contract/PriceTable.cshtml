@@ -23,7 +23,7 @@
     }
 </style>
 <h2>@Html.T("prices")</h2>
-<form asp-action="UpdatePrice" asp-controller="Contract">
+<form asp-action="UpdatePrice" asp-controller="Contract" class="price-form">
     <table class="table access-table">
         <tr>
             <th style="width:2rem;">№</th>
@@ -55,5 +55,7 @@
             </tr>
         }
     </table>
-    <input type="submit" value="@Html.T("save")" class="action-button"/>
+    <div class="form-actions">
+        <input type="submit" value="@Html.T("save")" class="action-button"/>
+    </div>
 </form>

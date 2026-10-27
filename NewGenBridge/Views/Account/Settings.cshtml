@@ -1,4 +1,4 @@
-﻿@using NewGenBridge.Helpers
+@using NewGenBridge.Helpers
 @using NewGenBridge.ViewModels
 @model SettingsViewModel
 @{
@@ -13,7 +13,7 @@
         {
             <form asp-action="ChangeProfilePicture" asp-controller="Account"
                   class="profile-image-form" enctype="multipart/form-data">
-                <label>@Html.T("profile_picture")</label>
+                <label for="labelN">@Html.T("profile_picture")</label>
                 <div class="profile-image-input">
                     <img src="~/img/upload.svg" alt="@Html.T("s_upload_title")">
                     <p class="profile-image-name">@Html.T("s_upload_title")</p>
@@ -46,11 +46,11 @@
             <input type="password" name="newPassword" id="labelN" pattern=".{5,}" required>
         </div>
         <div>
-            <label>@Html.T("current_password")<span class="asterisk">*</span></label>
+            <label for="labelO">@Html.T("current_password")<span class="asterisk">*</span></label>
             <input type="password" name="currentPassword" id="labelO" required>
         </div>
         <div>
-            <label>@Html.T("confirm_new_password")<span class="asterisk">*</span></label>
+            <label for="labelC">@Html.T("confirm_new_password")<span class="asterisk">*</span></label>
             <input type="password" id="labelC" required>
         </div>
         <button id="passwordButton" type="submit" class="centered-button action-button spinner-button profile-form-button">

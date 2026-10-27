@@ -1,4 +1,4 @@
-﻿@using NewGenBridge.Services
+@using NewGenBridge.Services
 @using NewGenBridge.ViewModels
 @inject BranchService _branchService
 @model StaffRegistrationViewModel
@@ -38,19 +38,19 @@
           data-ajax-begin="submitFormSpin(this)"
           data-ajax-success="ajaxCompleted">
         <div class="v-form-block">
-            <label>@Html.T("first_name"):<span class="asterisk">*</span></label>
+            <label for="FirstName">@Html.T("first_name"):<span class="asterisk">*</span></label>
             <input asp-for="FirstName" autocomplete="off" required/>
         </div>
         <div class="v-form-block">
-            <label>@Html.T("last_name"):<span class="asterisk">*</span></label>
+            <label for="LastName">@Html.T("last_name"):<span class="asterisk">*</span></label>
             <input asp-for="LastName" autocomplete="off" required />
         </div>
         <div class="v-form-block">
-            <label>Email:</label>
+            <label for="Email">Email:</label>
             <input asp-for="Email" autocomplete="off" />
         </div>
         <div class="v-form-block">
-            <label>@Html.T("date_of_birth"):<span class="asterisk">*</span></label>
+            <label for="DateOfBirth">@Html.T("date_of_birth"):<span class="asterisk">*</span></label>
             <input asp-for="DateOfBirth" type="date" placeholder="@Html.T("date_of_birth")" required />
         </div>
         <div class="v-form-block">

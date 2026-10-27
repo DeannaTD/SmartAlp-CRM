@@ -1,29 +1,28 @@
 ﻿@using NewGenBridge.Helpers
 @using NewGenBridge.ViewModels
 @model StudentHomeViewModel
-<h2>@Html.T("welcome_to_smartalp")!</h2>
-<p class="sub-text">@Html.T("student_welcome_text2")</p>
-<div class="student-banner">
+@{ ViewData["Title"] = Html.T("Home"); }
+<header class="page-heading"><div><h1>@Html.T("welcome_to_smartalp")!</h1><p>@Html.T("student_welcome_text2")</p></div></header>
+<section class="work-focus student-focus">
+    <div class="work-focus-copy">
+        <h2>@Html.T("your_lesson"): @Model.CurrentLessonName</h2>
+        <p>@Html.T("lessons_full_list_hint")</p>
+        <a href="@Url.Content("~/" + Model.CurrentLessonLink + "/lesson.pdf")" target="_blank" rel="noopener" class="accent-button">@Html.T("go_to_lesson")<partial name="_WorkspaceArrow" /></a>
+    </div>
+    <div class="work-focus-links">
+        <a href="@Url.Action("StudentProgress", "Level")"><img src="~/img/lessons.svg" alt="" /><span>@Html.W("all_lessons")</span><partial name="_WorkspaceArrow" /></a>
+        <a href="@Url.Action("StudentAttendance", "Attendance")"><img src="~/img/clock.svg" alt="" /><span>@Html.T("attendance")</span><partial name="_WorkspaceArrow" /></a>
+    </div>
+</section>
+<div class="student-banner workspace-student-banner">
     <p class="banner-text">
         «@Html.T("student_welcome_text0")<br />@Html.T("student_welcome_text1")»
     </p>
     <img src="../img/student-banner-person.png" alt="student avatar" class="banner-image">
 </div>
-<div class="student-menu">
-    <div class="student-menu-card">
+<div class="student-help">
         <p class="sub-header label">@Html.T("need_help")</p>
         <p class="sub-text">@Html.T("contact_manager_or_mentor")</p>
-        <a href="#" class="accent-button">@Html.T("contacts")</a>
-    </div>
-    <div class="student-menu-card">
-        <div>
-            <p class="bold-text label">@Html.T("your_lesson"):</p>
-            <p class="sub-header">@Model.CurrentLessonName</p>
-        </div>
-        <p class="sub-text">@Html.T("lessons_full_list_hint")</p>
-        @* <a href="@Url.Action("Lesson", "Level", new {lessonId = Model.CurrentLessonId})" class="accent-button"></a> *@
-        <a href="@Url.Content("~/" + Model.CurrentLessonLink + "/lesson.pdf")" target="_blank" class="accent-button">@Html.T("go_to_lesson")</a>
-    </div>
 </div>
 @{
     if (ViewBag.Status == UserStatus.Blocked || ViewBag.Status == UserStatus.Archived)

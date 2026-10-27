@@ -43,6 +43,7 @@
 </style>
 
 <div>
+    <h2>@Html.T("levels")</h2>
     <ul class="file-control-container">
         <li style="justify-content: center; border-style: dashed;" data-link="@Url.Action("CreateLevel", "Level")" onclick="goToDataLink(this)">
             <img class="file-control-logo" src="~/img/add.svg" style="width: 50px;"/>
@@ -51,7 +52,7 @@
         @foreach(var level in Model)
         {
             <li data-link="@Url.Action("LessonsControlPanel", "Level", new { levelId = level.Id })" onclick="goToDataLink(this)">
-                <a href="@Url.Action("DeleteLevel", "Level", new { levelId = level.Id })" class="delete-level-button pointer">
+                <a href="@Url.Action("DeleteLevel", "Level", new { levelId = level.Id })" class="delete-level-button pointer" aria-label="@Html.T("delete") @level.Name" title="@Html.T("delete")">
                     <img src="~/img/close.svg" alt="">
                 </a>
                 <img class="file-control-logo" src="../Projects/Levels/@(level.Id).png" onerror="defaultPicture(this)" />
@@ -66,6 +67,7 @@
     var deleteLevel = document.querySelectorAll('.delete-level-button');
     deleteLevel.forEach(btn => {
         btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (!confirm("@Html.T("are_you_sure")")) e.preventDefault();
         })
     });

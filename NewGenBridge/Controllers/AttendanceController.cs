@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NewGenBridge.Helpers;
 using NewGenBridge.Models;
@@ -60,7 +60,7 @@ namespace NewGenBridge.Controllers
                     {
                         if (tool.State != "0")
                         {
-                            result = await _attendanceService.CreateAttendance(new Attendance()
+                            result += await _attendanceService.CreateAttendance(new Attendance()
                             {
                                 UserId = tool.StudentId,
                                 AttendanceStatus = Convert.ToInt32(tool.State),
@@ -72,11 +72,11 @@ namespace NewGenBridge.Controllers
                     {
                         if (tool.State == "0")
                         {
-                            result = await _attendanceService.DeleteAttendanceAsync(tool.Id);
+                            result += await _attendanceService.DeleteAttendanceAsync(tool.Id);
                         }
                         else
                         {
-                            result = await _attendanceService.UpdateAttendanceAsync(tool.Id, Convert.ToInt32(tool.State));
+                            result += await _attendanceService.UpdateAttendanceAsync(tool.Id, Convert.ToInt32(tool.State));
                         }
                     }
                 }

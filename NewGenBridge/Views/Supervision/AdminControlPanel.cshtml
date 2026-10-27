@@ -1,19 +1,64 @@
 ﻿@using NewGenBridge.Helpers
 @{
-    if(User.IsInRole(NPUR.Admin) || User.IsInRole(NPUR.Supervisor)) Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    else Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = Html.T("Home");
+    bool admin = User.IsInRole(NPUR.Admin);
+    bool supervisor = User.IsInRole(NPUR.Supervisor);
+    Layout = admin || supervisor ? "~/Views/Shared/_AdminLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Html.W("workspace");
+    string primaryLabel = admin ? "levels" : supervisor ? "branch" : "students";
+    string primaryAction = admin ? "LevelControlMenu" : supervisor ? "BranchControlPanel" : "Students";
+    string primaryController = admin ? "Level" : supervisor ? "Branch" : "Account";
+    string primaryHint = admin ? "course_hint" : supervisor ? "branch_hint" : "students_hint";
+    var work = admin
+        ? new[] { ("branch", "BranchControlPanel", "Branch", "building"), ("access", "ManageAccess", "Branch", "staff"), ("add_user", "Register", "Account", "add-square") }
+        : supervisor
+        ? new[] { ("structure", "StructureControl", "Branch", "building"), ("access", "ManageAccess", "Branch", "staff"), ("kit_requests", "KitRequests", "Branch", "lessons") }
+        : new[] { ("branch", "BranchControlPanel", "Branch", "building"), ("mentors", "Mentors", "Account", "staff"), ("new_user_registration", "NewStudents", "Contract", "add-square") };
 }
-
-<h2>@Html.T("welcome_to_smartalp")!</h2>
-
-<p>@Html.T("we_are_pleased_to")</p>
-
-<p>@Html.T("by_joining_smartalp")</p>
-
-<p>@Html.T("your_decision_to_open")</p>
-
-<p>@Html.T("we_appreciate_your_initiative")</p>
-<p>@Html.T("on_behalf_of_the_entire")</p>
-
-<p>@Html.T("we_look_forward")</p>
+<div class="workspace-home">
+    <header class="page-heading"><div>
+        <h1>@Html.W(admin ? "workspace" : supervisor ? "supervisor_home" : "manager_home")</h1>
+        <p>@Html.W(admin ? "admin_intro" : supervisor ? "supervisor_intro" : "manager_intro")</p>
+    </div></header>
+    <section class="work-focus" aria-labelledby="work-focus-title">
+        <div class="work-focus-copy">
+            <h2 id="work-focus-title">@Html.T(primaryLabel)</h2>
+            <p>@Html.W(primaryHint)</p>
+            <a class="accent-button" href="@Url.Action(primaryAction, primaryController)">@Html.T(primaryLabel)<partial name="_WorkspaceArrow" /></a>
+        </div>
+        <div class="work-focus-links">
+            @foreach (var item in work)
+            {
+                <a href="@Url.Action(item.Item2, item.Item3)"><img src="~/img/@(item.Item4).svg" alt="" /><span>@Html.T(item.Item1)</span><partial name="_WorkspaceArrow" /></a>
+            }
+        </div>
+    </section>
+    <div class="workspace-columns">
+        <section class="workspace-section">
+            <h2>@Html.T("finances")</h2>
+            <div class="workspace-links">
+                @foreach (var item in new[] { ("contracts", "ContractTable"), ("bills", "BillTable"), ("royalty", "RoyaltyTable"), ("prices", "PriceTable") })
+                { <a href="@Url.Action(item.Item2, "Contract")"><span>@Html.T(item.Item1)</span><partial name="_WorkspaceArrow" /></a> }
+            </div>
+        </section>
+        <section class="workspace-section">
+            <h2>@(supervisor ? Html.T("company_data") : Html.W("learning"))</h2>
+            <div class="workspace-links">
+                @if (supervisor)
+                {
+                    <a href="@Url.Action("Company", "Branch")"><span>@Html.T("company_data")</span><partial name="_WorkspaceArrow" /></a>
+                    <a href="@Url.Action("Register", "Account")"><span>@Html.T("add_user")</span><partial name="_WorkspaceArrow" /></a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Index", "Hub")"><span>@Html.T("hub")</span><partial name="_WorkspaceArrow" /></a>
+                    <a href="@Url.Action("KnowledgeBaseIndex", "Hub")"><span>@Html.T("knowledge_base")</span><partial name="_WorkspaceArrow" /></a>
+                }
+            </div>
+        </section>
+    </div>
+    <details class="academy-welcome">
+        <summary>@Html.T("welcome_to_smartalp")</summary>
+        @foreach (var key in new[] { "we_are_pleased_to", "by_joining_smartalp", "your_decision_to_open", "we_appreciate_your_initiative", "on_behalf_of_the_entire", "we_look_forward" })
+        { <p>@Html.T(key)</p> }
+    </details>
+</div>

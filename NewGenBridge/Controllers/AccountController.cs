@@ -259,17 +259,16 @@ namespace NewGenBridge.Controllers
                 Started = DateOnly.FromDateTime(student.DateStarted),
                 DateOfBirth = DateOnly.FromDateTime(student.DateOfBirth),
                 Note = student.Note ?? "",
-                GroupId = student.GroupId ?? 1,
+                GroupId = student.GroupId ?? 0,
                 LevelId = level.Id,
                 LevelName = level.Name
             };
-            Group group = await _branchService.GetGroupByIdAsync(model.GroupId);
-            NPUser mentor = await _userManager.FindByIdAsync(group.MentorId);
-            Branch branch = await _branchService.GetBranchByIdAsync(group.BranchId);
-            Division division = await _branchService.GetDivisionByIdAsync(branch.DivisionId);
+            Group group = model.GroupId > 0 ? await _branchService.GetGroupByIdAsync(model.GroupId) : null;
+            Branch branch = group != null ? await _branchService.GetBranchByIdAsync(group.BranchId)
+                : student.MentorDivisionId.HasValue ? await _branchService.GetBranchByIdAsync(student.MentorDivisionId.Value) : null;
             List<Branch> branches = await _branchService.GetBranchesAsync();
             
-            SelectList branchList = new(from br in branches where br.DivisionId == division.Id
+            SelectList branchList = new(from br in branches where branch != null && br.DivisionId == branch.DivisionId
                                         from gr in br.Groups select new { 
                                             Id = gr.Id,
                                             Name = br.Name + ", " + (gr.Name ?? "") + " " + gr.Day.ToString() + " " + gr.Time.ToString("hh\\:mm") 
@@ -330,24 +329,33 @@ namespace NewGenBridge.Controllers
             }).ToList());
         }
 
-        public async Task<IActionResult> Students(int statusId = 0, int page = 1, string name = "")
+        public async Task<IActionResult> Students(int statusId = 0, int page = 1, string name = "", int branchId = 0, int groupId = 0)
         {
-            if (statusId == UserStatus.Archived) return RedirectToAction("ArchivedStudents");
+
             int pageSize = 20;
             List<UserAccess> accesses = await _accountService.GetUserAccesses(User.Identity.Name);
-            IEnumerable<int?> userAccesses = accesses.Select(a => a.BranchId).Where(a => a is not null);
+            IEnumerable<int?> userAccesses = accesses.Select(a => a.BranchId).Where(a => a is not null).Distinct().ToList();
             var model = new List<StudentManagerViewModel>();
             foreach(int? access in userAccesses)
             {
                 List<NPUser> students = await _accountService.GetStudentsByBranchId(access ?? 0, statusId);
                 model.AddRange(students.Select(s => new StudentManagerViewModel() { 
                     Id = s.Id,
+                    BranchId = access ?? 0,
                     FullName = s.FirstName + " " + s.LastName,
                     GroupId = s.GroupId ?? 0,
                     StatusId = s.StatusId ?? 0,
                     StartedOn = DateOnly.FromDateTime(s.DateStarted)
                 }));
             }
+            if (statusId == UserStatus.Archived || statusId == UserStatus.All)
+            {
+                var detached = (await _userManager.GetUsersInRoleAsync(NPUR.Student))
+                    .Where(u => u.GroupId == null && u.StatusId == UserStatus.Archived && userAccesses.Contains(u.MentorDivisionId));
+                model.AddRange(detached.Select(u => new StudentManagerViewModel { Id=u.Id, BranchId=u.MentorDivisionId ?? 0, FullName=u.FirstName+" "+u.LastName, GroupId=0, StatusId=UserStatus.Archived, StartedOn=DateOnly.FromDateTime(u.DateStarted) }));
+            }
+            model = model.DistinctBy(s => s.Id).ToList();
+            name = (name ?? "").Trim();
             if(name!="")
             {
                 model = model.Where(s => s.FullName.ToLower().Contains(name.ToLower())).ToList();
@@ -356,10 +364,14 @@ namespace NewGenBridge.Controllers
 
             // Build group list for dropdown
             List<SelectListItem> groupList = new List<SelectListItem>();
-            foreach (int? branchId in userAccesses)
+            var branchList = new List<SelectListItem>();
+            var groupBranches = new Dictionary<string, int>();
+            foreach (int? allowedBranchId in userAccesses)
             {
-                Branch branch = await _branchService.GetBranchByIdAsync(branchId ?? 0);
-                List<Group> groups = _branchService.GetGroupsByBranchId(branchId ?? 0);
+                Branch branch = await _branchService.GetBranchByIdAsync(allowedBranchId ?? 0);
+                List<Group> groups = _branchService.GetGroupsByBranchId(allowedBranchId ?? 0);
+                branchList.Add(new SelectListItem { Value = branch.Id.ToString(), Text = branch.Name });
+                foreach (var g in groups) groupBranches[g.Id.ToString()] = branch.Id;
                 groupList.AddRange(groups.Select(
                     g => new SelectListItem
                     {
@@ -368,20 +380,27 @@ namespace NewGenBridge.Controllers
                     }));
             }
 
+            if (branchId != 0) model = model.Where(s => s.BranchId == branchId).ToList();
+            if (groupId != 0) model = model.Where(s => s.GroupId == groupId).ToList();
+            model = model.OrderBy(s => s.FullName).ThenBy(s => s.Id).ToList();
+            ViewBag.BranchList = branchList;
+            ViewBag.GroupBranches = groupBranches;
+            ViewBag.BranchId = branchId;
+            ViewBag.GroupId = groupId;
+            ViewBag.ResultCount = model.Count;
             ViewBag.GroupList = groupList;
             ViewBag.BranchesId = userAccesses;
             ViewBag.StatusId = statusId;
             ViewBag.TotalPages = (int)Math.Ceiling((double)model.Count / pageSize);
             ViewBag.NamesList = model.Select(c => new { c.FullName}).DistinctBy(c => c.FullName).ToList();
+            page = Math.Clamp(page, 1, Math.Max(1, (int)ViewBag.TotalPages));
             model = model.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             ViewBag.CurrentPage = page;
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                if (statusId == UserStatus.All) return PartialView("_StudentsAllPartial", model);
-                return PartialView("_StudentsPartial", model);
+                return PartialView("_StudentsAllPartial", model);
             }
-            if (statusId == UserStatus.All) return View("StudentsAll", model);
-            return View(model);
+            return View("StudentsAll", model);
         }
 
         public async Task<string> ToggleUserStatus(string userId, int statusId, int groupId = -1)

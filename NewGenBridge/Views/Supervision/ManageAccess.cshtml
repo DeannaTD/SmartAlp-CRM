@@ -1,4 +1,4 @@
-﻿@using NewGenBridge.ViewModels
+@using NewGenBridge.ViewModels
 @using NewGenBridge.Helpers
 @model List<ManagerAccessViewModel>
 @{
@@ -34,7 +34,7 @@
                     <td>@Html.T("supervisors")
                         <a href="@Url.Action("AddAccess", "Branch", new{divisionId = record.DivisionId, branchId = record.BranchId})"
                            data-ajax="true" data-ajax-update="#access-pop-up"
-                           title="@Html.T("grant_access")">[+]</a>
+                           title="@Html.T("grant_access")">@Html.T("add")</a>
                     </td>
                     <td>
                         @foreach(var userData in record.ManagersIds)
@@ -42,7 +42,7 @@
                             <p>@userData.Item2
                                 <a href="@Url.Action("RemoveAccess", "Branch", new{userId = userData.Item1, divisionId = record.DivisionId, branchId = record.BranchId})"
                                 title="@Html.T("remove_access")"
-                                data-ajax="true" data-ajax-success="ajaxCompleted">[-]</a>
+                                data-ajax="true" data-ajax-success="ajaxCompleted">@Html.T("remove_access")</a>
                             </p>
                         }
                         
@@ -57,7 +57,7 @@
                     @record.StructureName
                     <a href="@Url.Action("AddAccess", "Branch", new{divisionId = record.DivisionId, branchId = record.BranchId})"
                                             data-ajax="true" data-ajax-update="#access-pop-up"
-                                            title="@Html.T("add")">[+]</a>
+                                            title="@Html.T("add")">@Html.T("add")</a>
                 </td>
                 <td>
                     @foreach (var userData in record.ManagersIds)
@@ -65,7 +65,7 @@
                         <p>@userData.Item2
                             <a href="@Url.Action("RemoveAccess", "Branch", new{userId = userData.Item1, divisionId = record.DivisionId, branchId = record.BranchId})"
                             title="@Html.T("remove_access")"
-                            data-ajax="true" data-ajax-success="ajaxCompleted">[-]</a></p>
+                            data-ajax="true" data-ajax-success="ajaxCompleted">@Html.T("remove_access")</a></p>
                     }
                     
                 </td>

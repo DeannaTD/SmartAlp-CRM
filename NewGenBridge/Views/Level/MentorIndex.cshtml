@@ -1,9 +1,10 @@
-﻿@using NewGenBridge.Helpers
+@using NewGenBridge.Helpers
 @using NewGenBridge.Services
 @inject LevelService _levelService
 @model List<Lesson>
 
 @{
+    ViewData["Title"] = Html.T("lessons");
     int lid = 0;
     Level level = null;
     var groupedLessons = Model.OrderBy(l => l.LevelId)
@@ -58,16 +59,16 @@
     {
         level = await _levelService.GetLevelByIdAsync(group.Key);
         <li>
-            <div class="dropdown-trigger">
-                <h3>@level.Name</h3>
-                <img src="~/img/toggle-arrow.svg" />
-            </div>
-            <ul class="progress-list">
+            <button type="button" class="dropdown-trigger" aria-expanded="false" aria-controls="course-lessons-@group.Key">
+                <span>@level.Name <small>(@group.Count())</small></span>
+                <img src="~/img/toggle-arrow.svg" alt="" />
+            </button>
+            <ul class="progress-list" id="course-lessons-@group.Key" inert>
             @foreach(var lesson in group)
             {
                 <li class="progress-card">
                     <div class="flex-centered">
-                        <img src="@("../Projects/Levels/" + lesson.LevelId + ".png")" alt="LevelLogo" class="level-logo" />
+                        <img src="@Url.Content("~/Projects/Levels/" + lesson.LevelId + ".png")" alt="" class="level-logo" />
                     </div>
                     <div>
                         <p class="progress-lesson-name">@lesson.Name</p>
@@ -76,7 +77,7 @@
                             if (lesson.FileLink == "OPEN")
                             {
                                 <a href="@Url.Content("~/Projects/" + LabelCreator.CreateProjectLabel(lesson.LevelId, lesson.Id) + "/lesson.pdf")" class="progress-lesson-button">
-                                    @Html.T("go_to_lesson") ⟶
+                                    @Html.T("go_to_lesson") <partial name="_WorkspaceArrow" />
                                 </a>
                             }
                         }
@@ -85,13 +86,13 @@
                     @if (lesson.FileLink == "OPEN")
                     {
                         <div class="flex-centered">
-                            <img src="~/img/green-checkmark.svg" alt="green checkmark" />
+                            <img src="~/img/green-checkmark.svg" alt="@Html.T("active")" />
                         </div>
                     }
                     else
                     {
                         <div class="flex-centered">
-                            <img src="~/img/red-crossmark.svg" alt="green checkmark" />
+                            <span class="lesson-access-hint">@Html.W("locked_hint")</span>
                         </div>
                     }
                 </li>
@@ -111,12 +112,22 @@
                 const progressList = trigger.nextElementSibling;
                 const arrowIcon = trigger.querySelector('img');
 
-                if (progressList.style.maxHeight) {
+                const expanded = trigger.getAttribute('aria-expanded') === 'true';
+                trigger.setAttribute('aria-expanded', String(!expanded));
+                progressList.inert = expanded;
+                if (expanded) {
                     progressList.style.maxHeight = null;
                     arrowIcon.style.transform = 'rotate(180deg)';
                 } else {
                     progressList.style.maxHeight = progressList.scrollHeight + 'px';
                     arrowIcon.style.transform = 'rotate(270deg)';
+                }
+            });
+        });
+        window.addEventListener('resize', () => {
+            dropdownTriggers.forEach(trigger => {
+                if (trigger.getAttribute('aria-expanded') === 'true') {
+                    trigger.nextElementSibling.style.maxHeight = trigger.nextElementSibling.scrollHeight + 'px';
                 }
             });
         });

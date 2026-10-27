@@ -10,17 +10,18 @@
 }
 @{
     string userName = isUserAuthenticated ? User.Identity.Name : "Guest";
-    string profileImage = "../Profile/" + User.Identity.Name + ".png";
+    string profileImage = Url.Content("~/Profile/" + User.Identity.Name + ".png");
     var currentLanguage = Context.Request.Cookies["lang"] ?? "en";
 }
 <!DOCTYPE html>
-<html>
+<html lang="@currentLanguage">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/css/site.css">
     <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/workspace.css" asp-append-version="true">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @if (ViewData["Title"] != null)
@@ -46,11 +47,13 @@
     </style>
 </head>
 
-<body>
+<body class="crm-ui">
+    <a class="skip-link" href="#content">Skip to content</a>
     <aside class="primary-nav">
-        <nav class="primary-nav" aria-label="primary navigation">
+        <partial name="_WorkspaceBrand" />
+        <nav class="primary-nav" id="workspace-navigation" aria-label="primary navigation">
             <ul class="menu-list">
-                <li class="menu-item"><a href="@Url.Action("Index", "Home")" title="@Html.T("Home")"><img src="~/img/home.svg" alt="Home"><span>@Html.T("Home")</span></a></li>
+                <li class="menu-item"><a href="@Url.Action("Index", "Home")" title="@(User.IsInRole(NPUR.Mentor) ? Html.W("schedule") : Html.T("Home"))"><img src="~/img/home.svg" alt=""><span>@(User.IsInRole(NPUR.Mentor) ? Html.W("schedule") : Html.T("Home"))</span></a></li>
                 @if (User.IsInRole(NPUR.Mentor))
                 {
                     @* <li class="menu-item"><a href="@Url.Action("Index", "Level")"><img src="~/img/lessons.svg" alt="Lessons"><span>Lessons</span></a></li> *@
@@ -80,7 +83,7 @@
                         </a>
                     </li>
                     <li class="menu-item"><a href="@Url.Action("KitRequests", "Branch")" title="@Html.T("kit_requests")"><img src="~/img/building.svg" alt="Kit Requests"><span>@Html.T("kit_requests")</span></a></li>
-                    <li class="menu-item"><a href="@Url.Action("Students", "Account")" title="@Html.T("students")"><img src="~/img/user-lock.svg" alt="Blocked students"><span>@Html.T("students")</span></a></li>
+                    <li class="menu-item"><a href="@Url.Action("Students", "Account")" title="@Html.T("students")"><img src="~/img/staff.svg" alt=""><span>@Html.T("students")</span></a></li>
                     @* <li class="menu-item"><a href="@Url.Action("Students", "Account", new{statusId = UserStatus.Blocked})"><img src="~/img/user-lock.svg" alt="Blocked students"><span>Blocked students</span></a></li> *@
                     @* <li class="menu-item"><a href="@Url.Action("Students", "Account", new{statusId = UserStatus.Archived})"><img src="~/img/clock.svg" alt="Archived students"><span>Archived students</span></a></li> *@
                     <li class="menu-item"><a href="@Url.Action("Mentors", "Account")" title="@Html.T("mentors")"><img src="~/img/staff.svg" alt="Lessons"><span>@Html.T("mentors")</span></a></li>
@@ -127,14 +130,16 @@
                 <li class="menu-item"><a href="@Url.Action("Logout", "Account")" title="@Html.T("logout")"><img src="~/img/logout.svg" alt="Logout"><span>@Html.T("logout")</span></a></li>
             </ul>
         </nav>
-        <div class="nav-toggler">
+        <button class="nav-toggler" type="button" aria-label="Toggle navigation" aria-expanded="true" aria-controls="workspace-navigation">
             <img src="~/img/toggle-arrow.svg" alt="">
-        </div>
+            <span>SmartAlp CRM</span>
+        </button>
     </aside>
     <main>
         <nav class="secondary-nav" aria-label="secondary navigation">
+            <partial name="_WorkspaceLocation" />
             <form asp-controller="Master" asp-action="SetLanguage" method="get" class="no-form">
-                <select name="lang" onchange="this.form.submit()">
+                <select name="lang" aria-label="Language" onchange="this.form.submit()">
                     <option value="en" selected="@(currentLanguage == "en")">EN</option>
                     <option value="fr" selected="@(currentLanguage == "fr")">FR</option>
                     <option value="it" selected="@(currentLanguage == "it")">IT</option>
@@ -146,17 +151,19 @@
             <a href="@Url.Action("Logout", "Account")" class="header-logout">
                 <img src="~/img/logout.svg" alt="Logout">
             </a>
-            <a href="" class="header-profile">
-                <img src="@profileImage" alt="User profile" onerror="this.src='../Profile/default.png'">
+            <div class="account-label">@User.Identity?.Name<small>@Html.W(User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "")</small></div>
+            <a href="@Url.Action("Settings", "Account")" class="header-profile" aria-label="@Html.T("settings")">
+                <img src="@profileImage" alt="" onerror="this.onerror=null; this.src='@Url.Content("~/Profile/default.png")'">
             </a>
         </nav>
-        <section class="content">
+        <section class="content" id="content">
             @RenderBody()
         </section>
     </main>
 
     <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/workspace.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
